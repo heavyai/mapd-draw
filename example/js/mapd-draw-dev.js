@@ -1,0 +1,1 @@
+../../dist/mapd-draw-dev.js

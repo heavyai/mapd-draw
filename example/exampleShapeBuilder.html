@@ -1,0 +1,77 @@
+-
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>MapD</title>
+    <meta charset="UTF-8">
+    <style></style>
+</head>
+
+<body>
+    <div class="main-container" style="width: 100%; height: 100%">
+        <div id="chart1-example" style="position: relative; width: 100%; height: 100%;"></div>
+    </div>
+    <script src="js/mapd-draw-dev.js"></script>
+    <script>
+    function init() {
+        const parent = document.getElementById("chart1-example")
+
+        const width = parent.offsetWidth
+        const height = parent.offsetHeight
+
+        const drawEngine = new MapdDraw.ShapeBuilder(parent, {
+          enableInteractions: true,
+          cameraPosition: [0, 0]
+        })
+
+        const circle = new MapdDraw.Circle({
+          position: [0, 0],
+          radius: 50,
+          fillColor: "rgba(0,0,255,1.0)",
+          strokeColor: "red",
+          strokeWidth: 3,
+          dashPattern: [10, 3]
+        })
+        circle.scale([2, 1])
+        drawEngine.addShape(circle)
+
+        const rect = new MapdDraw.Rect({
+          position: [150, 150],
+          width: 100,
+          height: 100,
+          fillColor: "rgba(0,255,0,0.5)",
+          strokeColor: "red",
+          strokeWidth: 3,
+          dashPattern: [10, 3]
+        })
+        drawEngine.addShape(rect)
+
+        const verts = [
+          [-100, -100],
+          [100, -100],
+          [0, -300]
+        ]
+        const poly = new MapdDraw.Poly({
+          verts: verts,
+          fillColor: "rgba(0,255,0,0.5)"
+        })
+        drawEngine.addShape(poly)
+
+        const doAnimation = false
+
+        function rotateCircle() {
+            circle.rotate(1)
+            window.requestAnimationFrame(rotateCircle)
+        }
+
+        if (doAnimation) {
+          window.requestAnimationFrame(rotateCircle)
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', init, false)
+    </script>
+</body>
+
+</html>

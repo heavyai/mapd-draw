@@ -1,0 +1,48 @@
+{
+  "name": "@mapd/mapd-draw",
+  "description": "A Utility Library for drawing and interacting with shapes using canvas",
+  "version": "0.1.0",
+  "homepage": "http://mapd.com",
+  "bugs": "https://github.com/map-d/mapd-draw.js/issues",
+  "main": "src/mapd-draw.js",
+  "author": "MapD Technologies",
+  "license": "MIT",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/map-d/mapd-draw.js.git"
+  },
+  "dependencies": {
+    "gl-matrix": "^2.3.2",
+    "css-element-queries": "^0.4.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-lodash": "^3.1.2",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "eslint": "^3.0.1",
+    "http-server": "^0.9.0",
+    "json-loader": "0.5.4",
+    "webpack": "^1.13.1"
+  },
+  "scripts": {
+    "build": "npm run build:prod; npm run build:dev",
+    "build:prod": "npm run webpack",
+    "build:dev": "npm run webpack:dev",
+    "clean": "bash scripts/clean.sh",
+    "eslint": "eslint -c ./.eslintrc.json",
+    "lint": "eslint $(find src -name \"*.js\" ! -name '*.spec.js')",
+    "start": "npm run build; http-server -p 8080 -o;",
+    "watch:dev": "node node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.dev.config.js",
+    "webpack": "node node_modules/webpack/bin/webpack.js",
+    "webpack:dev": "node node_modules/webpack/bin/webpack.js --config webpack.dev.config.js",
+    "test": "node_modules/.bin/mocha ./test --require ./test/config --require ./test/setup"
+  },
+  "pre-commit": [
+    "lint"
+  ]
+}
