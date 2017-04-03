@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "homepage": "http://mapd.com",
   "bugs": "https://github.com/map-d/mapd-draw.js/issues",
-  "main": "src/mapd-draw.js",
+  "main": "dist/mapd-draw.js",
   "author": "MapD Technologies",
   "license": "MIT",
   "engines": {
