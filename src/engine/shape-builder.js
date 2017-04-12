@@ -10,9 +10,43 @@ import StrokeStyle from "../style/stroke-style"
 import VertEditableShape from "../interactions/vert-editable-shape"
 import XformShape from "../interactions/xform-shape"
 
-const scaleSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><polygon transform=\"rotate(<degrees>,15,15)\" points=\"11.96 8 11.96 0 0 12 11.96 24 11.96 16 27.96 16 27.96 24 39.95 12 27.96 0 27.96 8 11.96 8\" style=\"fill:#fff\"/><polygon transform=\"rotate(<degrees>,15,15)\" points=\"9.96 10 9.96 5 2.96 12 9.96 19 9.96 14 29.96 14 29.96 19 36.96 12 29.96 5 29.96 10 9.96 10\"/></svg>')"
+const scaleSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
+<g transform=\"rotate(<degrees>,24,24)\">\
+<polygon style=\"fill:#ffffff;\" points=\"16,20 16,12 4,24 16,36 16,28 32,28 32,36 44,24 32,12 32,20 \"/>\
+<polygon points=\"14,22 14,17 7,24 14,31 14,26 34,26 34,31 41,24 34,17 34,22 \"/>\
+</g>\
+</svg>')"
 
-const rotateSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\"><path transform=\"rotate(<degrees>,15,15)\" d=\"M21.57,39V34.08h1c7.2,0,13.06-6.32,13.06-14.08,0-11.64-7.1-14.08-13.06-14.08-6.42,0-11.9,5.14-12.89,11.89h2.94L7.15,28,1.67,17.81H4.92C6,8.31,13.54,1,22.57,1,33.7,1,40.35,8.1,40.35,20c0,10.48-8,19-17.78,19Z\"/><path transform=\"rotate(<degrees>,15,15)\"  d=\"M22.57,2C33.07,2,39.35,8.73,39.35,20c0,9.93-7.53,18-16.78,18V35.08c7.75,0,14.06-6.77,14.06-15.08,0-5.63-1.83-15.08-14.06-15.08-7.38,0-13.43,6.13-14,13.89h2.38l-3.8,7.06-3.8-7.06H5.84C6.42,9.44,13.69,2,22.57,2m0-2C13.31,0,5.49,7.24,4,16.81H0l1.59,2.95,3.8,7.06,1.76,3.27,1.76-3.27,3.8-7.06,1.59-2.95H10.89C12.21,11.12,17,6.92,22.57,6.92c8,0,12.06,4.4,12.06,13.08,0,7.21-5.41,13.08-12.06,13.08h-2V40h2c10.36,0,18.78-9,18.78-20,0-12.34-7.2-20-18.78-20Z\" style=\"fill:%23fff\"/></svg>')"
+const rotateSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
+<g transform=\"rotate(<degrees>,24,24)\">\
+<path style=\"fill:#ffffff;\" d=\"M25.9,4C16.6,4,8.8,11.2,7.4,20.8H6.7H3.3l1.6,2.9l3.8,7.1l1.8,3.3l1.8-3.3l3.8-7.1l1.6-2.9h-3.3h-0.1 c1.3-5.7,6.1-9.9,11.7-9.9c8,0,12.1,4.4,12.1,13.1c0,7.2-5.4,13.1-12.1,13.1h-2v2V42v2h2c10.4,0,18.8-9,18.8-20 C44.7,11.7,37.5,4,25.9,4L25.9,4z\"/>\
+<path d=\"M25.9,6c10.5,0,16.8,6.7,16.8,18c0,9.9-7.5,18-16.8,18v-2.9c7.8,0,14.1-6.8,14.1-15.1c0-5.6-1.8-15.1-14.1-15.1 c-7.4,0-13.4,6.1-14,13.9h2.4l-3.8,7.1l-3.8-7.1h2.5C9.7,13.4,17,6,25.9,6\"/>\
+</g>\
+</svg>')"
+
+const addSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
+<polygon style=\"fill:#ffffff;\" points=\"31.2,28 24.8,28 24.8,32.8 20,32.8 20,39.2 24.8,39.2 24.8,44 31.2,44 31.2,39.2 36,39.2 36,32.8 31.2,32.8 \"/> \
+<polygon style=\"fill:#ffffff\" points=\"12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 \"/>\
+<polygon points=\"13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 \"/>\
+<polyline points=\"29.6,29.6 29.6,34.4 34.4,34.4 34.4,37.6 29.6,37.6 29.6,42.4 26.4,42.4 26.4,37.6 21.6,37.6 21.6,34.4 26.4,34.4 26.4,29.6 29.6,29.6  \"/>\
+</svg>')"
+
+const removeSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
+<rect style=\"fill:#ffffff;\" x=\"20\" y=\"32.8\" width=\"16\" height=\"6.4\"/>\
+<polygon  style=\"fill:#ffffff;\" points=\"12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 \"/>\
+<polygon points=\"13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 \"/>\
+<polyline points=\"34.4,34.4 34.4,37.6 21.6,37.6 21.6,34.4 \"/>\
+</svg>')"
+
+const repositionSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
+<path style=\"fill:#ffffff;\" d=\"M24,17.5c-3.6,0-6.5,2.9-6.5,6.5s2.9,6.5,6.5,6.5s6.5-2.9,6.5-6.5S27.6,17.5,24,17.5L24,17.5z\"/>\
+<path style=\"fill:#ffffff;\" d=\"M24,4L4,24l20,20l20-20L24,4z M31.5,31.5h-15v-15h15V31.5z\"/>\
+<polygon points=\"17,34 24,40.5 31,34  \"/>\
+<polygon points=\"31,14 24,7.5 17,14     \"/>\
+<polygon points=\"14,17 7.5,24 14,31   \"/>\
+<polygon points=\"34,31 40.5,24 34,17    \"/>\
+<path d=\"M24,20c2.2,0,4,1.8,4,4s-1.8,4-4,4s-4-1.8-4-4S21.8,20,24,20\"/>\
+</svg>')"
 
 const EventConstants = {
   SELECTION_CHANGED: "draw:selectionChanged",
@@ -122,21 +156,21 @@ function clearSpecificShapes(selectedShapeMap, shapes) {
   return clearedShapes
 }
 
-function appendCustomCursor(_event, target, cursorStyle) {
+function appendCustomCursor(_event, target, cursorStyle, offsetX = -14, offsetY = -14) {
   const cursor = document.getElementById('cursor')
 
   const mouseX = (e) => {
-    return `${(e.offsetX - 10) + 'px'}`
+    return `${(e.offsetX) + 'px'}`
   }
 
   const mouseY = (e) => {
-    return `${(e.offsetY - 10) + 'px'}`
+    return `${(e.offsetY) + 'px'}`
   }
 
   if (cursor === null) {
     const newCursor = document.createElement('span')
     newCursor.setAttribute('id', 'cursor')
-    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 20px; height: 20px; background: ${cursorStyle} no-repeat; cursor: none; pointer-events: none;`)
+    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 28px; height: 28px; background: ${cursorStyle} no-repeat; cursor: none; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
     target.appendChild(newCursor)
   } else if (cursor.style.background !== cursorStyle + 'no-repeat') {
     cursor.style.background = cursorStyle + 'no-repeat'
@@ -152,11 +186,11 @@ function updateCursorPosition(_event) {
   const cursor = document.getElementById('cursor')
 
   const mouseX = (e) => {
-    return `${(e.offsetX - 10) + 'px'}`
+    return `${(e.offsetX) + 'px'}`
   }
 
   const mouseY = (e) => {
-    return `${(e.offsetY - 10) + 'px'}`
+    return `${(e.offsetY) + 'px'}`
   }
 
   if (cursor !== null) {
@@ -316,12 +350,12 @@ export default class ShapeBuilder extends DrawEngine {
           const selectedShape = this._selectedShapes.get(shapes[i])
           let hitInfo = null
           if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
+            this._parent.style.cursor = 'none'
+            // forEach not supported on nodelist in IE/Edge
+            for (let i = 0; i < this._parent.childNodes.length; i++) {
+              this._parent.childNodes[i].style.cursor = 'none'
+            }
             if (selectedShape instanceof XformShape) {
-              this._parent.style.cursor = 'none'
-              // forEach not supported on nodelist in IE/Edge
-              for (let i = 0; i < this._parent.childNodes.length; i++) {
-                this._parent.childNodes[i].style.cursor = 'none'
-              }
               const cursor = document.getElementById('cursor')
               if (hitInfo.rotate) {
                 let degrees = shapes[i].getRotation()
@@ -359,11 +393,11 @@ export default class ShapeBuilder extends DrawEngine {
               }
             } else if (selectedShape instanceof VertEditableShape) {
               if (hitInfo.controlIndex >= shapes[i].numVerts) {
-                this._parent.style.cursor = "copy"
+                appendCustomCursor(event, this._parent, addSvg, -8, -8)
               } else if (event.altKey) {
-                this._parent.style.cursor = "not-allowed"
+                appendCustomCursor(event, this._parent, removeSvg, -8, -8)
               } else {
-                this._parent.style.cursor = "all-scroll"
+                appendCustomCursor(event, this._parent, repositionSvg, -14, -14)
               }
             }
             event.stopImmediatePropagation()
