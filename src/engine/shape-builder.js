@@ -12,35 +12,35 @@ import XformShape from "../interactions/xform-shape"
 
 const scaleSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
 <g transform=\"rotate(<degrees>,24,24)\">\
-<polygon style=\"fill:#ffffff;\" points=\"16,20 16,12 4,24 16,36 16,28 32,28 32,36 44,24 32,12 32,20 \"/>\
+<polygon style=\"fill:%23ffffff;\" points=\"16,20 16,12 4,24 16,36 16,28 32,28 32,36 44,24 32,12 32,20 \"/>\
 <polygon points=\"14,22 14,17 7,24 14,31 14,26 34,26 34,31 41,24 34,17 34,22 \"/>\
 </g>\
 </svg>')"
 
 const rotateSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
 <g transform=\"rotate(<degrees>,24,24)\">\
-<path style=\"fill:#ffffff;\" d=\"M25.9,4C16.6,4,8.8,11.2,7.4,20.8H6.7H3.3l1.6,2.9l3.8,7.1l1.8,3.3l1.8-3.3l3.8-7.1l1.6-2.9h-3.3h-0.1 c1.3-5.7,6.1-9.9,11.7-9.9c8,0,12.1,4.4,12.1,13.1c0,7.2-5.4,13.1-12.1,13.1h-2v2V42v2h2c10.4,0,18.8-9,18.8-20 C44.7,11.7,37.5,4,25.9,4L25.9,4z\"/>\
+<path style=\"fill:%23ffffff;\" d=\"M25.9,4C16.6,4,8.8,11.2,7.4,20.8H6.7H3.3l1.6,2.9l3.8,7.1l1.8,3.3l1.8-3.3l3.8-7.1l1.6-2.9h-3.3h-0.1 c1.3-5.7,6.1-9.9,11.7-9.9c8,0,12.1,4.4,12.1,13.1c0,7.2-5.4,13.1-12.1,13.1h-2v2V42v2h2c10.4,0,18.8-9,18.8-20 C44.7,11.7,37.5,4,25.9,4L25.9,4z\"/>\
 <path d=\"M25.9,6c10.5,0,16.8,6.7,16.8,18c0,9.9-7.5,18-16.8,18v-2.9c7.8,0,14.1-6.8,14.1-15.1c0-5.6-1.8-15.1-14.1-15.1 c-7.4,0-13.4,6.1-14,13.9h2.4l-3.8,7.1l-3.8-7.1h2.5C9.7,13.4,17,6,25.9,6\"/>\
 </g>\
 </svg>')"
 
 const addSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
-<polygon style=\"fill:#ffffff;\" points=\"31.2,28 24.8,28 24.8,32.8 20,32.8 20,39.2 24.8,39.2 24.8,44 31.2,44 31.2,39.2 36,39.2 36,32.8 31.2,32.8 \"/> \
-<polygon style=\"fill:#ffffff\" points=\"12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 \"/>\
+<polygon style=\"fill:%23ffffff;\" points=\"31.2,28 24.8,28 24.8,32.8 20,32.8 20,39.2 24.8,39.2 24.8,44 31.2,44 31.2,39.2 36,39.2 36,32.8 31.2,32.8 \"/> \
+<polygon style=\"fill:%23ffffff\" points=\"12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 \"/>\
 <polygon points=\"13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 \"/>\
 <polyline points=\"29.6,29.6 29.6,34.4 34.4,34.4 34.4,37.6 29.6,37.6 29.6,42.4 26.4,42.4 26.4,37.6 21.6,37.6 21.6,34.4 26.4,34.4 26.4,29.6 29.6,29.6  \"/>\
 </svg>')"
 
 const removeSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
-<rect style=\"fill:#ffffff;\" x=\"20\" y=\"32.8\" width=\"16\" height=\"6.4\"/>\
-<polygon  style=\"fill:#ffffff;\" points=\"12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 \"/>\
+<rect style=\"fill:%23ffffff;\" x=\"20\" y=\"32.8\" width=\"16\" height=\"6.4\"/>\
+<polygon  style=\"fill:%23ffffff;\" points=\"12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 \"/>\
 <polygon points=\"13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 \"/>\
 <polyline points=\"34.4,34.4 34.4,37.6 21.6,37.6 21.6,34.4 \"/>\
 </svg>')"
 
 const repositionSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\">\
-<path style=\"fill:#ffffff;\" d=\"M24,17.5c-3.6,0-6.5,2.9-6.5,6.5s2.9,6.5,6.5,6.5s6.5-2.9,6.5-6.5S27.6,17.5,24,17.5L24,17.5z\"/>\
-<path style=\"fill:#ffffff;\" d=\"M24,4L4,24l20,20l20-20L24,4z M31.5,31.5h-15v-15h15V31.5z\"/>\
+<path style=\"fill:%23ffffff;\" d=\"M24,17.5c-3.6,0-6.5,2.9-6.5,6.5s2.9,6.5,6.5,6.5s6.5-2.9,6.5-6.5S27.6,17.5,24,17.5L24,17.5z\"/>\
+<path style=\"fill:%23ffffff;\" d=\"M24,4L4,24l20,20l20-20L24,4z M31.5,31.5h-15v-15h15V31.5z\"/>\
 <polygon points=\"17,34 24,40.5 31,34  \"/>\
 <polygon points=\"31,14 24,7.5 17,14     \"/>\
 <polygon points=\"14,17 7.5,24 14,31   \"/>\
@@ -350,13 +350,13 @@ export default class ShapeBuilder extends DrawEngine {
           const selectedShape = this._selectedShapes.get(shapes[i])
           let hitInfo = null
           if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
-            this._parent.style.cursor = 'none'
-            // forEach not supported on nodelist in IE/Edge
-            for (let i = 0; i < this._parent.childNodes.length; i++) {
-              this._parent.childNodes[i].style.cursor = 'none'
-            }
             if (selectedShape instanceof XformShape) {
               const cursor = document.getElementById('cursor')
+              this._parent.style.cursor = 'none'
+              // forEach not supported on nodelist in IE/Edge
+              for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'none'
+              }
               if (hitInfo.rotate) {
                 let degrees = shapes[i].getRotation()
                 if (flipy) {
@@ -392,10 +392,15 @@ export default class ShapeBuilder extends DrawEngine {
                 }
               }
             } else if (selectedShape instanceof VertEditableShape) {
+              this._parent.style.cursor = 'none'
+              // forEach not supported on nodelist in IE/Edge
+              for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'none'
+              }
               if (hitInfo.controlIndex >= shapes[i].numVerts) {
-                appendCustomCursor(event, this._parent, addSvg, -8, -8)
+                appendCustomCursor(event, this._parent, addSvg, -8, -6)
               } else if (event.altKey) {
-                appendCustomCursor(event, this._parent, removeSvg, -8, -8)
+                appendCustomCursor(event, this._parent, removeSvg, -8, -6)
               } else {
                 appendCustomCursor(event, this._parent, repositionSvg, -14, -14)
               }
@@ -405,7 +410,14 @@ export default class ShapeBuilder extends DrawEngine {
             break
           } else if (shapes[i].containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)) {
             if (selectInfo && selectInfo.movable) {
+              const cursor = document.getElementById('cursor')
+              if (cursor !== null) {
+                cursor.parentNode.removeChild(cursor)
+              }
               this._parent.style.cursor = "move"
+              for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'move'
+              }
               event.stopImmediatePropagation()
               event.preventDefault()
             }
