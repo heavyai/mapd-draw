@@ -318,6 +318,9 @@ export default class ShapeBuilder extends DrawEngine {
           if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
             if (selectedShape instanceof XformShape) {
               this._parent.style.cursor = 'none'
+              this._parent.childNodes.forEach((element) => {
+                element.style.cursor = 'none'
+              })
               const cursor = document.getElementById('cursor')
               if (hitInfo.rotate) {
                 let degrees = shapes[i].getRotation()
@@ -382,6 +385,9 @@ export default class ShapeBuilder extends DrawEngine {
           cursor.parentNode.removeChild(cursor)
         }
         this._parent.style.cursor = "default"
+        this._parent.childNodes.forEach((element) => {
+          element.style.cursor = 'default'
+        })
       }
     }
   }
