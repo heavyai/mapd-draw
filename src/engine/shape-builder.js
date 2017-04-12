@@ -10,9 +10,9 @@ import StrokeStyle from "../style/stroke-style"
 import VertEditableShape from "../interactions/vert-editable-shape"
 import XformShape from "../interactions/xform-shape"
 
-const scaleSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 30 30\" x=\"0px\" y=\"0px\" width=\"30px\" height=\"30px\"><style type=\"text/css\">.st0{fill:white;stroke:#333;stroke-width:1.5;stroke-linejoin:round;}</style><polygon class=\"st0\" transform=\"rotate(<degrees>,15,15)\" points=\"19,17 19,21 26,15 19,9 19,13 11,13 11,9 4,15 11,21 11,17 19,17\"/></svg>') 15 15"
+const scaleSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><polygon transform=\"rotate(<degrees>,15,15)\" points=\"11.96 8 11.96 0 0 12 11.96 24 11.96 16 27.96 16 27.96 24 39.95 12 27.96 0 27.96 8 11.96 8\" style=\"fill:#fff\"/><polygon transform=\"rotate(<degrees>,15,15)\" points=\"9.96 10 9.96 5 2.96 12 9.96 19 9.96 14 29.96 14 29.96 19 36.96 12 29.96 5 29.96 10 9.96 10\"/></svg>')"
 
-const rotateSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20px\" height=\"20px\" viewBox=\"0 0 30 30\"> <path transform=\"rotate(<degrees>,15,15)\" d=\"M15.9965,1.1841a13.8158,13.8158,0,1,1,.0105,27.6315,1.011,1.011,0,1,1-.0286-2.0218q.0143,0,.0286,0A11.794,11.794,0,1,0,5.0134,10.6192l2.0745-1.211a1.011,1.011,0,1,1,1.0109,1.748L4.0551,13.5151a1.011,1.011,0,0,1-1.382-.3667c-.0064-.011-2.3774-4.414-2.3774-4.414A.9693.9693,0,0,1,1.54,7.3689a.9793.9793,0,0,1,.5456.4071L3.1706,9.7873A13.8542,13.8542,0,0,1,15.9965,1.1841Z\"/></svg>') 10 10"
+const rotateSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\"><path transform=\"rotate(<degrees>,15,15)\" d=\"M21.57,39V34.08h1c7.2,0,13.06-6.32,13.06-14.08,0-11.64-7.1-14.08-13.06-14.08-6.42,0-11.9,5.14-12.89,11.89h2.94L7.15,28,1.67,17.81H4.92C6,8.31,13.54,1,22.57,1,33.7,1,40.35,8.1,40.35,20c0,10.48-8,19-17.78,19Z\"/><path transform=\"rotate(<degrees>,15,15)\"  d=\"M22.57,2C33.07,2,39.35,8.73,39.35,20c0,9.93-7.53,18-16.78,18V35.08c7.75,0,14.06-6.77,14.06-15.08,0-5.63-1.83-15.08-14.06-15.08-7.38,0-13.43,6.13-14,13.89h2.38l-3.8,7.06-3.8-7.06H5.84C6.42,9.44,13.69,2,22.57,2m0-2C13.31,0,5.49,7.24,4,16.81H0l1.59,2.95,3.8,7.06,1.76,3.27,1.76-3.27,3.8-7.06,1.59-2.95H10.89C12.21,11.12,17,6.92,22.57,6.92c8,0,12.06,4.4,12.06,13.08,0,7.21-5.41,13.08-12.06,13.08h-2V40h2c10.36,0,18.78-9,18.78-20,0-12.34-7.2-20-18.78-20Z\" style=\"fill:%23fff\"/></svg>')"
 
 const EventConstants = {
   SELECTION_CHANGED: "draw:selectionChanged",
@@ -122,6 +122,49 @@ function clearSpecificShapes(selectedShapeMap, shapes) {
   return clearedShapes
 }
 
+function appendCustomCursor(_event, target, cursorStyle) {
+  const cursor = document.getElementById('cursor')
+
+  const mouseX = (e) => {
+    return `${(e.offsetX - 10) + 'px'}`
+  }
+
+  const mouseY = (e) => {
+    return `${(e.offsetY - 10) + 'px'}`
+  }
+
+  if (cursor === null) {
+    const newCursor = document.createElement('span')
+    newCursor.setAttribute('id', 'cursor')
+    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 20px; height: 20px; background: ${cursorStyle} no-repeat; cursor: none; pointer-events: none;`)
+    target.appendChild(newCursor)
+  } else if (cursor.style.background !== cursorStyle + 'no-repeat') {
+    cursor.style.background = cursorStyle + 'no-repeat'
+    cursor.style.top = mouseY(_event)
+    cursor.style.left = mouseX(_event)
+  } else {
+    cursor.style.top = mouseY(_event)
+    cursor.style.left = mouseX(_event)
+  }
+}
+
+function updateCursorPosition(_event) {
+  const cursor = document.getElementById('cursor')
+
+  const mouseX = (e) => {
+    return `${(e.offsetX - 10) + 'px'}`
+  }
+
+  const mouseY = (e) => {
+    return `${(e.offsetY - 10) + 'px'}`
+  }
+
+  if (cursor !== null) {
+    cursor.style.top = mouseY(_event)
+    cursor.style.left = mouseX(_event)
+  }
+}
+
 export default class ShapeBuilder extends DrawEngine {
   constructor(parent, opts) {
     super(parent, opts)
@@ -213,6 +256,7 @@ export default class ShapeBuilder extends DrawEngine {
       }
     }
     event.preventDefault()
+
   }
 
   _mouseupCB(event) {
@@ -254,6 +298,7 @@ export default class ShapeBuilder extends DrawEngine {
     }
 
     if (this._dragInfo && this._dragInfo.shape) {
+      updateCursorPosition(event)
       addEventKeysToSelectedInfo(event, this._dragInfo)
       transformSelectedShape(this._drawCanvas, event, this._dragInfo, this._camera)
       event.stopImmediatePropagation()
@@ -272,6 +317,12 @@ export default class ShapeBuilder extends DrawEngine {
           let hitInfo = null
           if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
             if (selectedShape instanceof XformShape) {
+              this._parent.style.cursor = 'none'
+              // forEach not supported on nodelist in IE/Edge
+              for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'none'
+              }
+              const cursor = document.getElementById('cursor')
               if (hitInfo.rotate) {
                 let degrees = shapes[i].getRotation()
                 if (flipy) {
@@ -292,22 +343,18 @@ export default class ShapeBuilder extends DrawEngine {
                     degrees += 90
                   }
                 }
-                this._parent.style.cursor = `${rotateSvg.replace("<degrees>", `${degrees}`)}, alias`
+                appendCustomCursor(event, this._parent, `${rotateSvg.replace(/\<degrees\>/g, `${degrees}`)}`)
               } else if (hitInfo.controlIndex < 4) {
-                if (hitInfo.controlIndex === 0) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() - 45}`)}, sw-resize`
-                } else if (hitInfo.controlIndex === 1) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() + 45}`)}, nw-resize`
-                } else if (hitInfo.controlIndex === 2) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() + 45}`)}, se-resize`
-                } else if (hitInfo.controlIndex === 3) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() - 45}`)}, ne-resize`
+                if (hitInfo.controlIndex === 0 || hitInfo.controlIndex === 3) {
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation() - 45}`)}`)
+                } else if (hitInfo.controlIndex === 1 || hitInfo.controlIndex === 2) {
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation() + 45}`)}`)
                 }
               } else {
                 if (hitInfo.controlIndex % 2 === 0) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation()}`)}, ew-resize`
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation()}`)}`)
                 } else {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() + 90}`)}, ns-resize`
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation() + 90}`)}`)
                 }
               }
             } else if (selectedShape instanceof VertEditableShape) {
@@ -334,7 +381,15 @@ export default class ShapeBuilder extends DrawEngine {
       }
 
       if (i < 0) {
+        const cursor = document.getElementById('cursor')
+        if (cursor !== null) {
+          cursor.parentNode.removeChild(cursor)
+        }
         this._parent.style.cursor = "default"
+        // forEach not supported on nodelist in IE/Edge
+        for (let i = 0; i < this._parent.childNodes.length; i++) {
+          this._parent.childNodes[i].style.cursor = 'default'
+        }
       }
     }
   }
