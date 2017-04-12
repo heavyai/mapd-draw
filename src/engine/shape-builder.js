@@ -10,9 +10,15 @@ import StrokeStyle from "../style/stroke-style"
 import VertEditableShape from "../interactions/vert-editable-shape"
 import XformShape from "../interactions/xform-shape"
 
-const scaleSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 30 30\" x=\"0px\" y=\"0px\" width=\"30px\" height=\"30px\"><style type=\"text/css\">.st0{fill:white;stroke:#333;stroke-width:1.5;stroke-linejoin:round;}</style><polygon class=\"st0\" transform=\"rotate(<degrees>,15,15)\" points=\"19,17 19,21 26,15 19,9 19,13 11,13 11,9 4,15 11,21 11,17 19,17\"/></svg>') 15 15"
+const scaleSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(<degrees>,24,24)'%3E%3Cpolygon style='fill:%23ffffff;' points='16,20 16,12 4,24 16,36 16,28 32,28 32,36 44,24 32,12 32,20 '/%3E%3Cpolygon points='14,22 14,17 7,24 14,31 14,26 34,26 34,31 41,24 34,17 34,22 '/%3E%3C/g%3E%3C/svg%3E\")"
 
-const rotateSvg = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20px\" height=\"20px\" viewBox=\"0 0 30 30\"> <path transform=\"rotate(<degrees>,15,15)\" d=\"M15.9965,1.1841a13.8158,13.8158,0,1,1,.0105,27.6315,1.011,1.011,0,1,1-.0286-2.0218q.0143,0,.0286,0A11.794,11.794,0,1,0,5.0134,10.6192l2.0745-1.211a1.011,1.011,0,1,1,1.0109,1.748L4.0551,13.5151a1.011,1.011,0,0,1-1.382-.3667c-.0064-.011-2.3774-4.414-2.3774-4.414A.9693.9693,0,0,1,1.54,7.3689a.9793.9793,0,0,1,.5456.4071L3.1706,9.7873A13.8542,13.8542,0,0,1,15.9965,1.1841Z\"/></svg>') 10 10"
+const rotateSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(<degrees>,24,24)'%3E%3Cpath style='fill:%23ffffff;' d='M25.9,4C16.6,4,8.8,11.2,7.4,20.8H6.7H3.3l1.6,2.9l3.8,7.1l1.8,3.3l1.8-3.3l3.8-7.1l1.6-2.9h-3.3h-0.1 c1.3-5.7,6.1-9.9,11.7-9.9c8,0,12.1,4.4,12.1,13.1c0,7.2-5.4,13.1-12.1,13.1h-2v2V42v2h2c10.4,0,18.8-9,18.8-20 C44.7,11.7,37.5,4,25.9,4L25.9,4z'/%3E%3Cpath d='M25.9,6c10.5,0,16.8,6.7,16.8,18c0,9.9-7.5,18-16.8,18v-2.9c7.8,0,14.1-6.8,14.1-15.1c0-5.6-1.8-15.1-14.1-15.1 c-7.4,0-13.4,6.1-14,13.9h2.4l-3.8,7.1l-3.8-7.1h2.5C9.7,13.4,17,6,25.9,6'/%3E%3C/g%3E%3C/svg%3E\")"
+
+const addSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpolygon style='fill:%23ffffff;' points='31.2,28 24.8,28 24.8,32.8 20,32.8 20,39.2 24.8,39.2 24.8,44 31.2,44 31.2,39.2 36,39.2 36,32.8 31.2,32.8 '/%3E %3Cpolygon style='fill:%23ffffff' points='12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 '/%3E%3Cpolygon points='13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 '/%3E%3Cpolyline points='29.6,29.6 29.6,34.4 34.4,34.4 34.4,37.6 29.6,37.6 29.6,42.4 26.4,42.4 26.4,37.6 21.6,37.6 21.6,34.4 26.4,34.4 26.4,29.6 29.6,29.6  '/%3E%3C/svg%3E\")"
+
+const removeSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect style='fill:%23ffffff;' x='20' y='32.8' width='16' height='6.4'/%3E%3Cpolygon  style='fill:%23ffffff;' points='12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 '/%3E%3Cpolygon points='13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 '/%3E%3Cpolyline points='34.4,34.4 34.4,37.6 21.6,37.6 21.6,34.4 '/%3E%3C/svg%3E\")"
+
+const repositionSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath style='fill:%23ffffff;' d='M24,17.5c-3.6,0-6.5,2.9-6.5,6.5s2.9,6.5,6.5,6.5s6.5-2.9,6.5-6.5S27.6,17.5,24,17.5L24,17.5z'/%3E%3Cpath style='fill:%23ffffff;' d='M24,4L4,24l20,20l20-20L24,4z M31.5,31.5h-15v-15h15V31.5z'/%3E%3Cpolygon points='17,34 24,40.5 31,34  '/%3E%3Cpolygon points='31,14 24,7.5 17,14     '/%3E%3Cpolygon points='14,17 7.5,24 14,31   '/%3E%3Cpolygon points='34,31 40.5,24 34,17    '/%3E%3Cpath d='M24,20c2.2,0,4,1.8,4,4s-1.8,4-4,4s-4-1.8-4-4S21.8,20,24,20'/%3E%3C/svg%3E\")"
 
 const EventConstants = {
   SELECTION_CHANGED: "draw:selectionChanged",
@@ -122,6 +128,49 @@ function clearSpecificShapes(selectedShapeMap, shapes) {
   return clearedShapes
 }
 
+function appendCustomCursor(_event, target, cursorStyle, offsetX = -14, offsetY = -14) {
+  const cursor = document.getElementById('cursor')
+
+  const mouseX = (e) => {
+    return `${(e.offsetX) + 'px'}`
+  }
+
+  const mouseY = (e) => {
+    return `${(e.offsetY) + 'px'}`
+  }
+
+  if (cursor === null) {
+    const newCursor = document.createElement('span')
+    newCursor.setAttribute('id', 'cursor')
+    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 28px; height: 28px; background: ${cursorStyle} no-repeat; cursor: none; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
+    target.appendChild(newCursor)
+  } else if (cursor.style.background !== cursorStyle + 'no-repeat') {
+    cursor.style.background = cursorStyle + 'no-repeat'
+    cursor.style.top = mouseY(_event)
+    cursor.style.left = mouseX(_event)
+  } else {
+    cursor.style.top = mouseY(_event)
+    cursor.style.left = mouseX(_event)
+  }
+}
+
+function updateCursorPosition(_event) {
+  const cursor = document.getElementById('cursor')
+
+  const mouseX = (e) => {
+    return `${(e.offsetX) + 'px'}`
+  }
+
+  const mouseY = (e) => {
+    return `${(e.offsetY) + 'px'}`
+  }
+
+  if (cursor !== null) {
+    cursor.style.top = mouseY(_event)
+    cursor.style.left = mouseX(_event)
+  }
+}
+
 export default class ShapeBuilder extends DrawEngine {
   constructor(parent, opts) {
     super(parent, opts)
@@ -213,6 +262,7 @@ export default class ShapeBuilder extends DrawEngine {
       }
     }
     event.preventDefault()
+
   }
 
   _mouseupCB(event) {
@@ -254,6 +304,7 @@ export default class ShapeBuilder extends DrawEngine {
     }
 
     if (this._dragInfo && this._dragInfo.shape) {
+      updateCursorPosition(event)
       addEventKeysToSelectedInfo(event, this._dragInfo)
       transformSelectedShape(this._drawCanvas, event, this._dragInfo, this._camera)
       event.stopImmediatePropagation()
@@ -272,6 +323,12 @@ export default class ShapeBuilder extends DrawEngine {
           let hitInfo = null
           if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
             if (selectedShape instanceof XformShape) {
+              const cursor = document.getElementById('cursor')
+              this._parent.style.cursor = 'none'
+              // forEach not supported on nodelist in IE/Edge
+              for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'none'
+              }
               if (hitInfo.rotate) {
                 let degrees = shapes[i].getRotation()
                 if (flipy) {
@@ -292,31 +349,32 @@ export default class ShapeBuilder extends DrawEngine {
                     degrees += 90
                   }
                 }
-                this._parent.style.cursor = `${rotateSvg.replace("<degrees>", `${degrees}`)}, alias`
+                appendCustomCursor(event, this._parent, `${rotateSvg.replace(/\<degrees\>/g, `${degrees}`)}`)
               } else if (hitInfo.controlIndex < 4) {
-                if (hitInfo.controlIndex === 0) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() - 45}`)}, sw-resize`
-                } else if (hitInfo.controlIndex === 1) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() + 45}`)}, nw-resize`
-                } else if (hitInfo.controlIndex === 2) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() + 45}`)}, se-resize`
-                } else if (hitInfo.controlIndex === 3) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() - 45}`)}, ne-resize`
+                if (hitInfo.controlIndex === 0 || hitInfo.controlIndex === 3) {
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation() - 45}`)}`)
+                } else if (hitInfo.controlIndex === 1 || hitInfo.controlIndex === 2) {
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation() + 45}`)}`)
                 }
               } else {
                 if (hitInfo.controlIndex % 2 === 0) {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation()}`)}, ew-resize`
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation()}`)}`)
                 } else {
-                  this._parent.style.cursor = `${scaleSvg.replace("<degrees>", `${-shapes[i].getRotation() + 90}`)}, ns-resize`
+                  appendCustomCursor(event, this._parent, `${scaleSvg.replace(/\<degrees\>/g, `${-shapes[i].getRotation() + 90}`)}`)
                 }
               }
             } else if (selectedShape instanceof VertEditableShape) {
+              this._parent.style.cursor = 'none'
+              // forEach not supported on nodelist in IE/Edge
+              for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'none'
+              }
               if (hitInfo.controlIndex >= shapes[i].numVerts) {
-                this._parent.style.cursor = "copy"
+                appendCustomCursor(event, this._parent, addSvg, -8, -6)
               } else if (event.altKey) {
-                this._parent.style.cursor = "not-allowed"
+                appendCustomCursor(event, this._parent, removeSvg, -8, -6)
               } else {
-                this._parent.style.cursor = "all-scroll"
+                appendCustomCursor(event, this._parent, repositionSvg, -14, -14)
               }
             }
             event.stopImmediatePropagation()
@@ -324,7 +382,14 @@ export default class ShapeBuilder extends DrawEngine {
             break
           } else if (shapes[i].containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)) {
             if (selectInfo && selectInfo.movable) {
+              const cursor = document.getElementById('cursor')
+              if (cursor !== null) {
+                cursor.parentNode.removeChild(cursor)
+              }
               this._parent.style.cursor = "move"
+              for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'move'
+              }
               event.stopImmediatePropagation()
               event.preventDefault()
             }
@@ -334,7 +399,15 @@ export default class ShapeBuilder extends DrawEngine {
       }
 
       if (i < 0) {
+        const cursor = document.getElementById('cursor')
+        if (cursor !== null) {
+          cursor.parentNode.removeChild(cursor)
+        }
         this._parent.style.cursor = "default"
+        // forEach not supported on nodelist in IE/Edge
+        for (let i = 0; i < this._parent.childNodes.length; i++) {
+          this._parent.childNodes[i].style.cursor = 'default'
+        }
       }
     }
   }
