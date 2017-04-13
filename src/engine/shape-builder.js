@@ -10,15 +10,15 @@ import StrokeStyle from "../style/stroke-style"
 import VertEditableShape from "../interactions/vert-editable-shape"
 import XformShape from "../interactions/xform-shape"
 
-const scaleSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(<degrees>,24,24)'%3E%3Cpolygon style='fill:%23ffffff;' points='16,20 16,12 4,24 16,36 16,28 32,28 32,36 44,24 32,12 32,20 '/%3E%3Cpolygon points='14,22 14,17 7,24 14,31 14,26 34,26 34,31 41,24 34,17 34,22 '/%3E%3C/g%3E%3C/svg%3E\")"
+const scaleSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(<degrees>,24,24)'%3E%3Cpolygon style='fill:%23ffffff;' points='16,20 16,12 4,24 16,36 16,28 32,28 32,36 44,24 32,12 32,20 '/%3E%3Cpolygon points='14,22 14,17 7,24 14,31 14,26 34,26 34,31 41,24 34,17 34,22 '/%3E%3C/g%3E%3C/svg%3E\") no-repeat"
 
-const rotateSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(<degrees>,24,24)'%3E%3Cpath style='fill:%23ffffff;' d='M25.9,4C16.6,4,8.8,11.2,7.4,20.8H6.7H3.3l1.6,2.9l3.8,7.1l1.8,3.3l1.8-3.3l3.8-7.1l1.6-2.9h-3.3h-0.1 c1.3-5.7,6.1-9.9,11.7-9.9c8,0,12.1,4.4,12.1,13.1c0,7.2-5.4,13.1-12.1,13.1h-2v2V42v2h2c10.4,0,18.8-9,18.8-20 C44.7,11.7,37.5,4,25.9,4L25.9,4z'/%3E%3Cpath d='M25.9,6c10.5,0,16.8,6.7,16.8,18c0,9.9-7.5,18-16.8,18v-2.9c7.8,0,14.1-6.8,14.1-15.1c0-5.6-1.8-15.1-14.1-15.1 c-7.4,0-13.4,6.1-14,13.9h2.4l-3.8,7.1l-3.8-7.1h2.5C9.7,13.4,17,6,25.9,6'/%3E%3C/g%3E%3C/svg%3E\")"
+const rotateSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(<degrees>,24,24)'%3E%3Cpath style='fill:%23ffffff;' d='M25.9,4C16.6,4,8.8,11.2,7.4,20.8H6.7H3.3l1.6,2.9l3.8,7.1l1.8,3.3l1.8-3.3l3.8-7.1l1.6-2.9h-3.3h-0.1 c1.3-5.7,6.1-9.9,11.7-9.9c8,0,12.1,4.4,12.1,13.1c0,7.2-5.4,13.1-12.1,13.1h-2v2V42v2h2c10.4,0,18.8-9,18.8-20 C44.7,11.7,37.5,4,25.9,4L25.9,4z'/%3E%3Cpath d='M25.9,6c10.5,0,16.8,6.7,16.8,18c0,9.9-7.5,18-16.8,18v-2.9c7.8,0,14.1-6.8,14.1-15.1c0-5.6-1.8-15.1-14.1-15.1 c-7.4,0-13.4,6.1-14,13.9h2.4l-3.8,7.1l-3.8-7.1h2.5C9.7,13.4,17,6,25.9,6'/%3E%3C/g%3E%3C/svg%3E\") no-repeat"
 
-const addSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpolygon style='fill:%23ffffff;' points='31.2,28 24.8,28 24.8,32.8 20,32.8 20,39.2 24.8,39.2 24.8,44 31.2,44 31.2,39.2 36,39.2 36,32.8 31.2,32.8 '/%3E %3Cpolygon style='fill:%23ffffff' points='12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 '/%3E%3Cpolygon points='13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 '/%3E%3Cpolyline points='29.6,29.6 29.6,34.4 34.4,34.4 34.4,37.6 29.6,37.6 29.6,42.4 26.4,42.4 26.4,37.6 21.6,37.6 21.6,34.4 26.4,34.4 26.4,29.6 29.6,29.6  '/%3E%3C/svg%3E\")"
+const addSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpolygon style='fill:%23ffffff;' points='31.2,28 24.8,28 24.8,32.8 20,32.8 20,39.2 24.8,39.2 24.8,44 31.2,44 31.2,39.2 36,39.2 36,32.8 31.2,32.8 '/%3E %3Cpolygon style='fill:%23ffffff' points='12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 '/%3E%3Cpolygon points='13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 '/%3E%3Cpolyline points='29.6,29.6 29.6,34.4 34.4,34.4 34.4,37.6 29.6,37.6 29.6,42.4 26.4,42.4 26.4,37.6 21.6,37.6 21.6,34.4 26.4,34.4 26.4,29.6 29.6,29.6  '/%3E%3C/svg%3E\") no-repeat"
 
-const removeSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect style='fill:%23ffffff;' x='20' y='32.8' width='16' height='6.4'/%3E%3Cpolygon  style='fill:%23ffffff;' points='12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 '/%3E%3Cpolygon points='13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 '/%3E%3Cpolyline points='34.4,34.4 34.4,37.6 21.6,37.6 21.6,34.4 '/%3E%3C/svg%3E\")"
+const removeSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect style='fill:%23ffffff;' x='20' y='32.8' width='16' height='6.4'/%3E%3Cpolygon  style='fill:%23ffffff;' points='12,32 12,4 32.3,24.3 20,24.3 19.7,24.6 '/%3E%3Cpolygon points='13.8,8.2 13.8,27.8 19,22.8 19.2,22.5 28,22.5 '/%3E%3Cpolyline points='34.4,34.4 34.4,37.6 21.6,37.6 21.6,34.4 '/%3E%3C/svg%3E\") no-repeat"
 
-const repositionSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath style='fill:%23ffffff;' d='M24,17.5c-3.6,0-6.5,2.9-6.5,6.5s2.9,6.5,6.5,6.5s6.5-2.9,6.5-6.5S27.6,17.5,24,17.5L24,17.5z'/%3E%3Cpath style='fill:%23ffffff;' d='M24,4L4,24l20,20l20-20L24,4z M31.5,31.5h-15v-15h15V31.5z'/%3E%3Cpolygon points='17,34 24,40.5 31,34  '/%3E%3Cpolygon points='31,14 24,7.5 17,14     '/%3E%3Cpolygon points='14,17 7.5,24 14,31   '/%3E%3Cpolygon points='34,31 40.5,24 34,17    '/%3E%3Cpath d='M24,20c2.2,0,4,1.8,4,4s-1.8,4-4,4s-4-1.8-4-4S21.8,20,24,20'/%3E%3C/svg%3E\")"
+const repositionSvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath style='fill:%23ffffff;' d='M24,17.5c-3.6,0-6.5,2.9-6.5,6.5s2.9,6.5,6.5,6.5s6.5-2.9,6.5-6.5S27.6,17.5,24,17.5L24,17.5z'/%3E%3Cpath style='fill:%23ffffff;' d='M24,4L4,24l20,20l20-20L24,4z M31.5,31.5h-15v-15h15V31.5z'/%3E%3Cpolygon points='17,34 24,40.5 31,34  '/%3E%3Cpolygon points='31,14 24,7.5 17,14     '/%3E%3Cpolygon points='14,17 7.5,24 14,31   '/%3E%3Cpolygon points='34,31 40.5,24 34,17    '/%3E%3Cpath d='M24,20c2.2,0,4,1.8,4,4s-1.8,4-4,4s-4-1.8-4-4S21.8,20,24,20'/%3E%3C/svg%3E\") no-repeat"
 
 const EventConstants = {
   SELECTION_CHANGED: "draw:selectionChanged",
@@ -128,6 +128,20 @@ function clearSpecificShapes(selectedShapeMap, shapes) {
   return clearedShapes
 }
 
+const hideCursor = function () {
+  const cursor = document.getElementById('cursor')
+  if (cursor !== null) {
+    cursor.style.display = 'none'
+  }
+}
+
+const showCursor = function () {
+  const cursor = document.getElementById('cursor')
+  if (cursor !== null) {
+    cursor.style.display = 'block'
+  }
+}
+
 function appendCustomCursor(_event, target, cursorStyle, offsetX = -14, offsetY = -14) {
   const cursor = document.getElementById('cursor')
 
@@ -142,15 +156,22 @@ function appendCustomCursor(_event, target, cursorStyle, offsetX = -14, offsetY 
   if (cursor === null) {
     const newCursor = document.createElement('span')
     newCursor.setAttribute('id', 'cursor')
-    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 28px; height: 28px; background: ${cursorStyle} no-repeat; cursor: none; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
+    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 28px; height: 28px; background: ${cursorStyle}; cursor: none; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
     target.appendChild(newCursor)
-  } else if (cursor.style.background !== cursorStyle + 'no-repeat') {
-    cursor.style.background = cursorStyle + 'no-repeat'
+  } else if (cursor.style.background !== cursorStyle) {
+    cursor.style.background = cursorStyle
     cursor.style.top = mouseY(_event)
     cursor.style.left = mouseX(_event)
   } else {
     cursor.style.top = mouseY(_event)
     cursor.style.left = mouseX(_event)
+  }
+}
+
+function removeCustomCursor() {
+  const cursor = document.getElementById('cursor')
+  if (cursor !== null) {
+    cursor.parentNode.removeChild(cursor)
   }
 }
 
@@ -197,6 +218,8 @@ export default class ShapeBuilder extends DrawEngine {
         selectedInfo = shapeInfo
         let hitInfo = null
         if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
+          this._parent.addEventListener('mouseout', hideCursor)
+          this._parent.addEventListener('mouseover', showCursor)
           if (selectedShape instanceof VertEditableShape && event.altKey && hitInfo.controlIndex < shapes[i].numVerts) {
             shapes[i].removeVert(hitInfo.controlIndex)
             selectedShape = null
@@ -262,20 +285,20 @@ export default class ShapeBuilder extends DrawEngine {
       }
     }
     event.preventDefault()
-
   }
 
   _mouseupCB(event) {
     if (this._dragInfo && this._dragInfo.shape) {
       event.stopImmediatePropagation()
       event.preventDefault()
+      this._parent.removeEventListener('mouseout', hideCursor)
+      this._parent.removeEventListener('mouseover', showCursor)
       this._dragInfo = null
       this.fire(EventConstants.DRAG_END, {
         shapes: getSelectedObjsFromMap(this._selectedShapes)
       })
     } else if (performance.now() - this.timer < 500) {
       // this is a relatively quick click
-
       Point2d.set(tmpPt1, event.offsetX, event.offsetY)
       Point2d.transformMat2d(tmpPt2, tmpPt1, this._camera.screenToWorldMatrix)
       const worldToScreenMatrix = this._camera.worldToScreenMatrix
@@ -289,7 +312,6 @@ export default class ShapeBuilder extends DrawEngine {
           break
         }
       }
-
       if (selectedShape && !selectedShape.selected) {
         const selectEventObj = selectShape(selectedShape, shapes, this._selectedShapes, this._selectStyle, this._xformStyle, selectedInfo)
         this.fire(EventConstants.SELECTION_CHANGED, selectEventObj)
@@ -399,10 +421,7 @@ export default class ShapeBuilder extends DrawEngine {
       }
 
       if (i < 0) {
-        const cursor = document.getElementById('cursor')
-        if (cursor !== null) {
-          cursor.parentNode.removeChild(cursor)
-        }
+        removeCustomCursor()
         this._parent.style.cursor = "default"
         // forEach not supported on nodelist in IE/Edge
         for (let i = 0; i < this._parent.childNodes.length; i++) {
