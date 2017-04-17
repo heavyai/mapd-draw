@@ -129,6 +129,7 @@ function clearSpecificShapes(selectedShapeMap, shapes) {
 }
 
 const hideCursor = function () {
+  console.log('hiding cursor')
   const cursor = document.getElementById('cursor')
   if (cursor !== null) {
     cursor.style.display = 'none'
@@ -156,7 +157,7 @@ function appendCustomCursor(_event, target, cursorStyle, offsetX = -14, offsetY 
   if (cursor === null) {
     const newCursor = document.createElement('span')
     newCursor.setAttribute('id', 'cursor')
-    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 28px; height: 28px; background: ${cursorStyle}; cursor: none; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
+    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 28px; height: 28px; background: ${cursorStyle}; cursor: none; z-index: 10; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
     target.appendChild(newCursor)
   } else if (cursor.style.background !== cursorStyle) {
     cursor.style.background = cursorStyle
@@ -350,6 +351,7 @@ export default class ShapeBuilder extends DrawEngine {
               // forEach not supported on nodelist in IE/Edge
               for (let i = 0; i < this._parent.childNodes.length; i++) {
                 this._parent.childNodes[i].style.cursor = 'none'
+                this._parent.childNodes[i].style.pointerEvents = 'none'
               }
               if (hitInfo.rotate) {
                 let degrees = shapes[i].getRotation()
@@ -390,6 +392,7 @@ export default class ShapeBuilder extends DrawEngine {
               // forEach not supported on nodelist in IE/Edge
               for (let i = 0; i < this._parent.childNodes.length; i++) {
                 this._parent.childNodes[i].style.cursor = 'none'
+                this._parent.childNodes[i].style.pointerEvents = 'none'
               }
               if (hitInfo.controlIndex >= shapes[i].numVerts) {
                 appendCustomCursor(event, this._parent, addSvg, -8, -6)
@@ -426,6 +429,7 @@ export default class ShapeBuilder extends DrawEngine {
         // forEach not supported on nodelist in IE/Edge
         for (let i = 0; i < this._parent.childNodes.length; i++) {
           this._parent.childNodes[i].style.cursor = 'default'
+          this._parent.childNodes[i].style.pointerEvents = 'auto'
         }
       }
     }
