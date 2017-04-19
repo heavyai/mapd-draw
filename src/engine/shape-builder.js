@@ -129,7 +129,6 @@ function clearSpecificShapes(selectedShapeMap, shapes) {
 }
 
 const hideCursor = function () {
-  console.log('hiding cursor')
   const cursor = document.getElementById('cursor')
   if (cursor !== null) {
     cursor.style.display = 'none'
@@ -143,32 +142,49 @@ const showCursor = function () {
   }
 }
 
+const hideCursorWithPointer = (e) => {
+  e.target.parentNode.style.cursor = 'default'
+  hideCursor()
+}
+
+const showCursorWithPointer = (e) => {
+  e.target.parentNode.style.cursor = 'none'
+  showCursor()
+}
+
+// understands how to return mouse coordinates as an object in the format {x: <X-COORD>, y: <Y-COORD>}
+// accepts a mouse event and a DOM element as arguments
+function getMouseCoordinates(e, target) {
+  const canvas = document.querySelector(`${'#' + target.id +  ' canvas'}`)
+
+  const coords = {
+    'x': e.offsetX + canvas.offsetLeft,
+    'y': e.offsetY + canvas.offsetTop
+  }
+
+  return coords
+}
+
+// understands how to append custom cursors to the DOM
+// accepts a mouse event, a DOM element, a cursorStyle, and pixel offsets as arguments
 function appendCustomCursor(_event, target, cursorStyle, offsetX = -14, offsetY = -14) {
   const cursor = document.getElementById('cursor')
-
-  const mouseX = (e) => {
-    return `${(e.offsetX) + 'px'}`
-  }
-
-  const mouseY = (e) => {
-    return `${(e.offsetY) + 'px'}`
-  }
+  const mouse = getMouseCoordinates(_event, target)
 
   if (cursor === null) {
     const newCursor = document.createElement('span')
     newCursor.setAttribute('id', 'cursor')
-    newCursor.setAttribute('style', `position: absolute; top: ${mouseY(_event)}; left: ${mouseX(_event)}; width: 28px; height: 28px; background: ${cursorStyle}; cursor: none; z-index: 10; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
+    newCursor.setAttribute('style', `position: absolute; top: ${mouse.y + 'px'}; left: ${mouse.x + 'px'}; width: 28px; height: 28px; background: ${cursorStyle}; cursor: none; z-index: 10; pointer-events: none; transform: translate(${offsetX}px, ${offsetY}px)`)
     target.appendChild(newCursor)
   } else if (cursor.style.background !== cursorStyle) {
     cursor.style.background = cursorStyle
-    cursor.style.top = mouseY(_event)
-    cursor.style.left = mouseX(_event)
+    updateCursorPosition(_event, target)
   } else {
-    cursor.style.top = mouseY(_event)
-    cursor.style.left = mouseX(_event)
+    updateCursorPosition(_event, target)
   }
 }
 
+// understands how to remove the custom cursor from the DOM
 function removeCustomCursor() {
   const cursor = document.getElementById('cursor')
   if (cursor !== null) {
@@ -176,20 +192,15 @@ function removeCustomCursor() {
   }
 }
 
-function updateCursorPosition(_event) {
+// understands how to change the position of the custom cursor on the page
+// accepts a mouse event and a DOM element as arguments
+function updateCursorPosition(_event, target) {
   const cursor = document.getElementById('cursor')
-
-  const mouseX = (e) => {
-    return `${(e.offsetX) + 'px'}`
-  }
-
-  const mouseY = (e) => {
-    return `${(e.offsetY) + 'px'}`
-  }
+  const mouse = getMouseCoordinates(_event, target)
 
   if (cursor !== null) {
-    cursor.style.top = mouseY(_event)
-    cursor.style.left = mouseX(_event)
+    cursor.style.top = `${mouse.y + 'px'}`
+    cursor.style.left = `${mouse.x + 'px'}`
   }
 }
 
@@ -219,8 +230,6 @@ export default class ShapeBuilder extends DrawEngine {
         selectedInfo = shapeInfo
         let hitInfo = null
         if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
-          this._parent.addEventListener('mouseout', hideCursor)
-          this._parent.addEventListener('mouseover', showCursor)
           if (selectedShape instanceof VertEditableShape && event.altKey && hitInfo.controlIndex < shapes[i].numVerts) {
             shapes[i].removeVert(hitInfo.controlIndex)
             selectedShape = null
@@ -267,6 +276,14 @@ export default class ShapeBuilder extends DrawEngine {
       this._dragInfo = null
       clearSelectedShapes(this._selectedShapes)
     } else if (selectedShape && selectedInfo && (selectedInfo.movable || selectedInfo.rotatable || selectedInfo.scalable)) {
+      const canvas = document.querySelector(`${'#' + this._parent.id +  ' > canvas'}`)
+      if( canvas !== null) {
+        canvas.addEventListener('mouseout', hideCursorWithPointer)
+        canvas.addEventListener('mouseover', showCursorWithPointer)
+      } else {
+        this._parent.addEventListener('mouseout', hideCursor)
+        this._parent.addEventListener('mouseover', showCursor)
+      }
       if (!this._dragInfo && selectedInfo.movable) {
         this._dragInfo = {
           startLocalPos: selectedShape.getPosition()
@@ -292,8 +309,14 @@ export default class ShapeBuilder extends DrawEngine {
     if (this._dragInfo && this._dragInfo.shape) {
       event.stopImmediatePropagation()
       event.preventDefault()
-      this._parent.removeEventListener('mouseout', hideCursor)
-      this._parent.removeEventListener('mouseover', showCursor)
+      const canvas = document.querySelector(`${'#' + this._parent.id +  ' > canvas'}`)
+      if( canvas !== null) {
+        canvas.removeEventListener('mouseout', hideCursorWithPointer)
+        canvas.removeEventListener('mouseover', showCursorWithPointer)
+      } else {
+        this._parent.removeEventListener('mouseout', hideCursor)
+        this._parent.removeEventListener('mouseover', showCursor)
+      }
       this._dragInfo = null
       this.fire(EventConstants.DRAG_END, {
         shapes: getSelectedObjsFromMap(this._selectedShapes)
@@ -327,7 +350,7 @@ export default class ShapeBuilder extends DrawEngine {
     }
 
     if (this._dragInfo && this._dragInfo.shape) {
-      updateCursorPosition(event)
+      updateCursorPosition(event, this._parent)
       addEventKeysToSelectedInfo(event, this._dragInfo)
       transformSelectedShape(this._drawCanvas, event, this._dragInfo, this._camera)
       event.stopImmediatePropagation()
@@ -344,15 +367,18 @@ export default class ShapeBuilder extends DrawEngine {
           const selectInfo = this._objects.get(shapes[i])
           const selectedShape = this._selectedShapes.get(shapes[i])
           let hitInfo = null
+          const cursor = document.getElementById('cursor')
+          this._parent.style.cursor = 'none'
+          // forEach not supported on nodelist in IE/Edge
+          for (let i = 0; i < this._parent.childNodes.length; i++) {
+            if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
+              continue
+            }
+            this._parent.childNodes[i].style.cursor = 'none'
+            this._parent.childNodes[i].style.pointerEvents = 'none'
+          }
           if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
             if (selectedShape instanceof XformShape) {
-              const cursor = document.getElementById('cursor')
-              this._parent.style.cursor = 'none'
-              // forEach not supported on nodelist in IE/Edge
-              for (let i = 0; i < this._parent.childNodes.length; i++) {
-                this._parent.childNodes[i].style.cursor = 'none'
-                this._parent.childNodes[i].style.pointerEvents = 'none'
-              }
               if (hitInfo.rotate) {
                 let degrees = shapes[i].getRotation()
                 if (flipy) {
@@ -391,6 +417,9 @@ export default class ShapeBuilder extends DrawEngine {
               this._parent.style.cursor = 'none'
               // forEach not supported on nodelist in IE/Edge
               for (let i = 0; i < this._parent.childNodes.length; i++) {
+                if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
+                  continue
+                }
                 this._parent.childNodes[i].style.cursor = 'none'
                 this._parent.childNodes[i].style.pointerEvents = 'none'
               }
@@ -413,6 +442,9 @@ export default class ShapeBuilder extends DrawEngine {
               }
               this._parent.style.cursor = "move"
               for (let i = 0; i < this._parent.childNodes.length; i++) {
+                if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
+                  continue
+                }
                 this._parent.childNodes[i].style.cursor = 'move'
               }
               event.stopImmediatePropagation()
@@ -428,6 +460,9 @@ export default class ShapeBuilder extends DrawEngine {
         this._parent.style.cursor = "default"
         // forEach not supported on nodelist in IE/Edge
         for (let i = 0; i < this._parent.childNodes.length; i++) {
+          if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
+            continue
+          }
           this._parent.childNodes[i].style.cursor = 'default'
           this._parent.childNodes[i].style.pointerEvents = 'auto'
         }
