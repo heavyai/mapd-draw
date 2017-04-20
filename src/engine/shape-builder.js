@@ -371,10 +371,10 @@ export default class ShapeBuilder extends DrawEngine {
           this._parent.style.cursor = 'none'
           // forEach not supported on nodelist in IE/Edge
           for (let i = 0; i < this._parent.childNodes.length; i++) {
+            this._parent.childNodes[i].style.cursor = 'none'
             if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
               continue
             }
-            this._parent.childNodes[i].style.cursor = 'none'
             this._parent.childNodes[i].style.pointerEvents = 'none'
           }
           if (selectedShape && (hitInfo = selectedShape.containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)).hit) {
@@ -417,10 +417,10 @@ export default class ShapeBuilder extends DrawEngine {
               this._parent.style.cursor = 'none'
               // forEach not supported on nodelist in IE/Edge
               for (let i = 0; i < this._parent.childNodes.length; i++) {
+                this._parent.childNodes[i].style.cursor = 'none'
                 if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
                   continue
                 }
-                this._parent.childNodes[i].style.cursor = 'none'
                 this._parent.childNodes[i].style.pointerEvents = 'none'
               }
               if (hitInfo.controlIndex >= shapes[i].numVerts) {
@@ -442,9 +442,6 @@ export default class ShapeBuilder extends DrawEngine {
               }
               this._parent.style.cursor = "move"
               for (let i = 0; i < this._parent.childNodes.length; i++) {
-                if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
-                  continue
-                }
                 this._parent.childNodes[i].style.cursor = 'move'
               }
               event.stopImmediatePropagation()
@@ -460,10 +457,10 @@ export default class ShapeBuilder extends DrawEngine {
         this._parent.style.cursor = "default"
         // forEach not supported on nodelist in IE/Edge
         for (let i = 0; i < this._parent.childNodes.length; i++) {
+          this._parent.childNodes[i].style.cursor = 'default'
           if(this._parent.childNodes[i].nodeName.toLowerCase() === 'canvas') {
             continue
           }
-          this._parent.childNodes[i].style.cursor = 'default'
           this._parent.childNodes[i].style.pointerEvents = 'auto'
         }
       }
@@ -670,6 +667,15 @@ export default class ShapeBuilder extends DrawEngine {
       unselectedShapes: selectClearedShapes,
       selectedShapes: getSelectedObjsFromMap(this._selectedShapes)
     })
+
+    removeCustomCursor()
+    this._parent.style.cursor = "default"
+    // forEach not supported on nodelist in IE/Edge
+    for (let i = 0; i < this._parent.childNodes.length; i++) {
+      this._parent.childNodes[i].style.cursor = 'default'
+      this._parent.childNodes[i].style.pointerEvents = 'auto'
+    }
+
     return super.deleteShape(shapes)
   }
 
@@ -680,6 +686,15 @@ export default class ShapeBuilder extends DrawEngine {
       unselectedShapes: selectedShapes,
       selectedShapes: []
     })
+
+    removeCustomCursor()
+    this._parent.style.cursor = "default"
+    // forEach not supported on nodelist in IE/Edge
+    for (let i = 0; i < this._parent.childNodes.length; i++) {
+      this._parent.childNodes[i].style.cursor = 'default'
+      this._parent.childNodes[i].style.pointerEvents = 'auto'
+    }
+
     return super.deleteShape(selectedShapes)
   }
 
