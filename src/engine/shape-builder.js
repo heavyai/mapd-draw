@@ -301,8 +301,8 @@ export default class ShapeBuilder extends DrawEngine {
           shapes: getSelectedObjsFromMap(this._selectedShapes)
         })
       }
+      event.preventDefault()
     }
-    event.preventDefault()
   }
 
   _mouseupCB(event) {
