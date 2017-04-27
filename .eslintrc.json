@@ -56,7 +56,7 @@
       "ignoreTrailingComments": true,
       "ignoreUrls": true
     }], // vertically-concise code gives reader more context.
-    "max-nested-callbacks": [1, 2], // a sign that the nested code should be refactored out.
+    "max-nested-callbacks": [1, 3], // a sign that the nested code should be refactored out.
     "max-params": 0, // better to have many params than obscure them with a config object.
     // "max-statements": [1, 10], // functions should be focused and concise. #TODO enable this rule.
     // "max-statements-per-line": 2, // improves readability; exceptions should be explicitly noted.
@@ -200,7 +200,6 @@
     "no-useless-escape": 2, // makes code easier to read.
     "no-var": 2, // const is best, and let is useful for counters, but they eclipse var's uses. #ES6only
     "no-void": 2, // unusual and unnecessary.
-    "no-warning-comments": 2, // warning comments should be addressed before merge (or moved out of code).
     "no-whitespace-before-property": 2, // typos.
     "no-with": 2, // can add unexpected variables to scope.
     // "no-wrap-func": 0, // removed.
@@ -209,7 +208,7 @@
     "one-var": [2, "never"], // grouped statement types are more consistent and readable.
     "one-var-declaration-per-line": 0, // superceded by one-var.
     "operator-assignment": 0, // better to be explicit about what is happening than relying on shorthand.
-    "operator-linebreak": [2, "none"], // if the statement is too long, it can probably be refactored.
+    "operator-linebreak": [2, "after"], // if the statement is too long, it can probably be refactored.
     "padded-blocks": [0, "never"], // concise code gives reader more context.
     "prefer-arrow-callback": 2, // increases readability and consistency.
     "prefer-const": 2, // better to be explicit about what is expected to change.

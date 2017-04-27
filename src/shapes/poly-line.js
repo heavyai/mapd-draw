@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 "use strict"
 
 import * as AABox2d from "../core/aabox2d"
@@ -143,9 +144,7 @@ export default class PolyLine extends BaseShape {
     // there's no need to traverse all the points. All we need to do is traverse
     // the points that define the convex hull to rebuild the bounds
     if (this._verts.length < 3) {
-      this._convexHull = this._verts.map((val, idx) => {
-        return idx
-      })
+      this._convexHull = this._verts.map((val, idx) => idx)
     } else {
       this._convexHull = simpleHull_2D(this._verts)
     }
@@ -240,9 +239,7 @@ export default class PolyLine extends BaseShape {
 
     // now recalcute the convex hull of all the transformed points
     if (this._verts.length < 3) {
-      this._convexHull = this._verts.map((val, idx) => {
-        return idx
-      })
+      this._convexHull = this._verts.map((val, idx) => idx)
     } else {
       this._convexHull = simpleHull_2D(this._verts)
     }
@@ -360,9 +357,7 @@ export default class PolyLine extends BaseShape {
   _rebuildAABox() {
     AABox2d.initEmpty(this._aabox)
     if (this._verts.length < 3) {
-      this._convexHull = this._verts.map((val, idx) => {
-        return idx
-      })
+      this._convexHull = this._verts.map((val, idx) => idx)
     } else {
       this._convexHull = simpleHull_2D(this._verts)
     }
@@ -415,9 +410,7 @@ export default class PolyLine extends BaseShape {
   toJSON() {
     return Object.assign({
       type: "PolyLine", // NOTE: this much match the name of the class
-      verts: this.vertsRef.map(vert => {
-        return [vert[0], vert[1]]
-      })
+      verts: this.vertsRef.map(vert => [vert[0], vert[1]])
     }, super.toJSON())
   }
 

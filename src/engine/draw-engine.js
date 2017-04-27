@@ -10,7 +10,6 @@ import {
 import Camera2d from "../view/camera2d"
 import EventHander from "../util/event-handler"
 import ResizeSensor from "css-element-queries/src/ResizeSensor"
-import StrokeStyle from "../style/stroke-style"
 
 const mouseevents = ["mousedown", "mouseup", "mousemove", "click", "dblclick", "mouseover", "mouseout"]
 const marginProps = ["top", "bottom", "left", "right"]
@@ -98,11 +97,6 @@ class DrawStyleState extends BasicStyle {
     this.setStrokeCtx(ctx)
   }
 }
-
-const boundsStrokeStyle = new StrokeStyle({
-  strokeColor: "darkgray",
-  strokeWidth: 2
-})
 
 function addClass(element, className) {
   if (element && (` ${element.className} `).indexOf(` ${className} `) < 0) {
@@ -307,9 +301,7 @@ export default class DrawEngine extends EventHander {
 
   _enableEvents() {
     this.registerEvents(mouseevents)
-    const callbacks = mouseevents.map(event => {
-      return `_${event}CB`
-    })
+    const callbacks = mouseevents.map(event => `_${event}CB`)
     // bindAll(callbacks, this)
     for (let i = 0; i < mouseevents.length; i += 1) {
       document.addEventListener(mouseevents[i], this[callbacks[i]], true)
@@ -317,9 +309,7 @@ export default class DrawEngine extends EventHander {
   }
 
   _disableEvents() {
-    const callbacks = mouseevents.map(event => {
-      return `_${event}CB`
-    })
+    const callbacks = mouseevents.map(event => `_${event}CB`)
     for (let i = 0; i < mouseevents.length; i += 1) {
       document.removeEventListener(mouseevents[i], this[callbacks[i]], true)
     }
@@ -434,11 +424,9 @@ export default class DrawEngine extends EventHander {
   }
 
   set margins(margins) {
-    let resize = false
     marginProps.forEach(prop => {
       if (typeof margins[prop] === "number" && margins[prop] !== this._margins[prop]) {
         this._margins[prop] = margins.prop
-        resize = true
       }
     })
 
@@ -552,12 +540,10 @@ export default class DrawEngine extends EventHander {
 
   getShapesAsJSON() {
     const shapes = this.sortedShapes
-    return shapes.map(shape => {
-      return shape.toJSON()
-    })
+    return shapes.map(shape => shape.toJSON())
   }
 
-  _rerenderCb(event) {
+  _rerenderCb() {
     if (this._renderRequestId) {
       window.cancelAnimationFrame(this._renderRequestId)
     }
@@ -572,7 +558,7 @@ export default class DrawEngine extends EventHander {
     changedShapes.forEach(changedShape => {
       console.assert(changedShape, "A changed event doesn't have an object")
       const shapeInfo = this._objects.get(changedShape)
-      console.assert(shapeInfo, "A changed event target isn't in the list of shapes " + changedShape)
+      console.assert(shapeInfo, `A changed event target isn't in the list of shapes ${changedShape}`)
       if (shapeInfo.shapeIdx < 0) {
         shapeInfo.shapeIdx = this._sortedObjs.push(changedShape) - 1
       }

@@ -11,15 +11,6 @@ import StrokeStyle from "../style/stroke-style"
  */
 export default class BasicStyle extends aggregation(class BaseBasicStyle {}, FillStyle, StrokeStyle) {
   /**
-   * Creates a new Basic Style
-   * @param  {...{}} [args] Initializer options for base classes/mixins
-   * @return {BasicStyle}
-   */
-  constructor(...args) {
-    super(...args)
-  }
-
-  /**
    * Copies the properties from one BasicStyle to another
    * @param  {BasicStyle} srcBasicStyle The style to copy from
    * @param  {BasicStyle} dstBasicStyle The style to copy to

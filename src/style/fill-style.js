@@ -135,15 +135,15 @@ export default class FillStyle {
    * @param  {FillStyle} dstStyle FillStyle object to copy to
    */
   static copyFillStyle(srcStyle, dstStyle) {
-    if (typeof srcStyle.packedFillColor !== "undefined") {
-      dstStyle.packedFillColor = srcStyle.packedFillColor
-    } else {
+    if (typeof srcStyle.packedFillColor === "undefined") {
       if (typeof srcStyle.fillColor !== "undefined") {
         dstStyle.fillColor = srcStyle.fillColor
       }
       if (typeof srcStyle.fillOpacity !== "undefined") {
         dstStyle.fillOpacity = srcStyle.fillOpacity
       }
+    } else {
+      dstStyle.packedFillColor = srcStyle.packedFillColor
     }
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 "use strict"
 
 /**
@@ -52,9 +53,7 @@ export function makeCanvasAutoHighDPI(canvasCtx) {
   allRatioArgs.forEach(funcName => {
     canvasCtx[funcName] = (function(_super) {
       return function(...args) {
-        args = args.map(function(a) {
-          return a * pixelRatio
-        })
+        args = args.map((a) => a * pixelRatio)
 
         return _super.apply(this, args)
       }

@@ -219,13 +219,13 @@ export default class EventHandler {
     const subtypes = type.split(":")
 
     let fireData = {
-      type: type,
+      type,
       target: this
     }
 
     Object.assign(fireData, data)
 
-    let numFires = recursiveFire(this._listeners, subtypes, 0, fireData)
+    recursiveFire(this._listeners, subtypes, 0, fireData)
 
     // To ensure that no error events are dropped, print them to the
     // console if they have no listeners.

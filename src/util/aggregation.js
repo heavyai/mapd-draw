@@ -33,31 +33,28 @@
  * @param  {...[function]} mixins mixin classes
  * @return {function}           new class constructor function
  */
-var aggregation = (base, ...mixins) => {
+const aggregation = (base, ...mixins) => {
 
   /*  create aggregation class  */
-  let aggregate = (base ? class __Aggregate extends base {
+  const aggregate = (base ? class __Aggregate extends base {
     constructor(...args) {
       /*  call base class constructor  */
       super(...args)
 
       /*  call mixin's initializer  */
       mixins.forEach((mixin) => {
-        if (typeof mixin.prototype.initializer === "function")
-          mixin.prototype.initializer.call(this, ...args)
+        if (typeof mixin.prototype.initializer === "function") { mixin.prototype.initializer.call(this, ...args) }
       })
     }
-  } : function() {});
+  } : () => { /* do nothing */ })
 
   /*  copy properties  */
-  let copyProps = (target, source) => {
+  const copyProps = (target, source) => {
     Object.getOwnPropertyNames(source)
       .concat(Object.getOwnPropertySymbols(source))
       .forEach((prop) => {
-        if (prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/))
-          return
-        if (base && prop.match(/^(?:initializer)$/))
-          return
+        if (prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) { return }
+        if (base && prop.match(/^(?:initializer)$/)) { return }
         Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop))
       })
   }

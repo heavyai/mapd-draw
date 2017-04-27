@@ -229,7 +229,7 @@ export default class BaseShape extends aggregation(CoreBaseShape,
       ctx.beginPath()
       this._draw(ctx)
       ctx.strokeStyle = "rgba(0,0,0,0)"
-      ctx.lineWidth = this.strokeWidth + 5
+      ctx.lineWidth = this.strokeWidth + 5 // eslint-disable-line no-magic-numbers
       ctx.dashPattern = []
       ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.stroke()
@@ -330,7 +330,7 @@ export default class BaseShape extends aggregation(CoreBaseShape,
    * @return {object}
    */
   toJSON() {
-    let state = this
+    let state = this // eslint-disable-line consistent-this
     if (this._stateStack && this._stateStack.length) {
       state = this._stateStack[0]
     }
