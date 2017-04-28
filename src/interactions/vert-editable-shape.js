@@ -1,12 +1,10 @@
+/* eslint-disable no-magic-numbers */
 "use strict"
 
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
+import {mat2d as Mat2d, vec2 as Vec2d} from "gl-matrix"
 import BaseShape from "../shapes/base-shape"
-import {
-  mat2d as Mat2d,
-  vec2 as Vec2d
-} from "gl-matrix"
 
 export default class VertEditableShape extends BaseShape {
   constructor(baseVertShape, opts) {
@@ -105,7 +103,7 @@ export default class VertEditableShape extends BaseShape {
     ctx.restore()
   }
 
-  render(ctx, worldToScreenMatrix, styleState) {
+  render(ctx) {
     ctx.save()
 
     ctx.setTransform(1, 0, 0, 1, 0, 0)

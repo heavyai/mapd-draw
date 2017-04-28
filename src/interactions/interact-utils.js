@@ -1,10 +1,11 @@
+/* eslint-disable no-magic-numbers */
 "use strict"
 
 import * as Point2d from "../core/point2d"
 import Mat2d from "../core/mat2d"
 import Vec2d from "../core/vec2d"
 
-function rotateOBBox(shape, parentShape, selectedInfo, screenPos, worldPos, camera) {
+function rotateOBBox(shape, parentShape, selectedInfo, screenPos, worldPos) {
   const pt = [0, 0]
   const scale = [0, 0]
   Mat2d.svd(pt, scale, null, selectedInfo.objectToWorldMatrix)
@@ -27,7 +28,7 @@ function rotateOBBox(shape, parentShape, selectedInfo, screenPos, worldPos, came
   parentShape.setRotation(selectedInfo.startLocalRot + Math.RAD_TO_DEG * angle)
 }
 
-export function transformXformShape(shape, selectedInfo, screenPos, worldPos, camera, selectOpts) {
+export function transformXformShape(shape, selectedInfo, screenPos, worldPos, camera) {
   const parentShape = shape.parent
   const objPos = [0, 0]
   const deltaPos = [0, 0]
@@ -181,7 +182,7 @@ export function translateShape(shape, selectedInfo, screenPos, worldPos, camera)
   shape.setPosition(pt)
 }
 
-export function translateVert(shape, selectedInfo, screenPos, worldPos, camera) {
+export function translateVert(shape, selectedInfo, screenPos, worldPos) {
   const parentShape = shape.parent
 
   // get the position of the shape at start of transform

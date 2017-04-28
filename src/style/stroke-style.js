@@ -352,15 +352,15 @@ export default class StrokeStyle {
    * @param  {StrokeStyle} dstStyle StrokeStyle object to copy to
    */
   static copyStrokeStyle(srcStyle, dstStyle) {
-    if (typeof srcStyle.packedStrokeColor !== "undefined") {
-      dstStyle.packedStrokeColor = srcStyle.packedStrokeColor
-    } else {
+    if (typeof srcStyle.packedStrokeColor === "undefined") {
       if (typeof srcStyle.strokeColor !== "undefined") {
         dstStyle.strokeColor = srcStyle.strokeColor
       }
       if (typeof srcStyle.strokeOpacity !== "undefined") {
         dstStyle.strokeOpacity = srcStyle.strokeOpacity
       }
+    } else {
+      dstStyle.packedStrokeColor = srcStyle.packedStrokeColor
     }
     if (typeof srcStyle.strokeWidth !== "undefined") {
       dstStyle.strokeWidth = srcStyle.strokeWidth

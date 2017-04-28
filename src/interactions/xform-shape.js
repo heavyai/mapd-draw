@@ -9,7 +9,11 @@ import Mat2d from "../core/mat2d"
 import Rect from "../shapes/rect"
 import Vec2d from "../core/vec2d"
 
-function drawOBBoxModifierRect(ctx, pt, objToScreenMat, modifierSize, modifierHalfSize, modifierRotation, scale, text) {
+const Constants = {
+  SIDES: 4
+}
+
+function drawOBBoxModifierRect(ctx, pt, objToScreenMat, modifierSize, modifierHalfSize, modifierRotation, scale) {
   Point2d.transformMat2d(pt, pt, objToScreenMat)
   ctx.setTransform(1, 0, 0, 1, 0, 0)
   ctx.translate(pt[0], pt[1])
@@ -78,7 +82,7 @@ export default class XformShape extends Rect {
     }
   }
 
-  containsPoint(screenPt, worldPt, worldToScreenMatrix, ctx) {
+  containsPoint(screenPt) {
     // Should we update here, or is it safe to
     // say that this is stateful, meaning a render
     // should have been performed beforehand which
@@ -117,7 +121,7 @@ export default class XformShape extends Rect {
       let xScale = 0
       let yScale = 0
 
-      for (let i = 0; i < 4; i += 1) {
+      for (let i = 0; i < Constants.SIDES; i += 1) {
         xScale = (i < 2 ? -1 : 1)
         yScale = (i % 2 === 0 ? -1 : 1)
         Point2d.set(pt, xScale * halfWidth, yScale * halfHeight)
@@ -129,13 +133,13 @@ export default class XformShape extends Rect {
       }
 
       if (!rtnObj.hit && this._scalable) {
-        for (let i = 0; i < 4; i += 1) {
+        for (let i = 0; i < Constants.SIDES; i += 1) {
           xScale = (i % 2 === 0 ? (i < 2 ? -1 : 1) : 0)
           yScale = (i % 2 === 0 ? 0 : (i < 2 ? -1 : 1))
           Point2d.set(pt, xScale * halfWidth, yScale * halfHeight)
           rtnObj = isPointInOBBoxModifierRect(screenPt, pt, this._fullXform, mat, halfBoxSz, this._interactiveBoxSize, padSz, padRadius, xScale, yScale, scale)
           if (rtnObj.hit) {
-            rtnObj.controlIndex = i + 4
+            rtnObj.controlIndex = i + Constants.SIDES
             break
           }
         }

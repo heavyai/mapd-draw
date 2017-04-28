@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 "use strict"
 
 import Math from "../math/math"

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Copyright 2001 softSurfer, 2012 Dan Sunday
 // This code may be freely used and modified for any purpose
 // providing that this copyright notice is included with it.

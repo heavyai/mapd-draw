@@ -7,6 +7,10 @@ export const MINY = 1
 export const MAXX = 2
 export const MAXY = 3
 
+const Constants = {
+  BOX_SIDES: 4
+}
+
 /**
  * Sets the boundaries of an existing 2d axis-aligned bounding box
  * If arguments are not supplied, the aabox is initialized as empty.
@@ -36,7 +40,7 @@ export function set(out, minx, miny, maxx, maxy) {
  * @return {AABox2d}      New AABox2d object
  */
 export function create(minx, miny, maxx, maxy) {
-  const out = new glMatrix.ARRAY_TYPE(4)
+  const out = new glMatrix.ARRAY_TYPE(Constants.BOX_SIDES)
   return set(out, minx, miny, maxx, maxy)
 }
 
@@ -47,7 +51,7 @@ export function create(minx, miny, maxx, maxy) {
  * @return {AABox2d}     new AABox2d object
  */
 export function clone(box) {
-  const out = new glMatrix.ARRAY_TYPE(4)
+  const out = new glMatrix.ARRAY_TYPE(Constants.BOX_SIDES)
   out[MINX] = box[MINX]
   out[MINY] = box[MINY]
   out[MAXX] = box[MAXX]
@@ -232,7 +236,7 @@ export function getSize(out, box) {
  */
 export function getExtents(out, box) {
   getSize(out, box)
-  return Vec2d.scale(out, out, 0.5)
+  return Vec2d.scale(out, out, 0.5) // eslint-disable-line no-magic-numbers
 }
 
 /**

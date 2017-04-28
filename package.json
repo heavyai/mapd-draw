@@ -30,6 +30,7 @@
     "http-server": "^0.9.0",
     "json-loader": "0.5.4",
     "mocha": "^3.3.0",
+    "pre-commit": "^1.2.2",
     "webpack": "^1.13.1"
   },
   "scripts": {
@@ -38,6 +39,7 @@
     "build:dev": "npm run webpack:dev",
     "clean": "bash scripts/clean.sh",
     "eslint": "eslint -c ./.eslintrc.json",
+    "lint-fix": "eslint --fix $(find src -name \"*.js\" ! -name '*.spec.js')",
     "lint": "eslint $(find src -name \"*.js\" ! -name '*.spec.js')",
     "start": "npm run build; http-server -p 8080 -o;",
     "watch:dev": "node node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.dev.config.js",
