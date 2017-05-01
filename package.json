@@ -48,6 +48,7 @@
     "test": "mocha --recursive --require babel-register"
   },
   "pre-commit": [
-    "lint"
+    "lint",
+    "test"
   ]
 }
