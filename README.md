@@ -6,7 +6,7 @@
 - [Installation](#installation)
 - [Testing and Linting](#testing-and-linting)
 - [Contributing](.github/CONTRIBUTING.md)
-- [License](LICENSE.md)
+- [License](LICENSE)
 
 # Quick Start
 ```bash
