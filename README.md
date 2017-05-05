@@ -4,8 +4,7 @@
 - [Quick Start](#quick-start)
 - [Synopsis](#synopsis)
 - [Installation](#installation)
-- [Examples](#examples)
-- [Testing](#testing)
+- [Testing and Linting](#testing-and-linting)
 - [Contributing](.github/CONTRIBUTING.md)
 - [License](LICENSE.md)
 
