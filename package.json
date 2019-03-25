@@ -26,9 +26,9 @@
     "babel-register": "^6.24.1",
     "chai": "^3.5.0",
     "eslint": "^3.0.1",
-    "http-server": "^0.9.0",
+    "http-server": "^0.11.1",
     "json-loader": "0.5.4",
-    "mocha": "^3.3.0",
+    "mocha": "^6.0.2",
     "pre-commit": "^1.2.2",
     "webpack": "^1.13.1"
   },
