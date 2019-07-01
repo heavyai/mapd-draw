@@ -42,6 +42,25 @@ const defaultXformStyle = {
   strokeWidth: 2
 }
 
+const EventsTypes = {
+  MOUSEDOWN: "mousedown",
+  MOUSEUP: "mouseup",
+  MOUSEMOVE: "mousemove",
+  TOUCHSTART: "touchstart",
+  TOUCHEND: "touchend",
+  TOUCHMOVE: "touchmove"
+}
+
+// This method will Add clientX, clientY & offsetX and offsetY for Touch events
+function getTouchCoordinates(event, canvas) {
+  event.clientX = event.touches[0].clientX
+  event.clientY = event.touches[0].clientY
+  const element = canvas.getBoundingClientRect()
+  event.offsetX = event.touches[0].clientX - element.left
+  event.offsetY = event.touches[0].clientY - element.top
+  return event
+}
+
 function inCanvas(canvas, x, y) {
   const domrect = canvas.getBoundingClientRect()
   let localX = 0
@@ -96,7 +115,7 @@ function selectShape(selectedShape, sortedShapes, currSelectedShapes, selectStyl
   selectedShape.zIndex = maxZ + 1
   BasicStyle.copyBasicStyle(selectStyle, selectedShape)
   selectedShape.selected = true
-    // const dimensions = selectedShape.getDimensions()
+  // const dimensions = selectedShape.getDimensions()
 
   let newSelectShape = null
   if (selectOpts.scalable || selectOpts.rotatable) {
@@ -208,7 +227,29 @@ function updateCursorPosition(_event, target) {
 }
 
 export default class ShapeBuilder extends DrawEngine {
+
+  _touchstartCB(event) {
+    this._mousedownCB(event)
+  }
+
+  _touchmoveCB(event) {
+    this._mousemoveCB(event)
+  }
+
+  _touchendCB(event) {
+    this._mouseupCB(event)
+  }
+
   _mousedownCB(event) {
+    this.setDenyMouseEventFlag(event)
+    if (this.denyMouseEvent && !event.touches) {
+      return
+    }
+    if (event.touches) {
+      event = getTouchCoordinates(event, this._drawCanvas)
+      this.previousEventObj = event // Assign event obj to variable to avoid the use it for touchend event
+    }
+
     if (!inCanvas(this._drawCanvas, event.clientX, event.clientY)) {
       return
     }
@@ -300,11 +341,22 @@ export default class ShapeBuilder extends DrawEngine {
           shapes: getSelectedObjsFromMap(this._selectedShapes)
         })
       }
-      event.preventDefault()
+      if (!event.touches) {
+        event.preventDefault()
+      }
     }
   }
 
   _mouseupCB(event) {
+    if (this.denyMouseEvent && !event.touches) {
+      this.setDenyMouseEventFlag(event)
+      return // Returning on next line to avoid ESLint error
+    }
+    if (event.touches) {
+      // Use previously assigned event obj to get the offsetX & Y and clientX & Y calculation
+      event = this.previousEventObj
+    }
+
     if (this._dragInfo && this._dragInfo.shape) {
       event.stopImmediatePropagation()
       event.preventDefault()
@@ -338,11 +390,24 @@ export default class ShapeBuilder extends DrawEngine {
       if (selectedShape && !selectedShape.selected) {
         const selectEventObj = selectShape(selectedShape, shapes, this._selectedShapes, this._selectStyle, this._xformStyle, selectedInfo)
         this.fire(EventConstants.SELECTION_CHANGED, selectEventObj)
+      } else {
+        // If user clicks anywhere outside then allow the movement of Base Map (Parents Container)
+        this._makeParentElementMovable()
       }
     }
   }
 
   _mousemoveCB(event) {
+    this.setDenyMouseEventFlag(event)
+    if (this.denyMouseEvent && !event.touches) {
+      return
+    }
+
+    if (event.touches) {
+      event = getTouchCoordinates(event, this._drawCanvas)
+      this.previousEventObj = event // Assign event obj to variable to avoid the use it for touchend event
+    }
+
     if (!(inCanvas(this._drawCanvas, event.clientX, event.clientY)) && !this._dragInfo) {
       return
     }
@@ -352,7 +417,9 @@ export default class ShapeBuilder extends DrawEngine {
       addEventKeysToSelectedInfo(event, this._dragInfo)
       transformSelectedShape(this._drawCanvas, event, this._dragInfo, this._camera)
       event.stopImmediatePropagation()
-      event.preventDefault()
+      if (!event.touches) {
+        event.preventDefault()
+      }
     } else if (!event.buttons && this._selectedShapes.size) {
       Point2d.set(tmpPt1, event.offsetX, event.offsetY)
       Point2d.transformMat2d(tmpPt2, tmpPt1, this._camera.screenToWorldMatrix)
@@ -553,6 +620,19 @@ export default class ShapeBuilder extends DrawEngine {
     this.timer = 0
   }
 
+  // This function allow the movement of Parent Container (In our case it is Map) when user clicks anywhere on Map except on Shape
+  // As well as it's changes the icon of mouse for Desktop devices
+  _makeParentElementMovable() {
+    removeCustomCursor()
+    this._parent.style.cursor = "default" // Change the Cursor icon for desktop device
+    for (let j = 0; j < this._parent.childNodes.length; j += 1) {
+      this._parent.childNodes[j].style.cursor = "default" // Change the Cursor icon for desktop device
+      if (this._parent.childNodes[j].nodeName.toLowerCase() !== "canvas") {
+        this._parent.childNodes[j].style.pointerEvents = "auto" // Allow movemnet of parent container i.e Map
+      }
+    }
+  }
+
   _renderShapes(ctx, drawShapes, camera) {
     const worldToScreenMat = camera.worldToScreenMatrix
     drawShapes.forEach(shape => {
@@ -703,6 +783,16 @@ export default class ShapeBuilder extends DrawEngine {
     this._disableEvents()
     this._activated = false
     return this
+  }
+
+  // This method is used to stop Mouse Event propagation Triggered from the Touch event
+  setDenyMouseEventFlag(event) {
+    if (event.touches) {
+      this.denyMouseEvent = true
+    } else if (event.type === EventsTypes.MOUSEUP) {
+      // set the Flag false at the end of mouse event i.e on MouseUp Event
+      this.denyMouseEvent = false
+    }
   }
 }
 
