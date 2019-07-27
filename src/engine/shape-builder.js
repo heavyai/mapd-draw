@@ -359,7 +359,9 @@ export default class ShapeBuilder extends DrawEngine {
 
     if (this._dragInfo && this._dragInfo.shape) {
       event.stopImmediatePropagation()
-      event.preventDefault()
+      if (event.cancelable) {
+        event.preventDefault()
+      }
       const canvas = document.querySelector(`${`#${this._parent.id} > canvas`}`)
       if (canvas === null) {
         this._parent.removeEventListener("mouseout", hideCursor)
