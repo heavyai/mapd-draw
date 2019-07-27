@@ -11,7 +11,7 @@ import Camera2d from "../view/camera2d"
 import EventHander from "../util/event-handler"
 import ResizeSensor from "css-element-queries/src/ResizeSensor"
 
-const mouseevents = ["mousedown", "mouseup", "mousemove", "click", "dblclick", "mouseover", "mouseout"]
+const mouseevents = ["mousedown", "mouseup", "mousemove", "click", "dblclick", "mouseover", "mouseout", "touchstart", "touchend", "touchmove"]
 const marginProps = ["top", "bottom", "left", "right"]
 
 export const EventConstants = {
@@ -23,7 +23,10 @@ export const EventConstants = {
   MOUSEOVER: "mouseover",
   MOUSEOUT: "mouseout",
   SHAPE_ADD: "shape:add",
-  SHAPE_DELETE: "shape:delete"
+  SHAPE_DELETE: "shape:delete",
+  TOUCHSTART: "touchstart",
+  TOUCHEND: "touchend",
+  TOUCHMOVE: "touchmove"
 }
 
 class DrawStyleState extends BasicStyle {
@@ -111,7 +114,7 @@ function createCanvas(parent) {
   const canvas = document.createElement("canvas")
   const canvasContext = canvas.getContext("2d")
   const ratio = CanvasUtils.makeCanvasAutoHighDPI(canvasContext)
-    // const ratio = 1
+  // const ratio = 1
 
   // add class?
   addClass(canvas, "mapd-draw-canvas")
@@ -239,6 +242,15 @@ export default class DrawEngine extends EventHander {
     })
   }
 
+  _touchstartCB(event) {
+    if (event.target !== this._parent) {
+      return
+    }
+    this.fire("touchstart", {
+      originalEvent: event
+    })
+  }
+
   _mouseupCB(event) {
     if (event.target !== this._parent) {
       return
@@ -249,12 +261,32 @@ export default class DrawEngine extends EventHander {
     })
   }
 
+  _touchendCB(event) {
+    if (event.target !== this._parent) {
+      return
+    }
+
+    this.fire("touchend", {
+      originalEvent: event
+    })
+  }
+
   _mousemoveCB(event) {
     if (event.target !== this._parent) {
       return
     }
 
     this.fire("mousemove", {
+      originalEvent: event
+    })
+  }
+
+  _touchmoveCB(event) {
+    if (event.target !== this._parent) {
+      return
+    }
+
+    this.fire("touchmove", {
       originalEvent: event
     })
   }
@@ -367,7 +399,7 @@ export default class DrawEngine extends EventHander {
     this.registerEvents([EventConstants.SHAPE_ADD, EventConstants.SHAPE_DELETE])
 
     bindAll(["_reorderCb", "_rerenderCb"], this)
-    bindAll(["_mousedownCB", "_mouseupCB", "_mousemoveCB", "_clickCB", "_dblclickCB", "_mouseoverCB", "_mouseoutCB"], this)
+    bindAll(["_mousedownCB", "_mouseupCB", "_mousemoveCB", "_clickCB", "_dblclickCB", "_mouseoverCB", "_mouseoutCB", "_touchstartCB", "_touchendCB", "_touchmoveCB"], this)
 
     this._renderFrameCb = this.renderAll.bind(this)
     this._renderRequestId = 0
@@ -401,7 +433,7 @@ export default class DrawEngine extends EventHander {
   get sortedShapes() {
     if (this._reorderedObjIdxs.size) {
       console.assert(this._sortedObjs.length === this._objects.size,
-        `Size mismatch when rendering objets. Something got out of sync - sorted objs length: ${this._sortedObjs.length}, objects length: ${this._objects.size}`)
+          `Size mismatch when rendering objets. Something got out of sync - sorted objs length: ${this._sortedObjs.length}, objects length: ${this._objects.size}`)
 
       // if (this._reorderedObjIdxs.length / this._sortedObjs.length > 0.7) {
       //   // might as well just resort the whole thing over
@@ -578,7 +610,7 @@ export default class DrawEngine extends EventHander {
 
   renderAll() {
     const ctx = this._drawCtx
-      // ctx.clearRect(0, 0, this.width, this.height)
+    // ctx.clearRect(0, 0, this.width, this.height)
     ctx.clearRect(0, 0, this._drawCanvas.offsetWidth, this._drawCanvas.offsetHeight)
 
     if (!this._objects.size) {
