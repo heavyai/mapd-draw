@@ -51,6 +51,8 @@ const EventsTypes = {
   TOUCHMOVE: "touchmove"
 }
 
+const DOUBLE_CLICK_DELAY = 600 // To detect the double click in case of touch screen
+
 // This method will Add clientX, clientY & offsetX and offsetY for Touch events
 function getTouchCoordinates(event, canvas) {
   event.clientX = event.touches[0].clientX
@@ -397,6 +399,16 @@ export default class ShapeBuilder extends DrawEngine {
         this._makeParentElementMovable()
       }
     }
+    // Added Support for Double click
+    if (event.touches) {
+      if (event.cancelable) {
+        event.preventDefault()
+      }
+      if ((Date.now() - this.firstTapTime) < DOUBLE_CLICK_DELAY) {
+        this._dblclickCB(event)
+      }
+    }
+    this.firstTapTime = Date.now()
   }
 
   _mousemoveCB(event) {
@@ -591,7 +603,9 @@ export default class ShapeBuilder extends DrawEngine {
     } else {
       event.stopImmediatePropagation()
     }
-    event.preventDefault()
+    if (event.cancelable) {
+      event.preventDefault()
+    }
   }
 
   _mouseoverCB() {
