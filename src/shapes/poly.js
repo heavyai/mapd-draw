@@ -36,12 +36,15 @@ export default class Poly extends PolyLine {
     return rtn
   }
 
+  // eslint-disable-next-line indent
   toJSON() {
     return Object.assign(super.toJSON(), {
+      /* eslint-disable  indent */
       type: "Poly" // NOTE: this much match the name of the class
                    // This is also supplied after the super.toJSON()
                    // so that this type overrides the parent class's
                    // type
+      /* eslint-enable indent */
     })
   }
 }

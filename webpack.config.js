@@ -36,11 +36,9 @@ module.exports = {
       }
     }),
     new webpack.optimize.UglifyJsPlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
   ],
   devtool: "nosources-source-map",
   resolve: {
-    extensions: ["", ".js"]
+    extensions: [".js"]
   }
 };
