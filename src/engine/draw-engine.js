@@ -409,7 +409,7 @@ export default class DrawEngine extends EventHander {
     )
 
     this._renderFrameCb = this.renderAll.bind(this)
-    this._renderRequestId = 0
+    this._renderRequestTime = 0
     this._ids = {
       shapeId: 1
     }
@@ -599,10 +599,7 @@ export default class DrawEngine extends EventHander {
   }
 
   _rerenderCb() {
-    if (this._renderRequestId) {
-      window.cancelAnimationFrame(this._renderRequestId)
-    }
-    this._renderRequestId = window.requestAnimationFrame(this._renderFrameCb)
+    window.requestAnimationFrame(this._renderFrameCb)
   }
 
   _reorderCb(event) {
@@ -634,9 +631,17 @@ export default class DrawEngine extends EventHander {
     })
   }
 
-  renderAll() {
+  renderAll(timestamp) {
+    if (timestamp) {
+      if (timestamp <= this._renderRequestTime) {
+        return
+      }
+      this._renderRequestTime = timestamp
+    } else {
+      this._renderRequestTime = performance.now()
+    }
+
     const ctx = this._drawCtx
-    // ctx.clearRect(0, 0, this.width, this.height)
     ctx.clearRect(
       0,
       0,
