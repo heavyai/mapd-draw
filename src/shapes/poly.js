@@ -10,18 +10,21 @@ export default class Poly extends PolyLine {
   constructor(opts) {
     super(opts)
     if (this._verts.length < Constants.MINIMUM_POINTS) {
-      throw new Error("Poly shapes must be initialized with an array of 2d points and contain at least 3 points")
+      throw new Error(
+        "Poly shapes must be initialized with an array of 2d points and contain at least 3 points"
+      )
     }
   }
 
   removeVert(vertIndex) {
     if (this._verts.length < Constants.MINIMUM_POINTS) {
-      throw new Error(`Cannot remove vertex ${vertIndex}. It would result in a poly with < 3 points. A poly must contain at least 3 points.`)
+      throw new Error(
+        `Cannot remove vertex ${vertIndex}. It would result in a poly with < 3 points. A poly must contain at least 3 points.`
+      )
     }
 
     super.removeVert(vertIndex)
   }
-
 
   _draw(ctx) {
     let rtn = false
@@ -36,12 +39,15 @@ export default class Poly extends PolyLine {
     return rtn
   }
 
+  // eslint-disable-next-line indent
   toJSON() {
     return Object.assign(super.toJSON(), {
+      /* eslint-disable  indent */
       type: "Poly" // NOTE: this much match the name of the class
-                   // This is also supplied after the super.toJSON()
-                   // so that this type overrides the parent class's
-                   // type
+      // This is also supplied after the super.toJSON()
+      // so that this type overrides the parent class's
+      // type
+      /* eslint-enable indent */
     })
   }
 }

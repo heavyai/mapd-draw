@@ -1,7 +1,7 @@
 "use strict"
 
 import * as Point2d from "../core/point2d"
-import {glMatrix as GLMatrix, mat2d as Mat2d, vec2 as Vec2d} from "gl-matrix"
+import { glMatrix as GLMatrix, mat2d as Mat2d, vec2 as Vec2d } from "gl-matrix"
 import aggregation from "../util/aggregation"
 import Math from "../math/math"
 
@@ -332,7 +332,13 @@ export default class Transform2d {
    */
   _updatelocalxform() {
     if (this._lxformDirty) {
-      buildXformMatrix(this._localXform, this._rotDeg, this._scale, this._pos, this._pivot)
+      buildXformMatrix(
+        this._localXform,
+        this._rotDeg,
+        this._scale,
+        this._pos,
+        this._pivot
+      )
       if (this._localXformUpdated) {
         this._localXformUpdated()
       }
@@ -351,7 +357,11 @@ export default class Transform2d {
     if (this._lxformDirty || this._xformDirty) {
       this._updatelocalxform()
       if (this._parent) {
-        Mat2d.multiply(this._globalXform, this._parent.globalXform, this._localXform)
+        Mat2d.multiply(
+          this._globalXform,
+          this._parent.globalXform,
+          this._localXform
+        )
       } else {
         Mat2d.copy(this._globalXform, this._localXform)
       }
@@ -393,12 +403,14 @@ export default class Transform2d {
   transformCtx(ctx, currMatrix, worldToScreenMatrix) {
     Mat2d.multiply(currMatrix, worldToScreenMatrix, this.globalXform)
 
-    ctx.setTransform(currMatrix[0],
+    ctx.setTransform(
+      currMatrix[0],
       currMatrix[1],
       currMatrix[2],
       currMatrix[3],
       currMatrix[4],
-      currMatrix[5])
+      currMatrix[5]
+    )
   }
 
   /**
@@ -442,218 +454,232 @@ export function createEventedTransform2dMixin(eventName) {
   /**
    * @mixin Transform2d mixin with event firing when modified
    */
-  return aggregation(null, Transform2d, class EventedTransform2d {
-    /**
-     * Sets the unparented pivot of the transform. The pivot is
-     * the offset from the transform's primary position where the
-     * transformation is applied.
-     * @param {Vec2d} pivot
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    set pivot(pivot) {
-      if (!Point2d.equals(pivot, this._pivot)) {
-        const prev = [this._pivot[0], this._pivot[1]]
-        Point2d.copy(this._pivot, pivot)
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attr: "pivot",
-          prevVal: prev,
-          currVal: pivot
-        })
-      }
-      return this
-    }
-
-    /**
-     * Gets a copy of the unparented pivot of the transform
-     * @return {Vec2d}
-     */
-    get pivot() {
-      return Point2d.clone(this._pivot)
-    }
-
-    /**
-     * Sets the unparented position of the transform.
-     * @param {Point2d} pos
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    setPosition(pos) {
-      if (!Point2d.equals(pos, this._pos)) {
-        const prev = [this._pos[0], this._pos[1]]
-        Point2d.copy(this._pos, pos)
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attr: "position",
-          prevVal: prev,
-          currVal: pos
-        })
-      }
-      return this
-    }
-
-    /**
-     * Translates the unparented position of a transform by an offset.
-     * @param  {Vec2d} translation
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    translate(translation) {
-      if (translation[0] || translation[1]) {
-        const prev = [this._pos[0], this._pos[1]]
-        Point2d.addVec2(this._pos, this._pos, translation)
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attr: "position",
-          prevVal: prev,
-          currVal: [this._pos[0], this._pos[1]]
-        })
-      }
-      return this
-    }
-
-    /**
-     * Sets the unparented 2d scale of the transform
-     * @param {Vec2d} scale
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    setScale(scale) {
-      if (!Vec2d.equals(scale, this._scale)) {
-        const prev = [this._scale[0], this._scale[1]]
-        Vec2d.copy(this._scale, scale)
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attr: "size",
-          prevVal: prev,
-          currVal: scale
-        })
-      }
-      return this
-    }
-
-    /**
-     * Multiplies the current unparented scale of the transform by a 2d scalar
-     * @param  {Vec2d} scaleMult
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    scale(scaleMult) {
-      if (scaleMult[0] !== 1 || scaleMult[1] !== 1) {
-        const prev = [this._scale[0], this._scale[1]]
-        Vec2d.multiply(this._scale, this._scale, scaleMult)
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attr: "size",
-          prevVal: prev,
-          currVal: [this._scale[0], this._scale[1]]
-        })
-      }
-      return this
-    }
-
-    /**
-     * Sets the unparented rotation of the transform in degrees
-     * @param {number} deg Rotation angle in degrees
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    setRotation(deg) {
-      const degToUse = deg % 360
-      if (degToUse !== this._rotDeg) {
-        const prev = this._rotDeg
-        this._rotDeg = degToUse
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attr: "orientation",
-          prevVal: prev,
-          curral: this._rotDeg
-        })
-      }
-    }
-
-    /**
-     * Adds a rotation angle in degrees to the current unparented
-     * rotation of the transform.
-     * @param  {number} deg Additional rotation angle in degrees
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    rotate(deg) {
-      if (deg) {
-        const prev = this._rotDeg
-        this._rotDeg += deg
-        this._rotDeg %= 360
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attr: "orientation",
-          prevVal: prev,
-          curral: this._rotDeg
-        })
-      }
-      return this
-    }
-
-    /**
-     * Utility function to reset all the unparented transform parameters
-     * @param {number} tx  Translation in x in world units
-     * @param {number} ty  Translation in y in world units
-     * @param {number} sx  Scale in x in world units
-     * @param {number} sy  Scale in y in world units
-     * @param {number} deg Rotation angle degrees
-     * @fires  EventedTransform2d#changed
-     * @return {EventedTransform2d}
-     */
-    setTransformations(tx, ty, sx, sy, deg) {
-      const attrs = []
-      const prevVals = []
-      const currVals = []
-      if (typeof tx !== "undefined" && typeof ty !== "undefined" && (!GLMatrix.equals(tx, this._pos[0]) || !GLMatrix.equals(ty, this._pos[1]))) {
-        const prev = Point2d.clone(this._pos)
-        this._pos[0] = tx
-        this._pos[1] = ty
-        attrs.push("position")
-        prevVals.push(prev)
-        currVals.push(Point2d.clone(this._pos))
+  return aggregation(
+    null,
+    Transform2d,
+    class EventedTransform2d {
+      /**
+       * Sets the unparented pivot of the transform. The pivot is
+       * the offset from the transform's primary position where the
+       * transformation is applied.
+       * @param {Vec2d} pivot
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      set pivot(pivot) {
+        if (!Point2d.equals(pivot, this._pivot)) {
+          const prev = [this._pivot[0], this._pivot[1]]
+          Point2d.copy(this._pivot, pivot)
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attr: "pivot",
+            prevVal: prev,
+            currVal: pivot
+          })
+        }
+        return this
       }
 
-      if (typeof sx !== "undefined" && typeof sy !== "undefined" && (!GLMatrix.equals(sx, this._scale[0]) || !GLMatrix.equals(sy, this._scale[1]))) {
-        const prev = Vec2d.clone(this._scale)
-        Vec2d.set(this._scale, sx, sy)
-        attrs.push("size")
-        prevVals.push(prev)
-        currVals.push(Vec2d.clone(this._scale))
+      /**
+       * Gets a copy of the unparented pivot of the transform
+       * @return {Vec2d}
+       */
+      get pivot() {
+        return Point2d.clone(this._pivot)
       }
 
-      if (typeof deg !== "undefined") {
+      /**
+       * Sets the unparented position of the transform.
+       * @param {Point2d} pos
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      setPosition(pos) {
+        if (!Point2d.equals(pos, this._pos)) {
+          const prev = [this._pos[0], this._pos[1]]
+          Point2d.copy(this._pos, pos)
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attr: "position",
+            prevVal: prev,
+            currVal: pos
+          })
+        }
+        return this
+      }
+
+      /**
+       * Translates the unparented position of a transform by an offset.
+       * @param  {Vec2d} translation
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      translate(translation) {
+        if (translation[0] || translation[1]) {
+          const prev = [this._pos[0], this._pos[1]]
+          Point2d.addVec2(this._pos, this._pos, translation)
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attr: "position",
+            prevVal: prev,
+            currVal: [this._pos[0], this._pos[1]]
+          })
+        }
+        return this
+      }
+
+      /**
+       * Sets the unparented 2d scale of the transform
+       * @param {Vec2d} scale
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      setScale(scale) {
+        if (!Vec2d.equals(scale, this._scale)) {
+          const prev = [this._scale[0], this._scale[1]]
+          Vec2d.copy(this._scale, scale)
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attr: "size",
+            prevVal: prev,
+            currVal: scale
+          })
+        }
+        return this
+      }
+
+      /**
+       * Multiplies the current unparented scale of the transform by a 2d scalar
+       * @param  {Vec2d} scaleMult
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      scale(scaleMult) {
+        if (scaleMult[0] !== 1 || scaleMult[1] !== 1) {
+          const prev = [this._scale[0], this._scale[1]]
+          Vec2d.multiply(this._scale, this._scale, scaleMult)
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attr: "size",
+            prevVal: prev,
+            currVal: [this._scale[0], this._scale[1]]
+          })
+        }
+        return this
+      }
+
+      /**
+       * Sets the unparented rotation of the transform in degrees
+       * @param {number} deg Rotation angle in degrees
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      setRotation(deg) {
         const degToUse = deg % 360
-        if (!GLMatrix.equals(degToUse, this._rotDeg)) {
+        if (degToUse !== this._rotDeg) {
           const prev = this._rotDeg
           this._rotDeg = degToUse
-          attrs.push("orientation")
-          prevVals.push(prev)
-          currVals.push(this._rotDeg)
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attr: "orientation",
+            prevVal: prev,
+            curral: this._rotDeg
+          })
         }
       }
 
-      if (attrs.length) {
-        this._lxformDirty = true
-        dirtyChildren(this._children)
-        this.fire(eventName, {
-          attrs,
-          prevVals,
-          currVals
-        })
+      /**
+       * Adds a rotation angle in degrees to the current unparented
+       * rotation of the transform.
+       * @param  {number} deg Additional rotation angle in degrees
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      rotate(deg) {
+        if (deg) {
+          const prev = this._rotDeg
+          this._rotDeg += deg
+          this._rotDeg %= 360
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attr: "orientation",
+            prevVal: prev,
+            curral: this._rotDeg
+          })
+        }
+        return this
       }
-      return this
+
+      /**
+       * Utility function to reset all the unparented transform parameters
+       * @param {number} tx  Translation in x in world units
+       * @param {number} ty  Translation in y in world units
+       * @param {number} sx  Scale in x in world units
+       * @param {number} sy  Scale in y in world units
+       * @param {number} deg Rotation angle degrees
+       * @fires  EventedTransform2d#changed
+       * @return {EventedTransform2d}
+       */
+      setTransformations(tx, ty, sx, sy, deg) {
+        const attrs = []
+        const prevVals = []
+        const currVals = []
+        if (
+          typeof tx !== "undefined" &&
+          typeof ty !== "undefined" &&
+          (!GLMatrix.equals(tx, this._pos[0]) ||
+            !GLMatrix.equals(ty, this._pos[1]))
+        ) {
+          const prev = Point2d.clone(this._pos)
+          this._pos[0] = tx
+          this._pos[1] = ty
+          attrs.push("position")
+          prevVals.push(prev)
+          currVals.push(Point2d.clone(this._pos))
+        }
+
+        if (
+          typeof sx !== "undefined" &&
+          typeof sy !== "undefined" &&
+          (!GLMatrix.equals(sx, this._scale[0]) ||
+            !GLMatrix.equals(sy, this._scale[1]))
+        ) {
+          const prev = Vec2d.clone(this._scale)
+          Vec2d.set(this._scale, sx, sy)
+          attrs.push("size")
+          prevVals.push(prev)
+          currVals.push(Vec2d.clone(this._scale))
+        }
+
+        if (typeof deg !== "undefined") {
+          const degToUse = deg % 360
+          if (!GLMatrix.equals(degToUse, this._rotDeg)) {
+            const prev = this._rotDeg
+            this._rotDeg = degToUse
+            attrs.push("orientation")
+            prevVals.push(prev)
+            currVals.push(this._rotDeg)
+          }
+        }
+
+        if (attrs.length) {
+          this._lxformDirty = true
+          dirtyChildren(this._children)
+          this.fire(eventName, {
+            attrs,
+            prevVals,
+            currVals
+          })
+        }
+        return this
+      }
     }
-  })
+  )
 }

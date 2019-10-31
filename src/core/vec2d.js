@@ -1,6 +1,6 @@
 "use strict"
 
-import {vec2 as Vec2d} from "gl-matrix"
+import { vec2 as Vec2d } from "gl-matrix"
 
 /**
  * Returns the Z coordinate of a 2D crossproduct

@@ -28,7 +28,13 @@ function rotateOBBox(shape, parentShape, selectedInfo, screenPos, worldPos) {
   parentShape.setRotation(selectedInfo.startLocalRot + Math.RAD_TO_DEG * angle)
 }
 
-export function transformXformShape(shape, selectedInfo, screenPos, worldPos, camera) {
+export function transformXformShape(
+  shape,
+  selectedInfo,
+  screenPos,
+  worldPos,
+  camera
+) {
   const parentShape = shape.parent
   const objPos = [0, 0]
   const deltaPos = [0, 0]
@@ -39,8 +45,9 @@ export function transformXformShape(shape, selectedInfo, screenPos, worldPos, ca
     return
   }
 
-  const uniformScale = (selectedInfo.keys.shiftKey || selectedInfo.uniformScaleOnly)
-  const centerScale = (selectedInfo.keys.altKey || selectedInfo.centerScaleOnly)
+  const uniformScale =
+    selectedInfo.keys.shiftKey || selectedInfo.uniformScaleOnly
+  const centerScale = selectedInfo.keys.altKey || selectedInfo.centerScaleOnly
 
   // get the position of the shape at start of transform
   const pt = [0, 0]
@@ -50,8 +57,14 @@ export function transformXformShape(shape, selectedInfo, screenPos, worldPos, ca
   Vec2d.sub(deltaPos, worldPos, selectedInfo.startWorldPos)
 
   if (uniformScale && selectedInfo.controlIndex < 4) {
-    const xAxisDir = [selectedInfo.objectToWorldMatrix[0], selectedInfo.objectToWorldMatrix[1]]
-    const yAxisDir = [selectedInfo.objectToWorldMatrix[2], selectedInfo.objectToWorldMatrix[3]]
+    const xAxisDir = [
+      selectedInfo.objectToWorldMatrix[0],
+      selectedInfo.objectToWorldMatrix[1]
+    ]
+    const yAxisDir = [
+      selectedInfo.objectToWorldMatrix[2],
+      selectedInfo.objectToWorldMatrix[3]
+    ]
     const diagDir = [0, 0]
 
     if (selectedInfo.controlIndex < 2) {
@@ -104,8 +117,8 @@ export function transformXformShape(shape, selectedInfo, screenPos, worldPos, ca
   let yScale = 0
   if (selectedInfo.controlIndex < 4) {
     // dragging a corner vertex
-    xScale = (selectedInfo.controlIndex < 2 ? -1 : 1)
-    yScale = (selectedInfo.controlIndex % 2 === 0 ? -1 : 1)
+    xScale = selectedInfo.controlIndex < 2 ? -1 : 1
+    yScale = selectedInfo.controlIndex % 2 === 0 ? -1 : 1
 
     // can translate based on the mouse delta in world space
     // This is done to offset the scale, which is done at
@@ -126,18 +139,26 @@ export function transformXformShape(shape, selectedInfo, screenPos, worldPos, ca
     const axisDir = [0, 0]
     if (idx % 2 === 0) {
       // scaling in the object's X direction
-      Vec2d.set(axisDir, selectedInfo.objectToWorldMatrix[0], selectedInfo.objectToWorldMatrix[1])
+      Vec2d.set(
+        axisDir,
+        selectedInfo.objectToWorldMatrix[0],
+        selectedInfo.objectToWorldMatrix[1]
+      )
       yScale = 0
-      xScale = (idx < 2 ? -1 : 1)
+      xScale = idx < 2 ? -1 : 1
       if (uniformScale) {
         yScale = xScale
         deltaDims[1] = deltaDims[0]
       }
     } else {
       // scaling in the object's Y direction
-      Vec2d.set(axisDir, selectedInfo.objectToWorldMatrix[2], selectedInfo.objectToWorldMatrix[3])
+      Vec2d.set(
+        axisDir,
+        selectedInfo.objectToWorldMatrix[2],
+        selectedInfo.objectToWorldMatrix[3]
+      )
       xScale = 0
-      yScale = (idx < 2 ? -1 : 1)
+      yScale = idx < 2 ? -1 : 1
       if (uniformScale) {
         xScale = yScale
         deltaDims[0] = deltaDims[1]
@@ -160,10 +181,21 @@ export function transformXformShape(shape, selectedInfo, screenPos, worldPos, ca
   }
 
   // perform the scale
-  parentShape.setScale([selectedInfo.startLocalScale[0] * (1 + xScale * deltaDims[0] / selectedInfo.shapeWidth), selectedInfo.startLocalScale[1] * (1 + yScale * deltaDims[1] / selectedInfo.shapeHeight)])
+  parentShape.setScale([
+    selectedInfo.startLocalScale[0] *
+      (1 + (xScale * deltaDims[0]) / selectedInfo.shapeWidth),
+    selectedInfo.startLocalScale[1] *
+      (1 + (yScale * deltaDims[1]) / selectedInfo.shapeHeight)
+  ])
 }
 
-export function translateShape(shape, selectedInfo, screenPos, worldPos, camera) {
+export function translateShape(
+  shape,
+  selectedInfo,
+  screenPos,
+  worldPos,
+  camera
+) {
   const diff = [0, 0]
   const pt = [0, 0]
   Mat2d.svd(pt, null, null, selectedInfo.objectToWorldMatrix)
@@ -203,7 +235,7 @@ export function translateVert(shape, selectedInfo, screenPos, worldPos) {
   const numVerts = parentShape.numVerts
   if (selectedInfo.controlIndex >= numVerts) {
     const idx1 = Math.min(selectedInfo.controlIndex - numVerts, numVerts - 1)
-    const idx2 = (idx1 === numVerts - 1 ? 0 : idx1 + 1)
+    const idx2 = idx1 === numVerts - 1 ? 0 : idx1 + 1
     const pt = [0, 0]
     const pt1 = [0, 0]
     const pt2 = [0, 0]

@@ -26,7 +26,7 @@ Math.EPS = EPS
  * @return {Number}
  */
 function clamp(f, minv, maxv) {
-  return f < minv ? minv : (f > maxv ? maxv : f)
+  return f < minv ? minv : f > maxv ? maxv : f
 }
 
 /**
@@ -35,7 +35,7 @@ function clamp(f, minv, maxv) {
  * @return {Number}
  */
 function clamp01(f) {
-  return f < 0 ? 0 : (f > 1 ? 1 : f)
+  return f < 0 ? 0 : f > 1 ? 1 : f
 }
 
 /**

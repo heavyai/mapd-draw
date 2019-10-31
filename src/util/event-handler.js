@@ -61,7 +61,7 @@ function recursiveDelete(currNode, listeners) {
       }
     })
   }
-  subnodes.forEach((node) => {
+  subnodes.forEach(node => {
     recursiveDelete(node, listeners)
   })
 }
@@ -85,7 +85,6 @@ function arrayify(intype) {
 
 /** Class for managing events and listeners. Can be used as a base class or a mixin (using @see {@link aggregation}) */
 export default class EventHandler {
-
   /**
    * Create a new event handler
    * @param  {string|string[]} eventsToRegister initial events to register
@@ -151,7 +150,9 @@ export default class EventHandler {
         if (!data) {
           const keys = []
           currMap.forEach((val, key) => keys.push(key))
-          throw new Error(`${type} is not a valid event type. The registered event types at this level are [${keys}]`)
+          throw new Error(
+            `${type} is not a valid event type. The registered event types at this level are [${keys}]`
+          )
         }
         currMap = data[0]
       })
@@ -201,7 +202,7 @@ export default class EventHandler {
    * @return {EventHandler}          this
    */
   once(types, listener) {
-    const wrapper = (data) => {
+    const wrapper = data => {
       this.off(types, wrapper)
       listener.call(this, data)
     }

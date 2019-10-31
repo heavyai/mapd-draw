@@ -3,7 +3,7 @@
 
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
-import {mat2d as Mat2d, vec2 as Vec2d} from "gl-matrix"
+import { mat2d as Mat2d, vec2 as Vec2d } from "gl-matrix"
 import BaseShape from "../shapes/base-shape"
 
 export default class VertEditableShape extends BaseShape {
@@ -18,10 +18,17 @@ export default class VertEditableShape extends BaseShape {
 
   _updateAABox(worldToScreenMatrix) {
     const aabox = this._baseVertShape.aabox
-    if (!AABox2d.equals(aabox, this._baseaabox) || !Mat2d.equals(worldToScreenMatrix, this._worldToScreenMatrix)) {
+    if (
+      !AABox2d.equals(aabox, this._baseaabox) ||
+      !Mat2d.equals(worldToScreenMatrix, this._worldToScreenMatrix)
+    ) {
       AABox2d.copy(this._baseaabox, aabox)
       Mat2d.copy(this._worldToScreenMatrix, worldToScreenMatrix)
-      AABox2d.transformMat2d(this._aabox, this._baseaabox, this._worldToScreenMatrix)
+      AABox2d.transformMat2d(
+        this._aabox,
+        this._baseaabox,
+        this._worldToScreenMatrix
+      )
       const pad = this._vertRadius + this.strokeWidth
       AABox2d.expand(this._aabox, this._aabox, [pad, pad])
     }
@@ -59,7 +66,11 @@ export default class VertEditableShape extends BaseShape {
         const radius = ctx.lineWidth * 1.5
         Vec2d.set(extents, radius, radius)
         for (i = 0; i < this._transformedVerts.length - 1; i += 1) {
-          Point2d.sub(tmpVec, this._transformedVerts[i + 1], this._transformedVerts[i])
+          Point2d.sub(
+            tmpVec,
+            this._transformedVerts[i + 1],
+            this._transformedVerts[i]
+          )
           Vec2d.scale(tmpVec, tmpVec, 0.5)
           Point2d.addVec2(tmpPt, this._transformedVerts[i], tmpVec)
           AABox2d.initCenterExtents(aabox, tmpPt, extents)
@@ -71,7 +82,11 @@ export default class VertEditableShape extends BaseShape {
         }
 
         if (i > 0 && i === this._transformedVerts.length - 1) {
-          Point2d.sub(tmpVec, this._transformedVerts[0], this._transformedVerts[i])
+          Point2d.sub(
+            tmpVec,
+            this._transformedVerts[0],
+            this._transformedVerts[i]
+          )
           Vec2d.scale(tmpVec, tmpVec, 0.5)
           Point2d.addVec2(tmpPt, this._transformedVerts[i], tmpVec)
           AABox2d.initCenterExtents(aabox, tmpPt, extents)
@@ -98,7 +113,12 @@ export default class VertEditableShape extends BaseShape {
     AABox2d.getCenter(center, this._aabox)
     AABox2d.getExtents(extents, this._aabox)
     ctx.beginPath()
-    ctx.rect(center[0] - extents[0], center[1] - extents[1], extents[0] * 2, extents[1] * 2)
+    ctx.rect(
+      center[0] - extents[0],
+      center[1] - extents[1],
+      extents[0] * 2,
+      extents[1] * 2
+    )
     ctx.stroke()
     ctx.restore()
   }
@@ -116,13 +136,25 @@ export default class VertEditableShape extends BaseShape {
     ctx.beginPath()
     let i = 0
     this._transformedVerts[i] = [0, 0]
-    Point2d.transformMat2d(this._transformedVerts[i], verts[i], objToScreenMatrix)
+    Point2d.transformMat2d(
+      this._transformedVerts[i],
+      verts[i],
+      objToScreenMatrix
+    )
 
     const radius = Math.max(ctx.lineWidth * 1.5, 2.5)
     for (i = 0; i < verts.length - 1; i += 1) {
       this._transformedVerts[i + 1] = [0, 0]
-      Point2d.transformMat2d(this._transformedVerts[i + 1], verts[i + 1], objToScreenMatrix)
-      Point2d.sub(tmpVec, this._transformedVerts[i + 1], this._transformedVerts[i])
+      Point2d.transformMat2d(
+        this._transformedVerts[i + 1],
+        verts[i + 1],
+        objToScreenMatrix
+      )
+      Point2d.sub(
+        tmpVec,
+        this._transformedVerts[i + 1],
+        this._transformedVerts[i]
+      )
       Vec2d.scale(tmpVec, tmpVec, 0.5)
       Point2d.addVec2(tmpPt, this._transformedVerts[i], tmpVec)
 

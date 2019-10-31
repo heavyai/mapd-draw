@@ -1,6 +1,6 @@
 "use strict"
 
-import ColorRGBA, {createEventedColorRGBAClass} from "./color-rgba"
+import ColorRGBA, { createEventedColorRGBAClass } from "./color-rgba"
 import aggregation from "../util/aggregation"
 
 /**
@@ -192,10 +192,14 @@ export function createEventedFillStyleMixin(eventName) {
    * @mixin New evented fill style mixin. Will fire events whenever
    *        the fill color is modified
    */
-  return aggregation(null, FillStyle, class EventedFillStyle {
-    initializer(opts) {
-      this._fillColor = new FillColorClass("red", this)
-      this._initFillStyleFromOptions(opts)
+  return aggregation(
+    null,
+    FillStyle,
+    class EventedFillStyle {
+      initializer(opts) {
+        this._fillColor = new FillColorClass("red", this)
+        this._initFillStyleFromOptions(opts)
+      }
     }
-  })
+  )
 }

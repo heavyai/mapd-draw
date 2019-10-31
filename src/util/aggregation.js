@@ -34,33 +34,50 @@
  * @return {function}           new class constructor function
  */
 const aggregation = (base, ...mixins) => {
-
   /*  create aggregation class  */
-  const aggregate = (base ? class __Aggregate extends base {
-    constructor(...args) {
-      /*  call base class constructor  */
-      super(...args)
+  const aggregate = base
+    ? class __Aggregate extends base {
+        constructor(...args) {
+          /*  call base class constructor  */
+          super(...args)
 
-      /*  call mixin's initializer  */
-      mixins.forEach((mixin) => {
-        if (typeof mixin.prototype.initializer === "function") { mixin.prototype.initializer.call(this, ...args) }
-      })
-    }
-  } : () => { /* do nothing */ })
+          /*  call mixin's initializer  */
+          mixins.forEach(mixin => {
+            if (typeof mixin.prototype.initializer === "function") {
+              mixin.prototype.initializer.call(this, ...args)
+            }
+          })
+        }
+      }
+    : () => {
+        /* do nothing */
+      }
 
   /*  copy properties  */
   const copyProps = (target, source) => {
     Object.getOwnPropertyNames(source)
       .concat(Object.getOwnPropertySymbols(source))
-      .forEach((prop) => {
-        if (prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) { return }
-        if (base && prop.match(/^(?:initializer)$/)) { return }
-        Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop))
+      .forEach(prop => {
+        if (
+          prop.match(
+            /^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/
+          )
+        ) {
+          return
+        }
+        if (base && prop.match(/^(?:initializer)$/)) {
+          return
+        }
+        Object.defineProperty(
+          target,
+          prop,
+          Object.getOwnPropertyDescriptor(source, prop)
+        )
       })
   }
 
   /*  copy all properties of all mixins into aggregation class  */
-  mixins.forEach((mixin) => {
+  mixins.forEach(mixin => {
     copyProps(aggregate.prototype, mixin.prototype)
     copyProps(aggregate, mixin)
   })

@@ -1,6 +1,6 @@
 "use strict"
 
-import {glMatrix, vec2 as Vec2d} from "gl-matrix"
+import { glMatrix, vec2 as Vec2d } from "gl-matrix"
 
 export const MINX = 0
 export const MINY = 1
@@ -186,7 +186,7 @@ export function initCenterExtents(out, center, sizes) {
  * @return {Boolean}     true if box is empty, false otherwise
  */
 export function isEmpty(box) {
-  return (box[MINX] > box[MAXX] || box[MINY] > box[MAXY])
+  return box[MINX] > box[MAXX] || box[MINY] > box[MAXY]
 }
 
 /**
@@ -195,7 +195,12 @@ export function isEmpty(box) {
  * @return {Boolean}     True if box extends to +/- inifinity in either dimension, false otherwise
  */
 export function isInfinite(box) {
-  return !isFinite(box[MINX]) || !isFinite(box[MINY]) || !isFinite(box[MAXX]) || !isFinite(box[MAXY])
+  return (
+    !isFinite(box[MINX]) ||
+    !isFinite(box[MINY]) ||
+    !isFinite(box[MAXX]) ||
+    !isFinite(box[MAXY])
+  )
 }
 
 /**
@@ -213,7 +218,12 @@ export function equals(a, b) {
   const b1 = b[1]
   const b2 = b[2]
   const b3 = b[3]
-  return (Math.abs(a0 - b0) <= glMatrix.EPSILON && Math.abs(a1 - b1) <= glMatrix.EPSILON && Math.abs(a2 - b2) <= glMatrix.EPSILON && Math.abs(a3 - b3) <= glMatrix.EPSILON)
+  return (
+    Math.abs(a0 - b0) <= glMatrix.EPSILON &&
+    Math.abs(a1 - b1) <= glMatrix.EPSILON &&
+    Math.abs(a2 - b2) <= glMatrix.EPSILON &&
+    Math.abs(a3 - b3) <= glMatrix.EPSILON
+  )
 }
 
 /**
@@ -284,7 +294,12 @@ export function area(box) {
  * @return {AABox2d}     bounds referenced by out arg
  */
 export function hull(out, a, b) {
-  return create(Math.min(a[MINX], b[MINX]), Math.min(a[MINY], b[MINY]), Math.max(a[MAXX], b[MAXX]), Math.max(a[MAXY], b[MAXY]))
+  return create(
+    Math.min(a[MINX], b[MINX]),
+    Math.min(a[MINY], b[MINY]),
+    Math.max(a[MAXX], b[MAXX]),
+    Math.max(a[MAXY], b[MAXY])
+  )
 }
 
 /**
@@ -329,7 +344,12 @@ export function intersection(out, a, b) {
  * @return {Boolean}   Returns true if a overlaps b, false otherwise
  */
 export function overlaps(a, b) {
-  return !(a[MAXX] <= b[MINX] || a[MINX] >= b[MAXX] || a[MAXY] <= b[MINY] || a[MINY] >= b[MAXY])
+  return !(
+    a[MAXX] <= b[MINX] ||
+    a[MINX] >= b[MAXX] ||
+    a[MAXY] <= b[MINY] ||
+    a[MINY] >= b[MAXY]
+  )
 }
 
 /**
@@ -339,7 +359,12 @@ export function overlaps(a, b) {
  * @return {Boolean}   true if a fully contains b.
  */
 export function contains(a, b) {
-  return !(b[MINX] < a[MINX] || b[MAXX] > a[MAXX] || b[MINY] < a[MINY] || b[MAXY] > a[MAXY])
+  return !(
+    b[MINX] < a[MINX] ||
+    b[MAXX] > a[MAXX] ||
+    b[MINY] < a[MINY] ||
+    b[MAXY] > a[MAXY]
+  )
 }
 
 /**
@@ -349,7 +374,12 @@ export function contains(a, b) {
  * @return {Boolean}     Returns true if pt is inside of box, false otherwise
  */
 export function containsPt(box, pt) {
-  return (pt[MINX] >= box[MINX] && pt[MINX] <= box[MAXX] && pt[MINY] >= box[MINY] && pt[MINY] <= box[MAXY])
+  return (
+    pt[MINX] >= box[MINX] &&
+    pt[MINX] <= box[MAXX] &&
+    pt[MINY] >= box[MINY] &&
+    pt[MINY] <= box[MAXY]
+  )
 }
 
 /**

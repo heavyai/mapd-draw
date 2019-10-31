@@ -34,13 +34,10 @@ module.exports = {
       "process.env": {
         NODE_ENV: JSON.stringify("production")
       }
-    }),
-    // new webpack.OldWatchingPlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
+    })
   ],
   devtool: "eval-source-map",
   resolve: {
-    extensions: ["", ".js"]
+    extensions: [".js"]
   }
 };

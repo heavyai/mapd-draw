@@ -1,6 +1,6 @@
 "use strict"
 
-import ColorRGBA, {createEventedColorRGBAClass} from "./color-rgba"
+import ColorRGBA, { createEventedColorRGBAClass } from "./color-rgba"
 import aggregation from "../util/aggregation"
 
 /**
@@ -50,8 +50,15 @@ const lineJoinOpts = ["miter", "bevel", "round"]
  */
 function validateLineJoin(lineJoin) {
   let idx = -1
-  if (typeof lineJoin !== "string" || (idx = lineJoinOpts.indexOf(lineJoin.toLowerCase())) < 0) {
-    throw new Error(`Line join must be a string and must be one of [${lineJoinOpts.join(", ")}]`)
+  if (
+    typeof lineJoin !== "string" ||
+    (idx = lineJoinOpts.indexOf(lineJoin.toLowerCase())) < 0
+  ) {
+    throw new Error(
+      `Line join must be a string and must be one of [${lineJoinOpts.join(
+        ", "
+      )}]`
+    )
   }
   return idx
 }
@@ -81,8 +88,13 @@ const lineCapOpts = ["butt", "square", "round"]
  */
 function validateLineCap(lineCap) {
   let idx = -1
-  if (typeof lineCap !== "string" || (idx = lineCapOpts.indexOf(lineCap.toLowerCase())) < 0) {
-    throw new Error(`Line cap must be a string and must be one of [${lineCapOpts.join(", ")}]`)
+  if (
+    typeof lineCap !== "string" ||
+    (idx = lineCapOpts.indexOf(lineCap.toLowerCase())) < 0
+  ) {
+    throw new Error(
+      `Line cap must be a string and must be one of [${lineCapOpts.join(", ")}]`
+    )
   }
   return idx
 }
@@ -94,8 +106,14 @@ function validateLineCap(lineCap) {
  * @private
  */
 function validateDashPattern(dashPattern) {
-  if (!dashPattern || !Array.isArray(dashPattern) || dashPattern.length % 2 !== 0) {
-    throw new Error("The dash pattern must be an array with an even number of numbers (or an empty array)")
+  if (
+    !dashPattern ||
+    !Array.isArray(dashPattern) ||
+    dashPattern.length % 2 !== 0
+  ) {
+    throw new Error(
+      "The dash pattern must be an array with an even number of numbers (or an empty array)"
+    )
   }
 }
 
@@ -474,180 +492,184 @@ export function createEventedStrokeStyleMixin(eventName) {
    * @mixin New evented stroke style mixin. Will fire events whenever
    *        the stroke is modified
    */
-  return aggregation(null, StrokeStyle, class EventedStrokeStyle {
-    /**
-     * Initializer method to initialize an evented stroke style.
-     * @param  {StrokeStyleOptions} [opts]
-     * @protected
-     */
-    initializer(opts) {
-      this._strokeColor = new StrokeColorClass("black", this)
-      this._strokeWidth = 0
-      this._lineJoin = JoinEnum.MITER
-      this._lineCap = CapEnum.BUTT
-      this._dashPattern = []
-      this._dashOffset = 0
-      this._initStrokeStyleFromOptions(opts)
-    }
-
-    /**
-     * Sets the stroke width
-     * @param  {number}
-     * @fires  EventedStrokeStyle#changed
-     * @return {EventedStrokeStyle}
-     */
-    set strokeWidth(strokeWidth) {
-      validateStrokeWidth(strokeWidth)
-      if (strokeWidth !== this._strokeWidth) {
-        const prev = this._strokeWidth
-        this._strokeWidth = strokeWidth
-        this.fire(eventName, {
-          attr: "strokeWidth",
-          prevVal: prev,
-          curral: this._strokeWidth
-        })
+  return aggregation(
+    null,
+    StrokeStyle,
+    class EventedStrokeStyle {
+      /**
+       * Initializer method to initialize an evented stroke style.
+       * @param  {StrokeStyleOptions} [opts]
+       * @protected
+       */
+      initializer(opts) {
+        this._strokeColor = new StrokeColorClass("black", this)
+        this._strokeWidth = 0
+        this._lineJoin = JoinEnum.MITER
+        this._lineCap = CapEnum.BUTT
+        this._dashPattern = []
+        this._dashOffset = 0
+        this._initStrokeStyleFromOptions(opts)
       }
 
-      return this
-    }
-
-    /**
-     * Gets the current stroke width
-     * @return {number}
-     */
-    get strokeWidth() {
-      return this._strokeWidth
-    }
-
-    /**
-     * Sets the line join
-     * @param  {string} lineJoin
-     * @fires {EventedStrokeStyle#changed}
-     * @return {EventedStrokeStyle}
-     */
-    set lineJoin(lineJoin) {
-      const enumVal = validateLineJoin(lineJoin)
-
-      if (enumVal !== this._lineJoin) {
-        const prev = this._lineJoin
-        this._lineJoin = enumVal
-        this.fire(eventName, {
-          attr: "lineJoin",
-          prevVal: prev,
-          curral: this._lineJoin
-        })
-      }
-
-      return this
-    }
-
-    /**
-     * Gets the current line join
-     * @return {string}
-     */
-    get lineJoin() {
-      return lineJoinOpts[this._lineJoin]
-    }
-
-    /**
-     * Sets the line cap
-     * @param  {string} lineCap
-     * @fires {EventedStrokeStyle#changed}
-     * @return {EventedStrokeStyle}
-     */
-    set lineCap(lineCap) {
-      const enumVal = validateLineCap(lineCap)
-      if (enumVal !== this._lineCap) {
-        const prev = this._lineCap
-        this._lineCap = enumVal
-        this.fire(eventName, {
-          attr: "lineCap",
-          prevVal: prev,
-          curral: this._lineCap
-        })
-      }
-      return this
-    }
-
-    /**
-     * Gets the line cap
-     * @return {string}
-     */
-    get lineCap() {
-      return lineCapOpts[this._lineCap]
-    }
-
-    /**
-     * Sets the dash pattern
-     * @param  {number[]} dashPattern
-     * @fires {EventedStrokeStyle#changed}
-     * @return {EventedStrokeStyle}
-     */
-    set dashPattern(dashPattern) {
-      validateDashPattern(dashPattern)
-      let diff = false
-      if (dashPattern.length === this._dashPattern.length) {
-        for (let i = 0; i < dashPattern.length; i += 1) {
-          if (dashPattern[i] !== this._dashPattern[i]) {
-            diff = true
-            break
-          }
-        }
-      } else {
-        diff = true
-      }
-
-      if (diff) {
-        const prev = this._dashPattern
-        this._dashPattern = dashPattern.slice()
-        this.fire(eventName, {
-          attr: "dashPattern",
-          prevVal: prev,
-          curral: this._dashPattern.slice()
-        })
-      }
-      return this
-    }
-
-    /**
-     * Gets the current dash pattern
-     * @return {number[]}
-     */
-    get dashPattern() {
-      return this._dashPattern.slice()
-    }
-
-    /**
-     * Sets the current dash offset
-     * @param  {number} dashOffset
-     * @fires {EventedStrokeStyle#changed}
-     * @return {EventedStrokeStyle}
-     */
-    set dashOffset(dashOffset) {
-      validateDashOffset(dashOffset)
-
-      if (dashOffset !== this._dashOffset) {
-        const prev = this._dashOffset
-        this._dashOffset = dashOffset
-
-        if (this._dashPattern.length) {
-          // only fire if dashing is activated
+      /**
+       * Sets the stroke width
+       * @param  {number}
+       * @fires  EventedStrokeStyle#changed
+       * @return {EventedStrokeStyle}
+       */
+      set strokeWidth(strokeWidth) {
+        validateStrokeWidth(strokeWidth)
+        if (strokeWidth !== this._strokeWidth) {
+          const prev = this._strokeWidth
+          this._strokeWidth = strokeWidth
           this.fire(eventName, {
-            attr: "dashOffset",
+            attr: "strokeWidth",
             prevVal: prev,
-            curral: this._dashOffset
+            curral: this._strokeWidth
           })
         }
-      }
-      return this
-    }
 
-    /**
-     * Gets the current dash offset
-     * @return {number}
-     */
-    get dashOffset() {
-      return this._dashOffset
+        return this
+      }
+
+      /**
+       * Gets the current stroke width
+       * @return {number}
+       */
+      get strokeWidth() {
+        return this._strokeWidth
+      }
+
+      /**
+       * Sets the line join
+       * @param  {string} lineJoin
+       * @fires {EventedStrokeStyle#changed}
+       * @return {EventedStrokeStyle}
+       */
+      set lineJoin(lineJoin) {
+        const enumVal = validateLineJoin(lineJoin)
+
+        if (enumVal !== this._lineJoin) {
+          const prev = this._lineJoin
+          this._lineJoin = enumVal
+          this.fire(eventName, {
+            attr: "lineJoin",
+            prevVal: prev,
+            curral: this._lineJoin
+          })
+        }
+
+        return this
+      }
+
+      /**
+       * Gets the current line join
+       * @return {string}
+       */
+      get lineJoin() {
+        return lineJoinOpts[this._lineJoin]
+      }
+
+      /**
+       * Sets the line cap
+       * @param  {string} lineCap
+       * @fires {EventedStrokeStyle#changed}
+       * @return {EventedStrokeStyle}
+       */
+      set lineCap(lineCap) {
+        const enumVal = validateLineCap(lineCap)
+        if (enumVal !== this._lineCap) {
+          const prev = this._lineCap
+          this._lineCap = enumVal
+          this.fire(eventName, {
+            attr: "lineCap",
+            prevVal: prev,
+            curral: this._lineCap
+          })
+        }
+        return this
+      }
+
+      /**
+       * Gets the line cap
+       * @return {string}
+       */
+      get lineCap() {
+        return lineCapOpts[this._lineCap]
+      }
+
+      /**
+       * Sets the dash pattern
+       * @param  {number[]} dashPattern
+       * @fires {EventedStrokeStyle#changed}
+       * @return {EventedStrokeStyle}
+       */
+      set dashPattern(dashPattern) {
+        validateDashPattern(dashPattern)
+        let diff = false
+        if (dashPattern.length === this._dashPattern.length) {
+          for (let i = 0; i < dashPattern.length; i += 1) {
+            if (dashPattern[i] !== this._dashPattern[i]) {
+              diff = true
+              break
+            }
+          }
+        } else {
+          diff = true
+        }
+
+        if (diff) {
+          const prev = this._dashPattern
+          this._dashPattern = dashPattern.slice()
+          this.fire(eventName, {
+            attr: "dashPattern",
+            prevVal: prev,
+            curral: this._dashPattern.slice()
+          })
+        }
+        return this
+      }
+
+      /**
+       * Gets the current dash pattern
+       * @return {number[]}
+       */
+      get dashPattern() {
+        return this._dashPattern.slice()
+      }
+
+      /**
+       * Sets the current dash offset
+       * @param  {number} dashOffset
+       * @fires {EventedStrokeStyle#changed}
+       * @return {EventedStrokeStyle}
+       */
+      set dashOffset(dashOffset) {
+        validateDashOffset(dashOffset)
+
+        if (dashOffset !== this._dashOffset) {
+          const prev = this._dashOffset
+          this._dashOffset = dashOffset
+
+          if (this._dashPattern.length) {
+            // only fire if dashing is activated
+            this.fire(eventName, {
+              attr: "dashOffset",
+              prevVal: prev,
+              curral: this._dashOffset
+            })
+          }
+        }
+        return this
+      }
+
+      /**
+       * Gets the current dash offset
+       * @return {number}
+       */
+      get dashOffset() {
+        return this._dashOffset
+      }
     }
-  })
+  )
 }
