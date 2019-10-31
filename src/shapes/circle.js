@@ -126,10 +126,12 @@ export default class Circle extends BaseShape {
    * @override
    */
   toJSON() {
-    return Object.assign({
-      type: "Circle", // NOTE: this much match the name of the class
-      radius: this.radius
-    }, super.toJSON())
+    return Object.assign(
+      {
+        type: "Circle", // NOTE: this much match the name of the class
+        radius: this.radius
+      },
+      super.toJSON()
+    )
   }
-
 }

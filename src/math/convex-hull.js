@@ -13,7 +13,6 @@
 const X = 0
 const Y = 1
 
-
 /**
  * Test if a point is Left|On|Right of an infinite line.
  * @param  {Point2d}  P0 [description]
@@ -60,21 +59,31 @@ export function simpleHull_2D(verts) {
   }
 
   // compute the hull on the deque D[]
-  for (let i = 3; i < n; i += 1) { // process the rest of vertices
+  for (let i = 3; i < n; i += 1) {
+    // process the rest of vertices
     // test if next vertex is outside the deque hull
-    if ((isLeft(verts[D[bot]], verts[D[bot + 1]], verts[i]) <= 0) ||
-      (isLeft(verts[D[top - 1]], verts[D[top]], verts[i]) <= 0)) {
-
+    if (
+      isLeft(verts[D[bot]], verts[D[bot + 1]], verts[i]) <= 0 ||
+      isLeft(verts[D[top - 1]], verts[D[top]], verts[i]) <= 0
+    ) {
       // incrementally add an exterior vertex to the deque hull
       // get the rightmost tangent at the deque bot
-      while (D[bot] >= 0 && D[bot + 1] >= 0 && isLeft(verts[D[bot]], verts[D[bot + 1]], verts[i]) <= 0) {
+      while (
+        D[bot] >= 0 &&
+        D[bot + 1] >= 0 &&
+        isLeft(verts[D[bot]], verts[D[bot + 1]], verts[i]) <= 0
+      ) {
         bot += 1 // remove bot of deque
       }
       bot -= 1
       D[bot] = i // insert verts[i] at bot of deque
 
       // get the leftmost tangent at the deque top
-      while (D[top] >= 0 && D[top + 1] >= 0 && isLeft(verts[D[top - 1]], verts[D[top]], verts[i]) <= 0) {
+      while (
+        D[top] >= 0 &&
+        D[top + 1] >= 0 &&
+        isLeft(verts[D[top - 1]], verts[D[top]], verts[i]) <= 0
+      ) {
         top -= 1 // pop top of deque
       }
       top += 1
@@ -84,7 +93,7 @@ export function simpleHull_2D(verts) {
 
   // transcribe deque D[] to the output hull array H[]
   let h = 0
-  for (h = 0; h <= (top - bot - 1); h += 1) {
+  for (h = 0; h <= top - bot - 1; h += 1) {
     H[h] = D[bot + h]
   }
 

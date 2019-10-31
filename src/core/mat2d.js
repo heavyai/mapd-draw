@@ -1,23 +1,23 @@
 "use strict"
 
-import {mat2d as Mat2d} from "gl-matrix"
+import { mat2d as Mat2d } from "gl-matrix"
 
 /**
  * Singular value decomposition
  * See: http://math.stackexchange.com/questions/861674/decompose-a-2d-arbitrary-transform-into-only-scaling-and-rotation
  */
 
- /**
-  * Calculates the singular value decomposition to extract the
-  * scale, rotation, and translation from a 2x3 matrix.
-  * Any matrix built by affine transformations can be decomposed
-  * into a rotation*scale*rotation*translation
-  * See: http://math.stackexchange.com/questions/861674/decompose-a-2d-arbitrary-transform-into-only-scaling-and-rotation
-  * @param  {Vec2d} outTranslate Vector to hold the translation components
-  * @param  {Vec2d} outScale     Vector to hold the x,y scale components
-  * @param  {Vec2d} outRotate    Vector to hold the rotation components
-  * @param  {Mat2d} mat          Matrix to decompose
-  */
+/**
+ * Calculates the singular value decomposition to extract the
+ * scale, rotation, and translation from a 2x3 matrix.
+ * Any matrix built by affine transformations can be decomposed
+ * into a rotation*scale*rotation*translation
+ * See: http://math.stackexchange.com/questions/861674/decompose-a-2d-arbitrary-transform-into-only-scaling-and-rotation
+ * @param  {Vec2d} outTranslate Vector to hold the translation components
+ * @param  {Vec2d} outScale     Vector to hold the x,y scale components
+ * @param  {Vec2d} outRotate    Vector to hold the rotation components
+ * @param  {Mat2d} mat          Matrix to decompose
+ */
 Mat2d.svd = (outTranslate, outScale, outRotate, mat) => {
   if (outTranslate) {
     outTranslate[0] = mat[4]

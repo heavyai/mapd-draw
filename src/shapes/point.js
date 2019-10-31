@@ -106,10 +106,12 @@ export default class Point extends BaseShape {
    * @override
    */
   toJSON() {
-    return Object.assign({
-      type: "Point", // NOTE: this much match the name of the class
-      size: this.size
-    }, super.toJSON())
+    return Object.assign(
+      {
+        type: "Point", // NOTE: this much match the name of the class
+        size: this.size
+      },
+      super.toJSON()
+    )
   }
-
 }

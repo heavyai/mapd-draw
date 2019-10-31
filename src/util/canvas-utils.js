@@ -7,12 +7,14 @@
  * @return {number}           pixel ratio of the canvas 2d context
  */
 export function getPixelRatio(canvasCtx) {
-  const backingStore = canvasCtx.backingStorePixelRatio ||
+  const backingStore =
+    canvasCtx.backingStorePixelRatio ||
     canvasCtx.webkitBackingStorePixelRatio ||
     canvasCtx.mozBackingStorePixelRatio ||
     canvasCtx.msBackingStorePixelRatio ||
     canvasCtx.oBackingStorePixelRatio ||
-    canvasCtx.backingStorePixelRatio || 1
+    canvasCtx.backingStorePixelRatio ||
+    1
 
   return (window.devicePixelRatio || 1) / backingStore
 }
@@ -53,7 +55,7 @@ export function makeCanvasAutoHighDPI(canvasCtx) {
   allRatioArgs.forEach(funcName => {
     canvasCtx[funcName] = (function(_super) {
       return function(...args) {
-        args = args.map((a) => a * pixelRatio)
+        args = args.map(a => a * pixelRatio)
 
         return _super.apply(this, args)
       }
@@ -134,7 +136,6 @@ export function makeCanvasAutoHighDPI(canvasCtx) {
   //     )
   //   }
   // })(canvasCtx.strokeText)
-
 
   const setTransformArgs = [pixelRatio, 0, 0, pixelRatio, 0, 0]
   canvasCtx.setTransform = (function(_super) {

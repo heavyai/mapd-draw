@@ -1,6 +1,6 @@
 "use strict"
 
-import {glMatrix, vec2 as Vec2} from "gl-matrix"
+import { glMatrix, vec2 as Vec2 } from "gl-matrix"
 
 const X = 0
 const Y = 1

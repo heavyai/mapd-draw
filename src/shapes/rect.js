@@ -114,7 +114,11 @@ export default class Rect extends BaseShape {
    */
   _updateAABox() {
     if (this._geomDirty || this._boundsOutOfDate) {
-      AABox2d.initCenterExtents(this._aabox, [0, 0], [this._width / 2, this._height / 2])
+      AABox2d.initCenterExtents(
+        this._aabox,
+        [0, 0],
+        [this._width / 2, this._height / 2]
+      )
       AABox2d.transformMat2d(this._aabox, this._aabox, this.globalXform)
       this._geomDirty = this._boundsOutOfDate = false
     }
@@ -136,10 +140,13 @@ export default class Rect extends BaseShape {
    * @override
    */
   toJSON() {
-    return Object.assign({
-      type: "Rect",
-      width: this.width,
-      height: this.height
-    }, super.toJSON())
+    return Object.assign(
+      {
+        type: "Rect",
+        width: this.width,
+        height: this.height
+      },
+      super.toJSON()
+    )
   }
 }

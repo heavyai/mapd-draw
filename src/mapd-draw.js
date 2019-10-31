@@ -1,20 +1,34 @@
-/* eslint-disable object-curly-spacing*/
 "use strict"
 
-export {version} from "../package.json"
+export { version } from "../package.json"
 
-export ShapeBuilder from "./engine/shape-builder"
-export DrawEngine from "./engine/draw-engine"
-export * as AABox2d from "./core/aabox2d"
-export Mat2d from "./core/mat2d"
-export * as Point2d from "./core/point2d"
-export {mat2 as Mat2} from "gl-matrix"
-export BasicStyle from "./style/basic-style"
-export Vec2d from "./core/vec2d"
-export Circle from "./shapes/circle"
-export Rect from "./shapes/rect"
-export Poly from "./shapes/poly"
-export PolyLine from "./shapes/poly-line"
-export Point from "./shapes/point"
-export Math from "./math/math"
-export {simpleHull_2D} from "./math/convex-hull"
+import ShapeBuilder from "./engine/shape-builder"
+export { ShapeBuilder }
+import DrawEngine from "./engine/draw-engine"
+export { DrawEngine }
+import * as AABox2d from "./core/aabox2d"
+export { AABox2d }
+import Mat2d from "./core/mat2d"
+export { Mat2d }
+import * as Point2d from "./core/point2d"
+export { Point2d }
+import { mat2 as Mat2 } from "gl-matrix"
+export { Mat2 }
+import BasicStyle from "./style/basic-style"
+export { BasicStyle }
+import Vec2d from "./core/vec2d"
+export { Vec2d }
+import Circle from "./shapes/circle"
+export { Circle }
+import Rect from "./shapes/rect"
+export { Rect }
+import Poly from "./shapes/poly"
+export { Poly }
+import PolyLine from "./shapes/poly-line"
+export { PolyLine }
+import Point from "./shapes/point"
+export { Point }
+import Math from "./math/math"
+export { Math }
+import { simpleHull_2D } from "./math/convex-hull"
+export { simpleHull_2D }

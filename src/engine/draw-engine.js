@@ -4,14 +4,20 @@ import * as CanvasUtils from "../util/canvas-utils"
 import * as Point2d from "../core/point2d"
 import BaseShape from "../shapes/base-shape"
 import BasicStyle from "../style/basic-style"
-import {
-  bindAll
-} from "../util/utils"
+import { bindAll } from "../util/utils"
 import Camera2d from "../view/camera2d"
 import EventHander from "../util/event-handler"
 import ResizeSensor from "css-element-queries/src/ResizeSensor"
 
-const mouseevents = ["mousedown", "mouseup", "mousemove", "click", "dblclick", "mouseover", "mouseout"]
+const mouseevents = [
+  "mousedown",
+  "mouseup",
+  "mousemove",
+  "click",
+  "dblclick",
+  "mouseover",
+  "mouseout"
+]
 const marginProps = ["top", "bottom", "left", "right"]
 
 export const EventConstants = {
@@ -99,7 +105,7 @@ class DrawStyleState extends BasicStyle {
 }
 
 function addClass(element, className) {
-  if (element && (` ${element.className} `).indexOf(` ${className} `) < 0) {
+  if (element && ` ${element.className} `.indexOf(` ${className} `) < 0) {
     element.className += (element.className ? " " : "") + className
   }
 }
@@ -111,7 +117,7 @@ function createCanvas(parent) {
   const canvas = document.createElement("canvas")
   const canvasContext = canvas.getContext("2d")
   const ratio = CanvasUtils.makeCanvasAutoHighDPI(canvasContext)
-    // const ratio = 1
+  // const ratio = 1
 
   // add class?
   addClass(canvas, "mapd-draw-canvas")
@@ -133,15 +139,23 @@ function createCanvas(parent) {
   }
 }
 
-
-function addShapesToMap(newShapes, existingObjectsMap, currIds, reorderCb, redrawCb) {
+function addShapesToMap(
+  newShapes,
+  existingObjectsMap,
+  currIds,
+  reorderCb,
+  redrawCb
+) {
   newShapes.forEach(shape => {
     existingObjectsMap.set(shape, {
       shapeObj: shape,
       shapeId: currIds.shapeId,
       shapeIdx: -1
     })
-    shape.on(["changed:order", "changed:visibility", "changed:style"], reorderCb)
+    shape.on(
+      ["changed:order", "changed:visibility", "changed:style"],
+      reorderCb
+    )
     shape.on(["changed:geom", "changed:visibility", "changed:xform"], redrawCb)
     currIds.shapeId += 1
   })
@@ -182,12 +196,18 @@ export default class DrawEngine extends EventHander {
   _resize(opts) {
     let width = 0
     if (this._parent.offsetWidth) {
-      width = Math.max(width, this._parent.offsetWidth - this._margins.left - this._margins.right)
+      width = Math.max(
+        width,
+        this._parent.offsetWidth - this._margins.left - this._margins.right
+      )
     }
 
     let height = 0
     if (this._parent.offsetHeight) {
-      height = Math.max(height, this._parent.offsetHeight - this._margins.top - this._margins.bottom)
+      height = Math.max(
+        height,
+        this._parent.offsetHeight - this._margins.top - this._margins.bottom
+      )
     }
 
     this._drawCanvas.width = width * this._pixelRatio
@@ -218,9 +238,20 @@ export default class DrawEngine extends EventHander {
       //   // this._camera.viewport = [0, 0, width, height]
       //   // this._camera.projectionBounds = [0, 0, width, height]
     } else {
-      const projDims = (opts && opts.projectionDimensions ? opts.projectionDimensions : [width, height])
-      this._camera = new Camera2d([0, 0, width, height], projDims, (opts.flipY ? Boolean(opts.flipY) : false))
-      this._camera.setPosition((opts && opts.cameraPosition ? opts.cameraPosition : [width / 2.0, height / 2.0]))
+      const projDims =
+        opts && opts.projectionDimensions
+          ? opts.projectionDimensions
+          : [width, height]
+      this._camera = new Camera2d(
+        [0, 0, width, height],
+        projDims,
+        opts.flipY ? Boolean(opts.flipY) : false
+      )
+      this._camera.setPosition(
+        opts && opts.cameraPosition
+          ? opts.cameraPosition
+          : [width / 2.0, height / 2.0]
+      )
       this._camera.on("changed", this._rerenderCb)
     }
     // this._camera = new Camera2d([0, 0, this.width, this.height], [0, 0, this.width, this.height])
@@ -316,19 +347,16 @@ export default class DrawEngine extends EventHander {
   }
 
   _initCanvas(parent, opts, forceEvents = null) {
-    this._margins = (opts && opts.margins ? Object.assign({}, opts.margins) : {})
+    this._margins = opts && opts.margins ? Object.assign({}, opts.margins) : {}
     marginProps.forEach(prop => {
       if (typeof this._margins[prop] !== "number") {
         this._margins[prop] = 0
       }
     })
 
-    const {
-      canvasContainer,
-      canvas,
-      canvasContext,
-      ratio
-    } = createCanvas(parent)
+    const { canvasContainer, canvas, canvasContext, ratio } = createCanvas(
+      parent
+    )
 
     this._container = canvasContainer
     this._drawCanvas = canvas
@@ -367,7 +395,18 @@ export default class DrawEngine extends EventHander {
     this.registerEvents([EventConstants.SHAPE_ADD, EventConstants.SHAPE_DELETE])
 
     bindAll(["_reorderCb", "_rerenderCb"], this)
-    bindAll(["_mousedownCB", "_mouseupCB", "_mousemoveCB", "_clickCB", "_dblclickCB", "_mouseoverCB", "_mouseoutCB"], this)
+    bindAll(
+      [
+        "_mousedownCB",
+        "_mouseupCB",
+        "_mousemoveCB",
+        "_clickCB",
+        "_dblclickCB",
+        "_mouseoverCB",
+        "_mouseoutCB"
+      ],
+      this
+    )
 
     this._renderFrameCb = this.renderAll.bind(this)
     this._renderRequestId = 0
@@ -400,8 +439,10 @@ export default class DrawEngine extends EventHander {
 
   get sortedShapes() {
     if (this._reorderedObjIdxs.size) {
-      console.assert(this._sortedObjs.length === this._objects.size,
-        `Size mismatch when rendering objets. Something got out of sync - sorted objs length: ${this._sortedObjs.length}, objects length: ${this._objects.size}`)
+      console.assert(
+        this._sortedObjs.length === this._objects.size,
+        `Size mismatch when rendering objets. Something got out of sync - sorted objs length: ${this._sortedObjs.length}, objects length: ${this._objects.size}`
+      )
 
       // if (this._reorderedObjIdxs.length / this._sortedObjs.length > 0.7) {
       //   // might as well just resort the whole thing over
@@ -425,7 +466,10 @@ export default class DrawEngine extends EventHander {
 
   set margins(margins) {
     marginProps.forEach(prop => {
-      if (typeof margins[prop] === "number" && margins[prop] !== this._margins[prop]) {
+      if (
+        typeof margins[prop] === "number" &&
+        margins[prop] !== this._margins[prop]
+      ) {
         this._margins[prop] = margins.prop
       }
     })
@@ -479,7 +523,13 @@ export default class DrawEngine extends EventHander {
       shapes = [shape]
     }
 
-    addShapesToMap(shapes, this._objects, this._ids, this._reorderCb, this._rerenderCb)
+    addShapesToMap(
+      shapes,
+      this._objects,
+      this._ids,
+      this._reorderCb,
+      this._rerenderCb
+    )
 
     // fire add event
     this.fire("shape:add", {
@@ -500,7 +550,12 @@ export default class DrawEngine extends EventHander {
       shapes = [shape]
     }
 
-    const idxs = deleteShapesFromMap(shapes, this._objects, this._reorderCb, this._rerenderCb)
+    const idxs = deleteShapesFromMap(
+      shapes,
+      this._objects,
+      this._reorderCb,
+      this._rerenderCb
+    )
     let index = -1
     for (let i = 0; i < shapes.length; i += 1) {
       if ((index = this._sortedObjs.indexOf(shapes[i])) >= 0) {
@@ -558,7 +613,10 @@ export default class DrawEngine extends EventHander {
     changedShapes.forEach(changedShape => {
       console.assert(changedShape, "A changed event doesn't have an object")
       const shapeInfo = this._objects.get(changedShape)
-      console.assert(shapeInfo, `A changed event target isn't in the list of shapes ${changedShape}`)
+      console.assert(
+        shapeInfo,
+        `A changed event target isn't in the list of shapes ${changedShape}`
+      )
       if (shapeInfo.shapeIdx < 0) {
         shapeInfo.shapeIdx = this._sortedObjs.push(changedShape) - 1
       }
@@ -578,8 +636,13 @@ export default class DrawEngine extends EventHander {
 
   renderAll() {
     const ctx = this._drawCtx
-      // ctx.clearRect(0, 0, this.width, this.height)
-    ctx.clearRect(0, 0, this._drawCanvas.offsetWidth, this._drawCanvas.offsetHeight)
+    // ctx.clearRect(0, 0, this.width, this.height)
+    ctx.clearRect(
+      0,
+      0,
+      this._drawCanvas.offsetWidth,
+      this._drawCanvas.offsetHeight
+    )
 
     if (!this._objects.size) {
       return

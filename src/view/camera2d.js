@@ -2,10 +2,10 @@
 
 import * as AABox2d from "../core/aabox2d"
 import aggregation from "../util/aggregation"
-import {createEventedTransform2dMixin} from "../shapes/transform2d"
+import { createEventedTransform2dMixin } from "../shapes/transform2d"
 import EventHandler from "../util/event-handler"
 import Mat2d from "../core/mat2d"
-import {vec2 as Vec2d} from "gl-matrix"
+import { vec2 as Vec2d } from "gl-matrix"
 
 /**
  * Camera modification event
@@ -108,7 +108,15 @@ class BaseCamera2d extends EventHandler {
       const extents = [0, 0]
       AABox2d.getCenter(center, this._viewport)
       AABox2d.getExtents(extents, this._viewport)
-      Mat2d.set(this._screenMatrix, extents[0], 0, 0, extents[1], center[0], center[1])
+      Mat2d.set(
+        this._screenMatrix,
+        extents[0],
+        0,
+        0,
+        extents[1],
+        center[0],
+        center[1]
+      )
       this._worldToScreenOutdated = true
       this._screenDirty = false
     }
@@ -121,9 +129,10 @@ class BaseCamera2d extends EventHandler {
  * @extends {BaseCamera2d}
  * @mixin {EventedTransform2d}
  */
-export default class Camera2d extends aggregation(BaseCamera2d,
-  createEventedTransform2dMixin("changed:xform")) {
-
+export default class Camera2d extends aggregation(
+  BaseCamera2d,
+  createEventedTransform2dMixin("changed:xform")
+) {
   /**
    * Creates a new Camera2d object
    * @param  {AABox2d} viewport             The camera's viewport bounds in pixel space
@@ -154,7 +163,7 @@ export default class Camera2d extends aggregation(BaseCamera2d,
       AABox2d.copy(this._projectionDimensions, projectionDimensions)
       this._viewDirty = true
       this._projDirty = true
-        // this._yflip = this._projectionDimensions[3] < this._projectionDimensions[1]
+      // this._yflip = this._projectionDimensions[3] < this._projectionDimensions[1]
       this.fire("changed", {
         attr: "projectionDimensions",
         prevVal: prev,
@@ -206,7 +215,12 @@ export default class Camera2d extends aggregation(BaseCamera2d,
    * @return {Mat2d}
    */
   get viewMatrix() {
-    if (this._viewDirty || this._boundsOutOfDate || this._xformDirty || this._lxformDirty) {
+    if (
+      this._viewDirty ||
+      this._boundsOutOfDate ||
+      this._xformDirty ||
+      this._lxformDirty
+    ) {
       // the matrix has been marked dirty, so recalculate
       const pos = [0, 0]
       const scale = [0, 0]
@@ -230,8 +244,16 @@ export default class Camera2d extends aggregation(BaseCamera2d,
    */
   get projMatrix() {
     if (this._projDirty) {
-      const flip = (this._yflip ? -1 : 1)
-      Mat2d.set(this._projMatrix, 2.0 / this._projectionDimensions[0], 0, 0, flip * 2.0 / this._projectionDimensions[1], 0, 0)
+      const flip = this._yflip ? -1 : 1
+      Mat2d.set(
+        this._projMatrix,
+        2.0 / this._projectionDimensions[0],
+        0,
+        0,
+        (flip * 2.0) / this._projectionDimensions[1],
+        0,
+        0
+      )
       this._worldToScreenOutdated = true
       this._projDirty = false
     }
@@ -244,7 +266,14 @@ export default class Camera2d extends aggregation(BaseCamera2d,
    * @private
    */
   _matricesDirty() {
-    return this._boundsOutOfDate || this._lxformDirty || this._xformDirty || this._viewDirty || this._projDirty || this._screenDirty
+    return (
+      this._boundsOutOfDate ||
+      this._lxformDirty ||
+      this._xformDirty ||
+      this._viewDirty ||
+      this._projDirty ||
+      this._screenDirty
+    )
   }
 
   /**
@@ -252,13 +281,25 @@ export default class Camera2d extends aggregation(BaseCamera2d,
    * @return {Mat2d}
    */
   get worldToScreenMatrix() {
-    if (!this._worldToScreenMatrix || this._worldToScreenOutdated || this._matricesDirty()) {
+    if (
+      !this._worldToScreenMatrix ||
+      this._worldToScreenOutdated ||
+      this._matricesDirty()
+    ) {
       if (!this._worldToScreenMatrix) {
         this._worldToScreenMatrix = Mat2d.create()
       }
       Mat2d.copy(this._worldToScreenMatrix, this.viewMatrix)
-      Mat2d.multiply(this._worldToScreenMatrix, this.projMatrix, this._worldToScreenMatrix)
-      Mat2d.multiply(this._worldToScreenMatrix, this.screenMatrix, this._worldToScreenMatrix)
+      Mat2d.multiply(
+        this._worldToScreenMatrix,
+        this.projMatrix,
+        this._worldToScreenMatrix
+      )
+      Mat2d.multiply(
+        this._worldToScreenMatrix,
+        this.screenMatrix,
+        this._worldToScreenMatrix
+      )
       this._worldToScreenOutdated = false
       this._screenToWorldOutdated = true
     }
@@ -270,7 +311,11 @@ export default class Camera2d extends aggregation(BaseCamera2d,
    * @return {[type]} [description]
    */
   get screenToWorldMatrix() {
-    if (!this._screenToWorld || this._screenToWorldOutdated || this._matricesDirty()) {
+    if (
+      !this._screenToWorld ||
+      this._screenToWorldOutdated ||
+      this._matricesDirty()
+    ) {
       if (!this._screenToWorld) {
         this._screenToWorld = Mat2d.create()
       }

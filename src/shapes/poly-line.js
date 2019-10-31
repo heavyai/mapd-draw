@@ -4,9 +4,9 @@
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
 import BaseShape from "./base-shape.js"
-import {mat2d as Mat2d} from "gl-matrix"
+import { mat2d as Mat2d } from "gl-matrix"
 import Math from "../math/math"
-import {simpleHull_2D} from "../math/convex-hull"
+import { simpleHull_2D } from "../math/convex-hull"
 
 const identityMatrix = Mat2d.create()
 
@@ -82,7 +82,6 @@ function isArray(obj) {
  * @extends {BaseShape}
  */
 export default class PolyLine extends BaseShape {
-
   /**
    * Creates a new poly line shape
    * @param  {PolyLineOptions} [opts] [description]
@@ -91,10 +90,15 @@ export default class PolyLine extends BaseShape {
   constructor(opts) {
     const verts = opts.verts || []
     super(opts)
-    if (!isArray(verts) ||
-      verts.length === 0 || (isArray(verts[0]) && verts.length < 1) ||
-      (!isArray(verts[0]) && (verts.length < 2 || verts.length % 2 !== 0))) {
-      throw new Error("PolyLine shapes must be initialized with an array of 2d points and contain at least 1 points")
+    if (
+      !isArray(verts) ||
+      verts.length === 0 ||
+      (isArray(verts[0]) && verts.length < 1) ||
+      (!isArray(verts[0]) && (verts.length < 2 || verts.length % 2 !== 0))
+    ) {
+      throw new Error(
+        "PolyLine shapes must be initialized with an array of 2d points and contain at least 1 points"
+      )
     }
 
     // going to build the aabox and store the indices for each vertex
@@ -121,12 +125,30 @@ export default class PolyLine extends BaseShape {
       let idx = 1
       for (i = 2; i < verts.length - 2; i += 2, idx += 1) {
         this._verts.push(Point2d.create(verts[i], verts[i + 1]))
-        aaboxEncapsulatePt(this._aabox, this._verts[idx], idx, this._extentIndices)
-        signedArea += buildCentroid(this._centroid, this._verts[idx - 1], this._verts[idx])
+        aaboxEncapsulatePt(
+          this._aabox,
+          this._verts[idx],
+          idx,
+          this._extentIndices
+        )
+        signedArea += buildCentroid(
+          this._centroid,
+          this._verts[idx - 1],
+          this._verts[idx]
+        )
       }
       this._verts.push(Point2d.create(verts[i], verts[i + 1]))
-      aaboxEncapsulatePt(this._aabox, this._verts[idx], idx, this._extentIndices)
-      signedArea += buildCentroid(this._centroid, this._verts[idx], this._verts[0])
+      aaboxEncapsulatePt(
+        this._aabox,
+        this._verts[idx],
+        idx,
+        this._extentIndices
+      )
+      signedArea += buildCentroid(
+        this._centroid,
+        this._verts[idx],
+        this._verts[0]
+      )
     }
     signedArea *= 0.5
     this._centroid[0] /= 6.0 * signedArea
@@ -166,11 +188,18 @@ export default class PolyLine extends BaseShape {
    */
   get width() {
     this._updateAABox()
-    if (!this._verts.length || this._extentIndices[0] < 0 || this._extentIndices[2] < 0) {
+    if (
+      !this._verts.length ||
+      this._extentIndices[0] < 0 ||
+      this._extentIndices[2] < 0
+    ) {
       return 0
     }
 
-    return this._verts[this._extentIndices[2]][0] - this._verts[this._extentIndices[0]][0]
+    return (
+      this._verts[this._extentIndices[2]][0] -
+      this._verts[this._extentIndices[0]][0]
+    )
   }
 
   /**
@@ -180,11 +209,18 @@ export default class PolyLine extends BaseShape {
    */
   get height() {
     this._updateAABox()
-    if (!this._verts.length || this._extentIndices[0] < 0 || this._extentIndices[2] < 0) {
+    if (
+      !this._verts.length ||
+      this._extentIndices[0] < 0 ||
+      this._extentIndices[2] < 0
+    ) {
       return 0
     }
 
-    return this._verts[this._extentIndices[3]][1] - this._verts[this._extentIndices[1]][1]
+    return (
+      this._verts[this._extentIndices[3]][1] -
+      this._verts[this._extentIndices[1]][1]
+    )
   }
 
   /**
@@ -245,7 +281,12 @@ export default class PolyLine extends BaseShape {
     }
     // use the convex hull points to rebuild the bounds
     this._convexHull.forEach(idx => {
-      aaboxEncapsulatePt(this._aabox, this._verts[idx], idx, this._extentIndices)
+      aaboxEncapsulatePt(
+        this._aabox,
+        this._verts[idx],
+        idx,
+        this._extentIndices
+      )
     })
 
     // reset the local transforms
@@ -264,7 +305,9 @@ export default class PolyLine extends BaseShape {
    */
   translateVert(vertIndex, t) {
     if (vertIndex >= this._verts.length) {
-      throw new Error(`Cannot translate vertex at index ${vertIndex}. There are only ${this._verts.length} vertices in the polygon.`)
+      throw new Error(
+        `Cannot translate vertex at index ${vertIndex}. There are only ${this._verts.length} vertices in the polygon.`
+      )
     }
 
     if (t[0] || t[1]) {
@@ -290,7 +333,9 @@ export default class PolyLine extends BaseShape {
 
   setVertPosition(vertIndex, pos) {
     if (vertIndex >= this._verts.length) {
-      throw new Error(`Cannot translate vertex at index ${vertIndex}. There are only ${this._verts.length} vertices in the polygon.`)
+      throw new Error(
+        `Cannot translate vertex at index ${vertIndex}. There are only ${this._verts.length} vertices in the polygon.`
+      )
     }
 
     if (!Point2d.equals(pos, this._verts[vertIndex])) {
@@ -337,7 +382,9 @@ export default class PolyLine extends BaseShape {
 
   removeVert(vertIndex) {
     if (vertIndex >= this._verts.length || vertIndex < 0) {
-      throw new Error(`Cannot remove vertex ${vertIndex}. Invalid index. There are only ${this._verts.length} vertices in the shape.`)
+      throw new Error(
+        `Cannot remove vertex ${vertIndex}. Invalid index. There are only ${this._verts.length} vertices in the shape.`
+      )
     }
 
     const pos = this._verts[vertIndex]
@@ -362,7 +409,12 @@ export default class PolyLine extends BaseShape {
       this._convexHull = simpleHull_2D(this._verts)
     }
     this._convexHull.forEach(idx => {
-      aaboxEncapsulatePt(this._aabox, this._verts[idx], idx, this._extentIndices)
+      aaboxEncapsulatePt(
+        this._aabox,
+        this._verts[idx],
+        idx,
+        this._extentIndices
+      )
     })
 
     const pivot = Point2d.create(0, 0)
@@ -381,14 +433,26 @@ export default class PolyLine extends BaseShape {
       const tmppt = [0, 0]
       const xform = this.globalXform
       this._convexHull.forEach(idx => {
-        AABox2d.encapsulatePt(this._aabox, this._aabox, Point2d.transformMat2d(tmppt, this._verts[idx], xform))
+        AABox2d.encapsulatePt(
+          this._aabox,
+          this._aabox,
+          Point2d.transformMat2d(tmppt, this._verts[idx], xform)
+        )
       })
       this._boundsOutOfDate = false
 
       if (this._geomDirty) {
         const pivot = Point2d.create()
-        pivot[0] = this._verts[this._extentIndices[0]][0] + 0.5 * (this._verts[this._extentIndices[2]][0] - this._verts[this._extentIndices[0]][0])
-        pivot[1] = this._verts[this._extentIndices[1]][1] + 0.5 * (this._verts[this._extentIndices[3]][1] - this._verts[this._extentIndices[1]][1])
+        pivot[0] =
+          this._verts[this._extentIndices[0]][0] +
+          0.5 *
+            (this._verts[this._extentIndices[2]][0] -
+              this._verts[this._extentIndices[0]][0])
+        pivot[1] =
+          this._verts[this._extentIndices[1]][1] +
+          0.5 *
+            (this._verts[this._extentIndices[3]][1] -
+              this._verts[this._extentIndices[1]][1])
         this.pivot = pivot
         this._geomDirty = false
       }
@@ -408,12 +472,14 @@ export default class PolyLine extends BaseShape {
   }
 
   toJSON() {
-    return Object.assign({
-      type: "PolyLine", // NOTE: this much match the name of the class
-      verts: this.vertsRef.map(vert => [vert[0], vert[1]])
-    }, super.toJSON())
+    return Object.assign(
+      {
+        type: "PolyLine", // NOTE: this much match the name of the class
+        verts: this.vertsRef.map(vert => [vert[0], vert[1]])
+      },
+      super.toJSON()
+    )
   }
-
 }
 
 PolyLine.aaboxEncapsulatePt = aaboxEncapsulatePt

@@ -9,7 +9,11 @@ import StrokeStyle from "../style/stroke-style"
  * @extends {FillStyle}
  * @extends {StrokeStyle}
  */
-export default class BasicStyle extends aggregation(class BaseBasicStyle {}, FillStyle, StrokeStyle) {
+export default class BasicStyle extends aggregation(
+  class BaseBasicStyle {},
+  FillStyle,
+  StrokeStyle
+) {
   /**
    * Copies the properties from one BasicStyle to another
    * @param  {BasicStyle} srcBasicStyle The style to copy from
@@ -33,6 +37,9 @@ export default class BasicStyle extends aggregation(class BaseBasicStyle {}, Fil
    *          }}
    */
   static toJSON(basicStyleObj) {
-    return Object.assign(FillStyle.toJSON(basicStyleObj), StrokeStyle.toJSON(basicStyleObj))
+    return Object.assign(
+      FillStyle.toJSON(basicStyleObj),
+      StrokeStyle.toJSON(basicStyleObj)
+    )
   }
 }

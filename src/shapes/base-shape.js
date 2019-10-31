@@ -1,13 +1,15 @@
 "use strict"
 
 import * as AABox2d from "../core/aabox2d"
-import FillStyle, {createEventedFillStyleMixin} from "../style/fill-style"
-import StrokeStyle, {createEventedStrokeStyleMixin} from "../style/stroke-style"
-import Transform2d, {createEventedTransform2dMixin} from "./transform2d"
+import FillStyle, { createEventedFillStyleMixin } from "../style/fill-style"
+import StrokeStyle, {
+  createEventedStrokeStyleMixin
+} from "../style/stroke-style"
+import Transform2d, { createEventedTransform2dMixin } from "./transform2d"
 import aggregation from "../util/aggregation"
 import BasicStyle from "../style/basic-style"
 import EventHandler from "../util/event-handler"
-import {mat2d as Mat2d} from "gl-matrix"
+import { mat2d as Mat2d } from "gl-matrix"
 
 /**
  * @typedef {object} CoreShapeOptions
@@ -43,9 +45,15 @@ class CoreBaseShape extends EventHandler {
    * @return {CoreBaseShape}
    */
   constructor(opts) {
-    super(["changed:xform", "changed:style", "changed:order", "changed:visibility", "changed:geom"])
+    super([
+      "changed:xform",
+      "changed:style",
+      "changed:order",
+      "changed:visibility",
+      "changed:geom"
+    ])
     this._aabox = AABox2d.create()
-    this._zIndex = (opts && opts.zIndex) ? opts.zIndex : 0
+    this._zIndex = opts && opts.zIndex ? opts.zIndex : 0
     this._visible = true
     this._geomDirty = false
 
@@ -136,10 +144,12 @@ class CoreBaseShape extends EventHandler {
  * @mixin {EventedFillStyle}
  * @mixin {EventedStrokeStyle}
  */
-export default class BaseShape extends aggregation(CoreBaseShape,
-  createEventedTransform2dMixin("changed:xform"), createEventedFillStyleMixin("changed:style"),
-  createEventedStrokeStyleMixin("changed:style")) {
-
+export default class BaseShape extends aggregation(
+  CoreBaseShape,
+  createEventedTransform2dMixin("changed:xform"),
+  createEventedFillStyleMixin("changed:style"),
+  createEventedStrokeStyleMixin("changed:style")
+) {
   /**
    * Creates new basic functionality (including transform, fill style, and stroke style properties)
    * for a shape
@@ -225,7 +235,14 @@ export default class BaseShape extends aggregation(CoreBaseShape,
       // isPointInPath/isPointInStroke api calls. Doing that
       // as this should be compatible across all browsers
       ctx.save()
-      ctx.setTransform(this._fullXform[0], this._fullXform[1], this._fullXform[2], this._fullXform[3], this._fullXform[4], this._fullXform[5])
+      ctx.setTransform(
+        this._fullXform[0],
+        this._fullXform[1],
+        this._fullXform[2],
+        this._fullXform[3],
+        this._fullXform[4],
+        this._fullXform[5]
+      )
       ctx.beginPath()
       this._draw(ctx)
       ctx.strokeStyle = "rgba(0,0,0,0)"
@@ -233,8 +250,11 @@ export default class BaseShape extends aggregation(CoreBaseShape,
       ctx.dashPattern = []
       ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.stroke()
-      if ((this.isFillVisible() && ctx.isPointInPath(screenPt[0], screenPt[1])) ||
-        (this.isStrokeVisible() && ctx.isPointInStroke(screenPt[0], screenPt[1]))) {
+      if (
+        (this.isFillVisible() && ctx.isPointInPath(screenPt[0], screenPt[1])) ||
+        (this.isStrokeVisible() &&
+          ctx.isPointInStroke(screenPt[0], screenPt[1]))
+      ) {
         rtn = true
       }
       ctx.restore()
@@ -250,7 +270,14 @@ export default class BaseShape extends aggregation(CoreBaseShape,
    */
   renderBounds(ctx, worldToScreenMatrix, boundsStrokeStyle) {
     ctx.save()
-    ctx.setTransform(worldToScreenMatrix[0], worldToScreenMatrix[1], worldToScreenMatrix[2], worldToScreenMatrix[3], worldToScreenMatrix[4], worldToScreenMatrix[5])
+    ctx.setTransform(
+      worldToScreenMatrix[0],
+      worldToScreenMatrix[1],
+      worldToScreenMatrix[2],
+      worldToScreenMatrix[3],
+      worldToScreenMatrix[4],
+      worldToScreenMatrix[5]
+    )
     boundsStrokeStyle.setStrokeCtx(ctx)
     const center = [0, 0]
     const extents = [0, 0]
@@ -258,7 +285,12 @@ export default class BaseShape extends aggregation(CoreBaseShape,
     AABox2d.getCenter(center, aabox)
     AABox2d.getExtents(extents, aabox)
     ctx.beginPath()
-    ctx.rect(center[0] - extents[0], center[1] - extents[1], extents[0] * 2, extents[1] * 2)
+    ctx.rect(
+      center[0] - extents[0],
+      center[1] - extents[1],
+      extents[0] * 2,
+      extents[1] * 2
+    )
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     ctx.stroke()
     ctx.restore()
@@ -334,15 +366,19 @@ export default class BaseShape extends aggregation(CoreBaseShape,
     if (this._stateStack && this._stateStack.length) {
       state = this._stateStack[0]
     }
-    return Object.assign({
-      // type: this.constructor.name,
-      // NOTE: I wanted to use the above call, which would keep the type
-      // consistent with the name of the class, but this isn't always
-      // the case, as was found out a few times when trying to add
-      // this to immerse
-      visible: this.visible,
-      zIndex: state.zIndex
-    }, BasicStyle.toJSON(state), Transform2d.toJSON(this))
+    return Object.assign(
+      {
+        // type: this.constructor.name,
+        // NOTE: I wanted to use the above call, which would keep the type
+        // consistent with the name of the class, but this isn't always
+        // the case, as was found out a few times when trying to add
+        // this to immerse
+        visible: this.visible,
+        zIndex: state.zIndex
+      },
+      BasicStyle.toJSON(state),
+      Transform2d.toJSON(this)
+    )
   }
 
   /**
@@ -367,5 +403,4 @@ export default class BaseShape extends aggregation(CoreBaseShape,
 
     return rtn
   }
-
 }
