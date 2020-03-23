@@ -12,6 +12,7 @@ bower_components
 *.iml
 .idea
 .project
+.vscode
 
 # vim files
 .*.swp
