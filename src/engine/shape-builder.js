@@ -226,6 +226,26 @@ function removeCustomCursor() {
   }
 }
 
+function setCursorState(
+  element,
+  cursor_type,
+  pointer_event_type,
+  apply_ponter_event_to_canvas = false
+) {
+  element.style.cursor = cursor_type
+  // forEach not supported on nodelist in IE/Edge
+  for (let j = 0; j < element.childNodes.length; j += 1) {
+    element.childNodes[j].style.cursor = cursor_type
+    if (
+      pointer_event_type !== null &&
+      (apply_ponter_event_to_canvas ||
+        element.childNodes[j].nodeName.toLowerCase() !== "canvas")
+    ) {
+      element.childNodes[j].style.pointerEvents = pointer_event_type
+    }
+  }
+}
+
 // understands how to change the position of the custom cursor on the page
 // accepts a mouse event and a DOM element as arguments
 function updateCursorPosition(_event, target) {
@@ -447,16 +467,7 @@ export default class ShapeBuilder extends DrawEngine {
           const selectInfo = this._objects.get(shapes[i])
           const selectedShape = this._selectedShapes.get(shapes[i])
           let hitInfo = null
-          this._parent.style.cursor = "none"
-          // forEach not supported on nodelist in IE/Edge
-          for (let j = 0; j < this._parent.childNodes.length; j += 1) {
-            this._parent.childNodes[j].style.cursor = "none"
-            if (
-              this._parent.childNodes[j].nodeName.toLowerCase() !== "canvas"
-            ) {
-              this._parent.childNodes[j].style.pointerEvents = "none"
-            }
-          }
+          setCursorState(this._parent, "none", "none", false)
           if (
             selectedShape &&
             (hitInfo = selectedShape.containsPoint(
@@ -536,16 +547,7 @@ export default class ShapeBuilder extends DrawEngine {
                 )
               }
             } else if (selectedShape instanceof VertEditableShape) {
-              this._parent.style.cursor = "none"
-              // forEach not supported on nodelist in IE/Edge
-              for (let j = 0; j < this._parent.childNodes.length; j += 1) {
-                this._parent.childNodes[j].style.cursor = "none"
-                if (
-                  this._parent.childNodes[j].nodeName.toLowerCase() !== "canvas"
-                ) {
-                  this._parent.childNodes[j].style.pointerEvents = "none"
-                }
-              }
+              setCursorState(this._parent, "none", "none", false)
               if (hitInfo.controlIndex >= shapes[i].numVerts) {
                 appendCustomCursor(event, this._parent, addSvg, -8, -6) // eslint-disable-line no-magic-numbers
               } else if (event.altKey) {
@@ -576,10 +578,7 @@ export default class ShapeBuilder extends DrawEngine {
               if (cursor !== null) {
                 cursor.parentNode.removeChild(cursor)
               }
-              this._parent.style.cursor = "move"
-              for (let j = 0; j < this._parent.childNodes.length; j += 1) {
-                this._parent.childNodes[j].style.cursor = "move"
-              }
+              setCursorState(this._parent, "move", null)
               event.stopImmediatePropagation()
               event.preventDefault()
             }
@@ -590,14 +589,7 @@ export default class ShapeBuilder extends DrawEngine {
 
       if (i < 0) {
         removeCustomCursor()
-        this._parent.style.cursor = "default"
-        // forEach not supported on nodelist in IE/Edge
-        for (let j = 0; j < this._parent.childNodes.length; j += 1) {
-          this._parent.childNodes[j].style.cursor = "default"
-          if (this._parent.childNodes[j].nodeName.toLowerCase() !== "canvas") {
-            this._parent.childNodes[j].style.pointerEvents = "auto"
-          }
-        }
+        setCursorState(this._parent, "default", "auto", false)
       }
     }
   }
@@ -686,14 +678,7 @@ export default class ShapeBuilder extends DrawEngine {
       this._dragInfo = null
       clearSelectedShapes(this._selectedShapes)
       removeCustomCursor()
-      this._parent.style.cursor = "default"
-      // forEach not supported on nodelist in IE/Edge
-      for (let j = 0; j < this._parent.childNodes.length; j += 1) {
-        this._parent.childNodes[j].style.cursor = "default"
-        if (this._parent.childNodes[j].nodeName.toLowerCase() !== "canvas") {
-          this._parent.childNodes[j].style.pointerEvents = "auto"
-        }
-      }
+      setCursorState(this._parent, "default", "auto", false)
     } else {
       event.stopImmediatePropagation()
     }
@@ -879,12 +864,7 @@ export default class ShapeBuilder extends DrawEngine {
     })
 
     removeCustomCursor()
-    this._parent.style.cursor = "default"
-    // forEach not supported on nodelist in IE/Edge
-    for (let j = 0; j < this._parent.childNodes.length; j += 1) {
-      this._parent.childNodes[j].style.cursor = "default"
-      this._parent.childNodes[j].style.pointerEvents = "auto"
-    }
+    setCursorState(this._parent, "default", "auto", true)
 
     return super.deleteShape(shapes)
   }
@@ -898,13 +878,7 @@ export default class ShapeBuilder extends DrawEngine {
     })
 
     removeCustomCursor()
-    this._parent.style.cursor = "default"
-    // forEach not supported on nodelist in IE/Edge
-    for (let j = 0; j < this._parent.childNodes.length; j += 1) {
-      this._parent.childNodes[j].style.cursor = "default"
-      this._parent.childNodes[j].style.pointerEvents = "auto"
-    }
-
+    setCursorState(this._parent, "default", "auto", true)
     return super.deleteShape(selectedShapes)
   }
 
