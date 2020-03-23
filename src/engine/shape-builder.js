@@ -685,6 +685,15 @@ export default class ShapeBuilder extends DrawEngine {
       }
       this._dragInfo = null
       clearSelectedShapes(this._selectedShapes)
+      removeCustomCursor()
+      this._parent.style.cursor = "default"
+      // forEach not supported on nodelist in IE/Edge
+      for (let j = 0; j < this._parent.childNodes.length; j += 1) {
+        this._parent.childNodes[j].style.cursor = "default"
+        if (this._parent.childNodes[j].nodeName.toLowerCase() !== "canvas") {
+          this._parent.childNodes[j].style.pointerEvents = "auto"
+        }
+      }
     } else {
       event.stopImmediatePropagation()
     }
