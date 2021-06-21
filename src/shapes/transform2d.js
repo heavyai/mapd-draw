@@ -394,26 +394,6 @@ export default class Transform2d {
   }
 
   /**
-   * Sets the transform state of a 2d rendering context
-   * @param  {CanvasRenderingContext2D} ctx
-   * @param  {Mat2d} currMatrix          The current matrix used to store the result of the
-   *                                     model-view-projection-screen matrix multiplication for this node
-   * @param  {Mat2d} worldToScreenMatrix The current world-to-screen tranform
-   */
-  transformCtx(ctx, currMatrix, worldToScreenMatrix) {
-    Mat2d.multiply(currMatrix, worldToScreenMatrix, this.globalXform)
-
-    ctx.setTransform(
-      currMatrix[0],
-      currMatrix[1],
-      currMatrix[2],
-      currMatrix[3],
-      currMatrix[4],
-      currMatrix[5]
-    )
-  }
-
-  /**
    * Converts a Transform2d instance to a JSON object
    * @param  {Transform2d} xformObj
    * @return {{position: Point2d, scale: Vec2d, rotation: number, pivot: Vec2d}}

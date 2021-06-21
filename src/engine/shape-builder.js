@@ -38,8 +38,8 @@ const Constants = {
   FORTY_FIVE_ANGLE: 45
 }
 
-const tmpPt1 = Point2d.create(0, 0)
-const tmpPt2 = Point2d.create(0, 0)
+let tmpPt1 = null
+let tmpPt2 = null
 
 const defaultXformStyle = {
   fillColor: "white",
@@ -259,6 +259,22 @@ function updateCursorPosition(_event, target) {
 }
 
 export default class ShapeBuilder extends DrawEngine {
+  constructor(parent, opts) {
+    super(parent, opts)
+    ShapeBuilder._init()
+  }
+
+  static _init() {
+    // need to initialize the reusable tmp points to catch user-configured array types.
+    // For instance, gl-matrix uses Float32Array by default as its underlying type, but
+    // the user can configure it to use Float64Array. We need to lazily initialize to pick
+    // up that configuration.
+    if (tmpPt1 === null) {
+      tmpPt1 = Point2d.create()
+      tmpPt2 = Point2d.create()
+    }
+  }
+
   _mousedownCB(event) {
     if (!inCanvas(this._drawCanvas, event.clientX, event.clientY)) {
       return

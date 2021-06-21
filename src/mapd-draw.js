@@ -12,8 +12,8 @@ import Mat2d from "./core/mat2d"
 export { Mat2d }
 import * as Point2d from "./core/point2d"
 export { Point2d }
-import { mat2 as Mat2 } from "gl-matrix"
-export { Mat2 }
+import { mat2 as Mat2, glMatrix } from "gl-matrix"
+export { Mat2, glMatrix }
 import BasicStyle from "./style/basic-style"
 export { BasicStyle }
 import Vec2d from "./core/vec2d"
