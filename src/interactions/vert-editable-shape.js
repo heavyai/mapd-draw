@@ -3,7 +3,8 @@
 
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
-import { mat2d as Mat2d, vec2 as Vec2d } from "gl-matrix"
+import Mat2d from "../core/mat2d"
+import Vec2d from "../core/vec2d"
 import BaseShape from "../shapes/base-shape"
 
 export default class VertEditableShape extends BaseShape {

@@ -1,6 +1,7 @@
 "use strict"
 
-import { glMatrix, vec2 as Vec2 } from "gl-matrix"
+import { glMatrix } from "gl-matrix"
+import Vec2d from "./vec2d"
 
 const X = 0
 const Y = 1
@@ -71,7 +72,7 @@ export function initFromValues(x, y) {
  * @return {Point2d}   Point referenced by out arg
  */
 export function addVec2(out, pt, v) {
-  return Vec2.add(out, pt, v)
+  return Vec2d.add(out, pt, v)
 }
 
 /**
@@ -82,7 +83,7 @@ export function addVec2(out, pt, v) {
  * @return {Vec2d}     Vector referenced by out arg
  */
 export function sub(out, pt1, pt2) {
-  return Vec2.sub(out, pt1, pt2)
+  return Vec2d.sub(out, pt1, pt2)
 }
 
 /**
@@ -93,7 +94,7 @@ export function sub(out, pt1, pt2) {
  * @return {Point2d}     Point referenced by out arg
  */
 export function transformMat2(out, p, m) {
-  return Vec2.transformMat2(out, p, m)
+  return Vec2d.transformMat2(out, p, m)
 }
 
 /**
@@ -106,7 +107,7 @@ export function transformMat2(out, p, m) {
  * @return {Point2d}     Point referenced by out arg
  */
 export function transformMat2d(out, p, m) {
-  return Vec2.transformMat2d(out, p, m)
+  return Vec2d.transformMat2d(out, p, m)
 }
 
 /**
@@ -125,7 +126,7 @@ export function str(p) {
  * @return {Number}
  */
 export function distance(p1, p2) {
-  return Vec2.distance(p1, p2)
+  return Vec2d.distance(p1, p2)
 }
 
 export const dist = distance
@@ -139,7 +140,7 @@ export const dist = distance
  * @return {Number}    distance^2
  */
 export function squaredDistance(p1, p2) {
-  return Vec2.squaredDistance(p1, p2)
+  return Vec2d.squaredDistance(p1, p2)
 }
 
 export const sqrDist = squaredDistance
@@ -155,17 +156,19 @@ export const sqrDist = squaredDistance
  * @return {Point2d}     Point referenced by out arg
  */
 export function lerp(out, p1, p2, t) {
-  return Vec2.lerp(out, p1, p2, t)
+  return Vec2d.lerp(out, p1, p2, t)
 }
 
 /**
  * Returns whether two points are relatively equal
  * @param  {Point2d} a
  * @param  {Point2d} b
+ * @param {Number} [epsilon=null] Optional epsilon value to use for the comparison. If null, uses
+ *                                the globally-configured epsilon.
  * @return {Boolean}   Returns true if two point are relatively equal, false otherwise
  */
-export function equals(a, b) {
-  return Vec2.equals(a, b)
+export function equals(a, b, epsilon = null) {
+  return Vec2d.equals(a, b, epsilon)
 }
 
 /**
@@ -175,5 +178,5 @@ export function equals(a, b) {
  * @return {Boolean}   Returns true if the two points are exactly equal, false otherwise
  */
 export function exactEquals(a, b) {
-  return Vec2.exactEquals(a, b)
+  return Vec2d.exactEquals(a, b)
 }

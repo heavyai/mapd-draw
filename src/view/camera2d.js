@@ -1,11 +1,11 @@
 "use strict"
 
 import * as AABox2d from "../core/aabox2d"
+import Vec2d from "../core/vec2d"
+import Mat2d from "../core/mat2d"
 import aggregation from "../util/aggregation"
 import { createEventedTransform2dMixin } from "../shapes/transform2d"
 import EventHandler from "../util/event-handler"
-import Mat2d from "../core/mat2d"
-import { vec2 as Vec2d } from "gl-matrix"
 
 /**
  * Camera modification event

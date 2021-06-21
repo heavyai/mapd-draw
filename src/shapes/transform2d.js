@@ -1,7 +1,9 @@
 "use strict"
 
 import * as Point2d from "../core/point2d"
-import { glMatrix as GLMatrix, mat2d as Mat2d, vec2 as Vec2d } from "gl-matrix"
+import Mat2d from "../core/mat2d"
+import Vec2d from "../core/vec2d"
+import { glMatrix as GLMatrix } from "gl-matrix"
 import aggregation from "../util/aggregation"
 import Math from "../math/math"
 

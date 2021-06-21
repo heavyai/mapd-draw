@@ -2,6 +2,7 @@
 
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
+import Mat2d from "../core/mat2d"
 import FillStyle, { createEventedFillStyleMixin } from "../style/fill-style"
 import StrokeStyle, {
   createEventedStrokeStyleMixin
@@ -10,7 +11,6 @@ import Transform2d, { createEventedTransform2dMixin } from "./transform2d"
 import aggregation from "../util/aggregation"
 import BasicStyle from "../style/basic-style"
 import EventHandler from "../util/event-handler"
-import { mat2d as Mat2d } from "gl-matrix"
 
 /**
  * @typedef {object} CoreShapeOptions

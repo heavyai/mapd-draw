@@ -3,8 +3,8 @@
 
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
+import Mat2d from "../core/mat2d"
 import BaseShape from "./base-shape.js"
-import { mat2d as Mat2d } from "gl-matrix"
 import Math from "../math/math"
 import { simpleHull_2D } from "../math/convex-hull"
 
