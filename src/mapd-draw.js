@@ -12,7 +12,7 @@ import Mat2d from "./core/mat2d"
 export { Mat2d }
 import * as Point2d from "./core/point2d"
 export { Point2d }
-import { mat2 as Mat2 } from "gl-matrix"
+import Mat2 from "./core/mat2"
 export { Mat2 }
 import BasicStyle from "./style/basic-style"
 export { BasicStyle }
