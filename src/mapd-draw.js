@@ -2,6 +2,8 @@
 
 export { version } from "../package.json"
 
+import * as Configure from "./core/configure"
+export { Configure }
 import ShapeBuilder from "./engine/shape-builder"
 export { ShapeBuilder }
 import DrawEngine from "./engine/draw-engine"

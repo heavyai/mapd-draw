@@ -3,7 +3,6 @@
 import * as Point2d from "../core/point2d"
 import Mat2d from "../core/mat2d"
 import Vec2d from "../core/vec2d"
-import { glMatrix as GLMatrix } from "gl-matrix"
 import aggregation from "../util/aggregation"
 import Math from "../math/math"
 
@@ -616,8 +615,8 @@ export function createEventedTransform2dMixin(eventName) {
         if (
           typeof tx !== "undefined" &&
           typeof ty !== "undefined" &&
-          (!GLMatrix.equals(tx, this._pos[0]) ||
-            !GLMatrix.equals(ty, this._pos[1]))
+          (!Math.floatingPtEquals(tx, this._pos[0]) ||
+            !Math.floatingPtEquals(ty, this._pos[1]))
         ) {
           const prev = Point2d.clone(this._pos)
           this._pos[0] = tx
@@ -630,8 +629,8 @@ export function createEventedTransform2dMixin(eventName) {
         if (
           typeof sx !== "undefined" &&
           typeof sy !== "undefined" &&
-          (!GLMatrix.equals(sx, this._scale[0]) ||
-            !GLMatrix.equals(sy, this._scale[1]))
+          (!Math.floatingPtEquals(sx, this._scale[0]) ||
+            !Math.floatingPtEquals(sy, this._scale[1]))
         ) {
           const prev = Vec2d.clone(this._scale)
           Vec2d.set(this._scale, sx, sy)
@@ -642,7 +641,7 @@ export function createEventedTransform2dMixin(eventName) {
 
         if (typeof deg !== "undefined") {
           const degToUse = deg % 360
-          if (!GLMatrix.equals(degToUse, this._rotDeg)) {
+          if (!Math.floatingPtEquals(degToUse, this._rotDeg)) {
             const prev = this._rotDeg
             this._rotDeg = degToUse
             attrs.push("orientation")

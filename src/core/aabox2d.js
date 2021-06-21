@@ -1,6 +1,7 @@
 "use strict"
 
 import { glMatrix } from "gl-matrix"
+import { EPSILON } from "./configure"
 import Vec2d from "./vec2d"
 
 export const MINX = 0
@@ -221,7 +222,7 @@ export function equals(a, b, epsilon = null) {
   const b1 = b[1]
   const b2 = b[2]
   const b3 = b[3]
-  const eps = epsilon !== null ? epsilon : glMatrix.EPSILON
+  const eps = epsilon !== null ? epsilon : EPSILON
   return (
     Math.abs(a0 - b0) <= eps &&
     Math.abs(a1 - b1) <= eps &&

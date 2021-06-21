@@ -1,6 +1,7 @@
 "use strict"
 
-import { glMatrix, vec2 as Vec2d } from "gl-matrix"
+import { vec2 as Vec2d } from "gl-matrix"
+import { EPSILON } from "./configure"
 
 /**
  * Overwrites https://github.com/toji/gl-matrix/blob/v3.3.0/src/vec2.js#L524
@@ -20,7 +21,7 @@ Vec2d.equals = function(a, b, epsilon = null) {
     a1 = a[1]
   const b0 = b[0],
     b1 = b[1]
-  const eps = epsilon !== null ? epsilon : glMatrix.EPSILON
+  const eps = epsilon !== null ? epsilon : EPSILON
   return (
     Math.abs(a0 - b0) <= eps * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
     Math.abs(a1 - b1) <= eps * Math.max(1.0, Math.abs(a1), Math.abs(b1))

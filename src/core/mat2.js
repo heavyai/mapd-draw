@@ -1,6 +1,7 @@
 "use strict"
 
-import { glMatrix, mat2 as Mat2 } from "gl-matrix"
+import { mat2 as Mat2 } from "gl-matrix"
+import { EPSILON } from "./configure"
 
 /**
  * Overwrites https://github.com/toji/gl-matrix/blob/v3.3.0/src/mat2.js#L379
@@ -24,7 +25,7 @@ Mat2.equals = function(a, b, epsilon = null) {
     b1 = b[1],
     b2 = b[2],
     b3 = b[3]
-  const eps = epsilon !== null ? epsilon : glMatrix.EPSILON
+  const eps = epsilon !== null ? epsilon : EPSILON
   return (
     Math.abs(a0 - b0) <= eps * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
     Math.abs(a1 - b1) <= eps * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
