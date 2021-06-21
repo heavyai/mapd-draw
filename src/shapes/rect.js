@@ -2,6 +2,7 @@
 
 import * as AABox2d from "../core/aabox2d"
 import BaseShape from "./base-shape.js"
+import * as Point2d from "../core/point2d"
 
 /**
  * @typedef {object} RectOptions
@@ -131,7 +132,28 @@ export default class Rect extends BaseShape {
    * @override
    */
   _draw(ctx) {
-    ctx.rect(0 - this.width / 2, 0 - this.height / 2, this.width, this.height)
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+
+    const half_width = this.width / 2
+    const half_height = this.height / 2
+
+    const corner_pt = Point2d.create(-half_width, -half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.moveTo(corner_pt[0], corner_pt[1])
+
+    Point2d.set(corner_pt, half_width, -half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.lineTo(corner_pt[0], corner_pt[1])
+
+    Point2d.set(corner_pt, half_width, half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.lineTo(corner_pt[0], corner_pt[1])
+
+    Point2d.set(corner_pt, -half_width, half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.lineTo(corner_pt[0], corner_pt[1])
+
+    ctx.closePath()
   }
 
   /**

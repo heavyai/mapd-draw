@@ -117,6 +117,21 @@ export default class Circle extends BaseShape {
    * @override
    */
   _draw(ctx) {
+    // NOTE: CanvasRenderingContext2d::setTransform
+    // (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform)
+    // only has 32-bits of precision when doing matrix multiplication. If you need a higher level
+    // of precision, then this is going to be prone to instability.
+    // The only way to counter the inprecision is to draw the circle ourselves, probably by rendering
+    // a dynamic line-segmented circle, which is doable, but could be tricky to get the proper amount
+    // of resolution for the circle dynamically. So keeping the 32-bit precision for now.
+    ctx.setTransform(
+      this._fullXform[0],
+      this._fullXform[1],
+      this._fullXform[2],
+      this._fullXform[3],
+      this._fullXform[4],
+      this._fullXform[5]
+    )
     ctx.arc(0, 0, this._radius, 0, Math.TWO_PI, false)
   }
 

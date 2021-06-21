@@ -4,6 +4,7 @@ import * as AABox2d from "../core/aabox2d"
 import BaseShape from "./base-shape.js"
 import Mat2d from "../core/mat2d"
 import Math from "../math/math"
+import * as Point2d from "../core/point2d"
 
 /**
  * @typedef {object} PointOptions
@@ -95,7 +96,7 @@ export default class Point extends BaseShape {
    */
   _draw(ctx) {
     ctx.setTransform(1, 0, 0, 1, 0, 0)
-    const pos = [0, 0]
+    const pos = Point2d.create()
     Mat2d.svd(pos, null, null, this._fullXform)
     ctx.arc(pos[0], pos[1], this._size, 0, Math.TWO_PI, false)
   }

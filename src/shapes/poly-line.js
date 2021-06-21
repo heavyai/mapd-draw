@@ -462,9 +462,13 @@ export default class PolyLine extends BaseShape {
   _draw(ctx) {
     let rtn = false
     if (this._verts.length >= 2) {
-      ctx.moveTo(this._verts[0][0], this._verts[0][1])
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      const proj_pt = Point2d.create()
+      Point2d.transformMat2d(proj_pt, this._verts[0], this._fullXform)
+      ctx.moveTo(proj_pt[0], proj_pt[1])
       for (let i = 1; i < this._verts.length; i += 1) {
-        ctx.lineTo(this._verts[i][0], this._verts[i][1])
+        Point2d.transformMat2d(proj_pt, this._verts[i], this._fullXform)
+        ctx.lineTo(proj_pt[0], proj_pt[1])
       }
       rtn = true
     }
