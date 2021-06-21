@@ -44,12 +44,12 @@
     "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",
-    "http-server": "^0.11.1",
     "json-loader": "0.5.4",
     "mocha": "^6.2.1",
     "pre-commit": "^1.2.2",
     "prettier": "1.18.2",
-    "webpack": "^3.12.0"
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^2.11.3"
   },
   "scripts": {
     "build": "npm run build:prod; npm run build:dev",
@@ -58,7 +58,7 @@
     "clean": "bash scripts/clean.sh",
     "lint:fix": "eslint --rule 'prettier/prettier: 0' --fix $(find src -name \"*.js\" ! -name '*.spec.js'); prettier --write $(find src -name \"*.js\" ! -name '*.spec.js')",
     "lint": "eslint $(find src -name \"*.js\" ! -name '*.spec.js')",
-    "start": "npm run build; http-server -p 8080 -o;",
+    "start": "webpack-dev-server --config webpack.dev.config.js --content-base ./example --watch -d --open",
     "watch:dev": "node node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.dev.config.js",
     "webpack": "node node_modules/webpack/bin/webpack.js",
     "webpack:dev": "node node_modules/webpack/bin/webpack.js --config webpack.dev.config.js",
