@@ -62,11 +62,18 @@ function getLocalMousePos(out, elem, event) {
   out[1] = event.clientY - domrect.top - elem.clientTop
 }
 
-function transformSelectedShape(canvas, event, selectedInfo, camera) {
-  getLocalMousePos(this._tmp_pt1, canvas, event)
+function transformSelectedShape(
+  localMousePos,
+  worldMousePos,
+  canvas,
+  event,
+  selectedInfo,
+  camera
+) {
+  getLocalMousePos(localMousePos, canvas, event)
   Point2d.transformMat2d(
-    this._tmp_pt2,
-    this._tmp_pt1,
+    worldMousePos,
+    localMousePos,
     camera.screenToWorldMatrix
   )
   const shape = selectedInfo.shape
@@ -74,24 +81,24 @@ function transformSelectedShape(canvas, event, selectedInfo, camera) {
     InteractUtils.transformXformShape(
       shape,
       selectedInfo,
-      this._tmp_pt1,
-      this._tmp_pt2,
+      localMousePos,
+      worldMousePos,
       camera
     )
   } else if (shape instanceof VertEditableShape) {
     InteractUtils.translateVert(
       shape,
       selectedInfo,
-      this._tmp_pt1,
-      this._tmp_pt2,
+      localMousePos,
+      worldMousePos,
       camera
     )
   } else {
     InteractUtils.translateShape(
       shape,
       selectedInfo,
-      this._tmp_pt1,
-      this._tmp_pt2,
+      localMousePos,
+      worldMousePos,
       camera
     )
   }
@@ -276,11 +283,13 @@ export default class ShapeBuilder extends DrawEngine {
     super(parent, opts)
 
     // a couple of global temp points that can be swapped around for various operations
-    // to avoid constant allocs/deallocs
+    // to avoid constant allocs/deallocs. This has not been measured tho so no real data
+    // on whether this is an improvement overl locals.
     this._tmp_pt1 = Point2d.create()
     this._tmp_pt2 = Point2d.create()
   }
 
+  /* eslint-disable complexity */
   _mousedownCB(event) {
     if (!inCanvas(this._drawCanvas, event.clientX, event.clientY)) {
       return
@@ -408,6 +417,7 @@ export default class ShapeBuilder extends DrawEngine {
       event.preventDefault()
     }
   }
+  /* eslint-enable complexity */
 
   _mouseupCB(event) {
     if (this._dragInfo && this._dragInfo.shape) {
@@ -466,6 +476,7 @@ export default class ShapeBuilder extends DrawEngine {
     }
   }
 
+  /* eslint-disable complexity, max-depth */
   _mousemoveCB(event) {
     if (
       !inCanvas(this._drawCanvas, event.clientX, event.clientY) &&
@@ -478,6 +489,8 @@ export default class ShapeBuilder extends DrawEngine {
       updateCursorPosition(event, this._parent)
       addEventKeysToSelectedInfo(event, this._dragInfo)
       transformSelectedShape(
+        this._tmp_pt1,
+        this._tmp_pt2,
         this._drawCanvas,
         event,
         this._dragInfo,
@@ -627,11 +640,13 @@ export default class ShapeBuilder extends DrawEngine {
       }
     }
   }
+  /* eslint-enable complexity, max-depth */
 
   _clickCB() {
     // noop
   }
 
+  /* eslint-disable max-depth */
   _dblclickCB(event) {
     if (!inCanvas(this._drawCanvas, event.clientX, event.clientY)) {
       return
@@ -722,6 +737,7 @@ export default class ShapeBuilder extends DrawEngine {
     }
     event.preventDefault()
   }
+  /* eslint-enable max-depth */
 
   _mouseoverCB() {
     // noop
