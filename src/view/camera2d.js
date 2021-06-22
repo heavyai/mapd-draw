@@ -1,6 +1,7 @@
 "use strict"
 
 import * as AABox2d from "../core/aabox2d"
+import * as Point2d from "../core/point2d"
 import Vec2d from "../core/vec2d"
 import Mat2d from "../core/mat2d"
 import aggregation from "../util/aggregation"
@@ -104,8 +105,8 @@ class BaseCamera2d extends EventHandler {
    */
   get screenMatrix() {
     if (this._screenDirty) {
-      const center = [0, 0]
-      const extents = [0, 0]
+      const center = Point2d.create()
+      const extents = Vec2d.create()
       AABox2d.getCenter(center, this._viewport)
       AABox2d.getExtents(extents, this._viewport)
       Mat2d.set(
@@ -222,9 +223,9 @@ export default class Camera2d extends aggregation(
       this._lxformDirty
     ) {
       // the matrix has been marked dirty, so recalculate
-      const pos = [0, 0]
-      const scale = [0, 0]
-      const rot = [0, 0]
+      const pos = Point2d.create()
+      const scale = Vec2d.create()
+      const rot = Vec2d.create()
       const xform = this.globalXform
       Mat2d.svd(pos, scale, rot, xform)
       Mat2d.fromTranslation(this._viewMatrix, Vec2d.negate(pos, pos))

@@ -29,7 +29,10 @@ export default class Point extends BaseShape {
     if (typeof opts.size !== "undefined") {
       this.size = opts.size
     }
-    AABox2d.initCenterExtents(this._aabox, [0, 0], [this._radius, this._radius])
+    AABox2d.initCenterExtents(this._aabox, Point2d.create(0, 0), [
+      this._radius,
+      this._radius
+    ])
     this.translate(opts.x || 0, opts.y || 0)
   }
 

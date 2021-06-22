@@ -133,8 +133,8 @@ export default class XformShape extends Rect {
       this.visible &&
       AABox2d.containsPt(aabox, screenPt)
     ) {
-      const scale = [0, 0]
-      const rot = [0, 0]
+      const scale = Vec2d.create()
+      const rot = Vec2d.create()
       Mat2d.svd(null, scale, rot, this._fullXform)
       const mat = Mat2d.create()
 
@@ -153,7 +153,7 @@ export default class XformShape extends Rect {
       const halfBoxSz = this._interactiveBoxSize / 2
       const halfWidth = this.width / 2
       const halfHeight = this.height / 2
-      const pt = [0, 0]
+      const pt = Point2d.create()
       const padSz = halfBoxSz + boxPadding
       const padRadius = Math.sqrt(2 * padSz * padSz)
       let xScale = 0
@@ -258,11 +258,10 @@ export default class XformShape extends Rect {
     if (force || this._geomDirty || this._boundsOutOfDate) {
       const boxPadding = this._rotatable ? this._interactiveBoxPadding : 0
       const padding = boxPadding + this._interactiveBoxSize / 2
-      AABox2d.initCenterExtents(
-        this._aabox,
-        [0, 0],
-        [this.width / 2, this.height / 2]
-      )
+      AABox2d.initCenterExtents(this._aabox, Point2d.create(0, 0), [
+        this.width / 2,
+        this.height / 2
+      ])
       AABox2d.transformMat2d(this._aabox, this._aabox, this._fullXform)
       AABox2d.expand(this._aabox, this._aabox, [padding, padding])
       this._aaboxUpdated = true
@@ -289,8 +288,8 @@ export default class XformShape extends Rect {
     ctx.save()
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     boundsStrokeStyle.setStrokeCtx(ctx)
-    const center = [0, 0]
-    const extents = [0, 0]
+    const center = Point2d.create()
+    const extents = Vec2d.create()
     AABox2d.getCenter(center, aabox)
     AABox2d.getExtents(extents, aabox)
     ctx.beginPath()
@@ -320,8 +319,8 @@ export default class XformShape extends Rect {
       this._updateAABox(true)
     }
 
-    const scale = [0, 0]
-    const rot = [0, 0]
+    const scale = Vec2d.create()
+    const rot = Vec2d.create()
     Mat2d.svd(null, scale, rot, this._fullXform)
     scale[0] = scale[0] < 0 ? -1 : 1
     scale[1] = scale[1] < 0 ? -1 : 1

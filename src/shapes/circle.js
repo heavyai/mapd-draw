@@ -1,6 +1,7 @@
 "use strict"
 
 import * as AABox2d from "../core/aabox2d"
+import * as Point2d from "../core/point2d"
 import BaseShape from "./base-shape.js"
 import Math from "../math/math"
 
@@ -25,7 +26,10 @@ export default class Circle extends BaseShape {
     if (typeof opts.radius !== "undefined") {
       this.radius = opts.radius
     }
-    AABox2d.initCenterExtents(this._aabox, [0, 0], [this._radius, this._radius])
+    AABox2d.initCenterExtents(this._aabox, Point2d.create(0, 0), [
+      this._radius,
+      this._radius
+    ])
   }
 
   /**

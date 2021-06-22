@@ -2,6 +2,7 @@
 
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
+import Vec2d from "../core/vec2d"
 import Mat2d from "../core/mat2d"
 import FillStyle, { createEventedFillStyleMixin } from "../style/fill-style"
 import StrokeStyle, {
@@ -207,7 +208,7 @@ export default class BaseShape extends aggregation(
    * @return {Vec2d} Width/Height of the shape after all parent transforms applied
    */
   getGlobalDimensions() {
-    const scale = [0, 0]
+    const scale = Vec2d.create()
     Mat2d.svd(null, scale, null, this.globalXform)
     scale[0] *= this.width
     scale[1] *= this.height

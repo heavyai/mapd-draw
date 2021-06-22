@@ -62,8 +62,8 @@ export default class VertEditableShape extends BaseShape {
       }
 
       if (!rtnObj.hit) {
-        const tmpPt = [0, 0]
-        const tmpVec = [0, 0]
+        const tmpPt = Point2d.create()
+        const tmpVec = Vec2d.create()
         const radius = ctx.lineWidth * 1.5
         Vec2d.set(extents, radius, radius)
         for (i = 0; i < this._transformedVerts.length - 1; i += 1) {
@@ -109,8 +109,8 @@ export default class VertEditableShape extends BaseShape {
     ctx.save()
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     boundsStrokeStyle.setStrokeCtx(ctx)
-    const center = [0, 0]
-    const extents = [0, 0]
+    const center = Point2d.create()
+    const extents = Vec2d.create()
     AABox2d.getCenter(center, this._aabox)
     AABox2d.getExtents(extents, this._aabox)
     ctx.beginPath()
@@ -131,12 +131,12 @@ export default class VertEditableShape extends BaseShape {
     const objToScreenMatrix = this._baseVertShape._fullXform
     const verts = this._baseVertShape.vertsRef
     this._transformedVerts = new Array(verts.length)
-    const tmpPt = [0, 0]
-    const tmpVec = [0, 0]
+    const tmpPt = Point2d.create()
+    const tmpVec = Vec2d.create()
 
     ctx.beginPath()
     let i = 0
-    this._transformedVerts[i] = [0, 0]
+    this._transformedVerts[i] = Point2d.create()
     Point2d.transformMat2d(
       this._transformedVerts[i],
       verts[i],
@@ -145,7 +145,7 @@ export default class VertEditableShape extends BaseShape {
 
     const radius = Math.max(ctx.lineWidth * 1.5, 2.5)
     for (i = 0; i < verts.length - 1; i += 1) {
-      this._transformedVerts[i + 1] = [0, 0]
+      this._transformedVerts[i + 1] = Point2d.create()
       Point2d.transformMat2d(
         this._transformedVerts[i + 1],
         verts[i + 1],

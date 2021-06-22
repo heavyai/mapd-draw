@@ -38,9 +38,6 @@ const Constants = {
   FORTY_FIVE_ANGLE: 45
 }
 
-const tmpPt1 = Point2d.create(0, 0)
-const tmpPt2 = Point2d.create(0, 0)
-
 const defaultXformStyle = {
   fillColor: "white",
   strokeColor: "black",
@@ -66,21 +63,37 @@ function getLocalMousePos(out, elem, event) {
 }
 
 function transformSelectedShape(canvas, event, selectedInfo, camera) {
-  getLocalMousePos(tmpPt1, canvas, event)
-  Point2d.transformMat2d(tmpPt2, tmpPt1, camera.screenToWorldMatrix)
+  getLocalMousePos(this._tmp_pt1, canvas, event)
+  Point2d.transformMat2d(
+    this._tmp_pt2,
+    this._tmp_pt1,
+    camera.screenToWorldMatrix
+  )
   const shape = selectedInfo.shape
   if (shape instanceof XformShape) {
     InteractUtils.transformXformShape(
       shape,
       selectedInfo,
-      tmpPt1,
-      tmpPt2,
+      this._tmp_pt1,
+      this._tmp_pt2,
       camera
     )
   } else if (shape instanceof VertEditableShape) {
-    InteractUtils.translateVert(shape, selectedInfo, tmpPt1, tmpPt2, camera)
+    InteractUtils.translateVert(
+      shape,
+      selectedInfo,
+      this._tmp_pt1,
+      this._tmp_pt2,
+      camera
+    )
   } else {
-    InteractUtils.translateShape(shape, selectedInfo, tmpPt1, tmpPt2, camera)
+    InteractUtils.translateShape(
+      shape,
+      selectedInfo,
+      this._tmp_pt1,
+      this._tmp_pt2,
+      camera
+    )
   }
 }
 
@@ -259,6 +272,15 @@ function updateCursorPosition(_event, target) {
 }
 
 export default class ShapeBuilder extends DrawEngine {
+  constructor(parent, opts) {
+    super(parent, opts)
+
+    // a couple of global temp points that can be swapped around for various operations
+    // to avoid constant allocs/deallocs
+    this._tmp_pt1 = Point2d.create()
+    this._tmp_pt2 = Point2d.create()
+  }
+
   _mousedownCB(event) {
     if (!inCanvas(this._drawCanvas, event.clientX, event.clientY)) {
       return
@@ -266,8 +288,12 @@ export default class ShapeBuilder extends DrawEngine {
 
     this.timer = performance.now()
 
-    Point2d.set(tmpPt1, event.offsetX, event.offsetY)
-    Point2d.transformMat2d(tmpPt2, tmpPt1, this._camera.screenToWorldMatrix)
+    Point2d.set(this._tmp_pt1, event.offsetX, event.offsetY)
+    Point2d.transformMat2d(
+      this._tmp_pt2,
+      this._tmp_pt1,
+      this._camera.screenToWorldMatrix
+    )
     const worldToScreenMatrix = this._camera.worldToScreenMatrix
     const shapes = this.sortedShapes
     let i = -1
@@ -282,8 +308,8 @@ export default class ShapeBuilder extends DrawEngine {
         if (
           selectedShape &&
           (hitInfo = selectedShape.containsPoint(
-            tmpPt1,
-            tmpPt2,
+            this._tmp_pt1,
+            this._tmp_pt2,
             worldToScreenMatrix,
             this._drawCtx
           )).hit
@@ -299,7 +325,7 @@ export default class ShapeBuilder extends DrawEngine {
             const localXform = selectedShape.parent.localXform
             const invLocalXform = Mat2d.clone(localXform)
             Mat2d.invert(invLocalXform, invLocalXform)
-            const startObjPos = Point2d.clone(tmpPt2)
+            const startObjPos = Point2d.clone(this._tmp_pt2)
             Point2d.transformMat2d(startObjPos, startObjPos, invLocalXform)
             this._dragInfo = Object.assign(
               {
@@ -319,8 +345,8 @@ export default class ShapeBuilder extends DrawEngine {
           break
         } else if (
           shapes[i].containsPoint(
-            tmpPt1,
-            tmpPt2,
+            this._tmp_pt1,
+            this._tmp_pt2,
             worldToScreenMatrix,
             this._drawCtx
           )
@@ -329,7 +355,7 @@ export default class ShapeBuilder extends DrawEngine {
           break
         }
       }
-      // else if (shapeInfo.selectable && shapes[i].containsPoint(tmpPt1, tmpPt2, worldToScreenMatrix, this._drawCtx)) {
+      // else if (shapeInfo.selectable && shapes[i].containsPoint(this._tmp_pt1, this._tmp_pt2, worldToScreenMatrix, this._drawCtx)) {
       //   selectedShape = shapes[i]
       //   selectedInfo = shapeInfo
       //   const selectEventObj = selectShape(selectedShape, shapes, this._selectedShapes, this._selectStyle, this._xformStyle, selectedInfo)
@@ -368,8 +394,8 @@ export default class ShapeBuilder extends DrawEngine {
 
       if (this._dragInfo) {
         this._dragInfo.shape = selectedShape
-        this._dragInfo.startPos = Point2d.clone(tmpPt1)
-        this._dragInfo.startWorldPos = Point2d.clone(tmpPt2)
+        this._dragInfo.startPos = Point2d.clone(this._tmp_pt1)
+        this._dragInfo.startWorldPos = Point2d.clone(this._tmp_pt2)
         this._dragInfo.objectToWorldMatrix = Mat2d.clone(
           selectedShape.globalXform
         )
@@ -401,8 +427,12 @@ export default class ShapeBuilder extends DrawEngine {
       })
     } else if (performance.now() - this.timer < Constants.QUICK_CLICK_TIME) {
       // this is a relatively quick click
-      Point2d.set(tmpPt1, event.offsetX, event.offsetY)
-      Point2d.transformMat2d(tmpPt2, tmpPt1, this._camera.screenToWorldMatrix)
+      Point2d.set(this._tmp_pt1, event.offsetX, event.offsetY)
+      Point2d.transformMat2d(
+        this._tmp_pt2,
+        this._tmp_pt1,
+        this._camera.screenToWorldMatrix
+      )
       const worldToScreenMatrix = this._camera.worldToScreenMatrix
       const shapes = this.sortedShapes
       let selectedShape = null
@@ -412,8 +442,8 @@ export default class ShapeBuilder extends DrawEngine {
         if (
           selectedInfo.selectable &&
           shapes[i].containsPoint(
-            tmpPt1,
-            tmpPt2,
+            this._tmp_pt1,
+            this._tmp_pt2,
             worldToScreenMatrix,
             this._drawCtx
           )
@@ -456,8 +486,12 @@ export default class ShapeBuilder extends DrawEngine {
       event.stopImmediatePropagation()
       event.preventDefault()
     } else if (!event.buttons && this._selectedShapes.size) {
-      Point2d.set(tmpPt1, event.offsetX, event.offsetY)
-      Point2d.transformMat2d(tmpPt2, tmpPt1, this._camera.screenToWorldMatrix)
+      Point2d.set(this._tmp_pt1, event.offsetX, event.offsetY)
+      Point2d.transformMat2d(
+        this._tmp_pt2,
+        this._tmp_pt1,
+        this._camera.screenToWorldMatrix
+      )
       const worldToScreenMatrix = this._camera.worldToScreenMatrix
       const shapes = this.sortedShapes
       let i = 0
@@ -471,8 +505,8 @@ export default class ShapeBuilder extends DrawEngine {
           if (
             selectedShape &&
             (hitInfo = selectedShape.containsPoint(
-              tmpPt1,
-              tmpPt2,
+              this._tmp_pt1,
+              this._tmp_pt2,
               worldToScreenMatrix,
               this._drawCtx
             )).hit
@@ -567,8 +601,8 @@ export default class ShapeBuilder extends DrawEngine {
             break
           } else if (
             shapes[i].containsPoint(
-              tmpPt1,
-              tmpPt2,
+              this._tmp_pt1,
+              this._tmp_pt2,
               worldToScreenMatrix,
               this._drawCtx
             )
@@ -603,8 +637,12 @@ export default class ShapeBuilder extends DrawEngine {
       return
     }
 
-    Point2d.set(tmpPt1, event.offsetX, event.offsetY)
-    Point2d.transformMat2d(tmpPt2, tmpPt1, this._camera.screenToWorldMatrix)
+    Point2d.set(this._tmp_pt1, event.offsetX, event.offsetY)
+    Point2d.transformMat2d(
+      this._tmp_pt2,
+      this._tmp_pt1,
+      this._camera.screenToWorldMatrix
+    )
     const worldToScreenMatrix = this._camera.worldToScreenMatrix
     const shapes = this.sortedShapes
     let i = -1
@@ -613,8 +651,8 @@ export default class ShapeBuilder extends DrawEngine {
       if (
         shapeInfo.selectable &&
         shapes[i].containsPoint(
-          tmpPt1,
-          tmpPt2,
+          this._tmp_pt1,
+          this._tmp_pt2,
           worldToScreenMatrix,
           this._drawCtx
         )

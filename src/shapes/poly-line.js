@@ -106,7 +106,7 @@ export default class PolyLine extends BaseShape {
     this._extentIndices = [-1, -1, -1, -1]
     this._localaabox = AABox2d.create()
     this._verts = []
-    this._centroid = [0, 0]
+    this._centroid = Point2d.create()
     AABox2d.initEmpty(this._aabox)
     let signedArea = 0
     let i = 0
@@ -430,7 +430,7 @@ export default class PolyLine extends BaseShape {
 
     if (this._boundsOutOfDate || this._geomDirty) {
       AABox2d.initEmpty(this._aabox)
-      const tmppt = [0, 0]
+      const tmppt = Point2d.create()
       const xform = this.globalXform
       this._convexHull.forEach(idx => {
         AABox2d.encapsulatePt(
