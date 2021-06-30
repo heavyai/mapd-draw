@@ -326,4 +326,19 @@ export default class Camera2d extends aggregation(
     }
     return this._screenToWorld
   }
+
+  /**
+   * Gets the axis-aligned bounding box of the current view in world-space coordinates
+   * @return {AABox2d}
+   */
+  get worldViewBounds() {
+    // get a clone of the current screen space viewport
+    const viewport_clone = this.viewport
+    AABox2d.transformMat2d(
+      viewport_clone,
+      viewport_clone,
+      this.screenToWorldMatrix
+    )
+    return viewport_clone
+  }
 }
