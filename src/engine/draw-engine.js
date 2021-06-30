@@ -477,6 +477,10 @@ export default class DrawEngine extends EventHander {
     this._resize()
   }
 
+  get camera() {
+    return this._camera
+  }
+
   get viewport() {
     return this._camera.viewport
   }
