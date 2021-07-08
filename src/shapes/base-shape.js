@@ -347,6 +347,10 @@ export default class BaseShape extends aggregation(
         ctx.setTransform(1, 0, 0, 1, 0, 0)
         ctx.stroke()
       }
+
+      if (typeof this._drawDebug === "function") {
+        this._drawDebug(ctx)
+      }
     }
   }
 
