@@ -161,6 +161,15 @@ export default class BaseShape extends aggregation(
   constructor(opts) {
     super(opts)
     this._stateStack = []
+
+    // if true, the render loop will call the _drawDebug method, if it exists
+    // This can be used to active debug draw rendering for extra visual markers
+    // useful in debugging the drawn shape.
+    const { debug } = opts
+    this._doDebugDraw =
+      typeof debug === "boolean" &&
+      debug &&
+      typeof this._drawDebug === "function"
   }
 
   /**
@@ -348,7 +357,7 @@ export default class BaseShape extends aggregation(
         ctx.stroke()
       }
 
-      if (typeof this._drawDebug === "function") {
+      if (this._doDebugDraw) {
         this._drawDebug(ctx)
       }
     }
