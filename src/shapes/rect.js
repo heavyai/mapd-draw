@@ -2,6 +2,7 @@
 
 import * as AABox2d from "../core/aabox2d"
 import BaseShape from "./base-shape.js"
+import * as Point2d from "../core/point2d"
 
 /**
  * @typedef {object} RectOptions
@@ -114,11 +115,10 @@ export default class Rect extends BaseShape {
    */
   _updateAABox() {
     if (this._geomDirty || this._boundsOutOfDate) {
-      AABox2d.initCenterExtents(
-        this._aabox,
-        [0, 0],
-        [this._width / 2, this._height / 2]
-      )
+      AABox2d.initCenterExtents(this._aabox, Point2d.create(0, 0), [
+        this._width / 2,
+        this._height / 2
+      ])
       AABox2d.transformMat2d(this._aabox, this._aabox, this.globalXform)
       this._geomDirty = this._boundsOutOfDate = false
     }
@@ -131,7 +131,28 @@ export default class Rect extends BaseShape {
    * @override
    */
   _draw(ctx) {
-    ctx.rect(0 - this.width / 2, 0 - this.height / 2, this.width, this.height)
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+
+    const half_width = this.width / 2
+    const half_height = this.height / 2
+
+    const corner_pt = Point2d.create(-half_width, -half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.moveTo(corner_pt[0], corner_pt[1])
+
+    Point2d.set(corner_pt, half_width, -half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.lineTo(corner_pt[0], corner_pt[1])
+
+    Point2d.set(corner_pt, half_width, half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.lineTo(corner_pt[0], corner_pt[1])
+
+    Point2d.set(corner_pt, -half_width, half_height)
+    Point2d.transformMat2d(corner_pt, corner_pt, this._fullXform)
+    ctx.lineTo(corner_pt[0], corner_pt[1])
+
+    ctx.closePath()
   }
 
   /**

@@ -3,8 +3,8 @@
 
 import * as AABox2d from "../core/aabox2d"
 import * as Point2d from "../core/point2d"
+import Mat2d from "../core/mat2d"
 import BaseShape from "./base-shape.js"
-import { mat2d as Mat2d } from "gl-matrix"
 import Math from "../math/math"
 import { simpleHull_2D } from "../math/convex-hull"
 
@@ -106,7 +106,7 @@ export default class PolyLine extends BaseShape {
     this._extentIndices = [-1, -1, -1, -1]
     this._localaabox = AABox2d.create()
     this._verts = []
-    this._centroid = [0, 0]
+    this._centroid = Point2d.create()
     AABox2d.initEmpty(this._aabox)
     let signedArea = 0
     let i = 0
@@ -430,7 +430,7 @@ export default class PolyLine extends BaseShape {
 
     if (this._boundsOutOfDate || this._geomDirty) {
       AABox2d.initEmpty(this._aabox)
-      const tmppt = [0, 0]
+      const tmppt = Point2d.create()
       const xform = this.globalXform
       this._convexHull.forEach(idx => {
         AABox2d.encapsulatePt(
@@ -462,9 +462,13 @@ export default class PolyLine extends BaseShape {
   _draw(ctx) {
     let rtn = false
     if (this._verts.length >= 2) {
-      ctx.moveTo(this._verts[0][0], this._verts[0][1])
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      const proj_pt = Point2d.create()
+      Point2d.transformMat2d(proj_pt, this._verts[0], this._fullXform)
+      ctx.moveTo(proj_pt[0], proj_pt[1])
       for (let i = 1; i < this._verts.length; i += 1) {
-        ctx.lineTo(this._verts[i][0], this._verts[i][1])
+        Point2d.transformMat2d(proj_pt, this._verts[i], this._fullXform)
+        ctx.lineTo(proj_pt[0], proj_pt[1])
       }
       rtn = true
     }

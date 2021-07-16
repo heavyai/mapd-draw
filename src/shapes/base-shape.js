@@ -1,6 +1,9 @@
 "use strict"
 
 import * as AABox2d from "../core/aabox2d"
+import * as Point2d from "../core/point2d"
+import Vec2d from "../core/vec2d"
+import Mat2d from "../core/mat2d"
 import FillStyle, { createEventedFillStyleMixin } from "../style/fill-style"
 import StrokeStyle, {
   createEventedStrokeStyleMixin
@@ -9,7 +12,6 @@ import Transform2d, { createEventedTransform2dMixin } from "./transform2d"
 import aggregation from "../util/aggregation"
 import BasicStyle from "../style/basic-style"
 import EventHandler from "../util/event-handler"
-import { mat2d as Mat2d } from "gl-matrix"
 
 /**
  * @typedef {object} CoreShapeOptions
@@ -159,6 +161,15 @@ export default class BaseShape extends aggregation(
   constructor(opts) {
     super(opts)
     this._stateStack = []
+
+    // if true, the render loop will call the _drawDebug method, if it exists
+    // This can be used to active debug draw rendering for extra visual markers
+    // useful in debugging the drawn shape.
+    const { debug } = opts
+    this._doDebugDraw =
+      typeof debug === "boolean" &&
+      debug &&
+      typeof this._drawDebug === "function"
   }
 
   /**
@@ -206,7 +217,7 @@ export default class BaseShape extends aggregation(
    * @return {Vec2d} Width/Height of the shape after all parent transforms applied
    */
   getGlobalDimensions() {
-    const scale = [0, 0]
+    const scale = Vec2d.create()
     Mat2d.svd(null, scale, null, this.globalXform)
     scale[0] *= this.width
     scale[1] *= this.height
@@ -235,14 +246,7 @@ export default class BaseShape extends aggregation(
       // isPointInPath/isPointInStroke api calls. Doing that
       // as this should be compatible across all browsers
       ctx.save()
-      ctx.setTransform(
-        this._fullXform[0],
-        this._fullXform[1],
-        this._fullXform[2],
-        this._fullXform[3],
-        this._fullXform[4],
-        this._fullXform[5]
-      )
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.beginPath()
       this._draw(ctx)
       ctx.strokeStyle = "rgba(0,0,0,0)"
@@ -270,27 +274,35 @@ export default class BaseShape extends aggregation(
    */
   renderBounds(ctx, worldToScreenMatrix, boundsStrokeStyle) {
     ctx.save()
-    ctx.setTransform(
-      worldToScreenMatrix[0],
-      worldToScreenMatrix[1],
-      worldToScreenMatrix[2],
-      worldToScreenMatrix[3],
-      worldToScreenMatrix[4],
-      worldToScreenMatrix[5]
-    )
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
     boundsStrokeStyle.setStrokeCtx(ctx)
-    const center = [0, 0]
-    const extents = [0, 0]
+    const corner_point = Point2d.create()
+    const center = Point2d.create()
+    const extents = Point2d.create()
     const aabox = this.aabox
     AABox2d.getCenter(center, aabox)
     AABox2d.getExtents(extents, aabox)
+
     ctx.beginPath()
-    ctx.rect(
-      center[0] - extents[0],
-      center[1] - extents[1],
-      extents[0] * 2,
-      extents[1] * 2
-    )
+
+    Point2d.set(corner_point, center[0] - extents[0], center[1] - extents[1])
+    Point2d.transformMat2d(corner_point, corner_point, worldToScreenMatrix)
+    ctx.moveTo(corner_point[0], corner_point[1])
+
+    Point2d.set(corner_point, center[0] + extents[0], center[1] - extents[1])
+    Point2d.transformMat2d(corner_point, corner_point, worldToScreenMatrix)
+    ctx.lineTo(corner_point[0], corner_point[1])
+
+    Point2d.set(corner_point, center[0] + extents[0], center[1] + extents[1])
+    Point2d.transformMat2d(corner_point, corner_point, worldToScreenMatrix)
+    ctx.lineTo(corner_point[0], corner_point[1])
+
+    Point2d.set(corner_point, center[0] - extents[0], center[1] + extents[1])
+    Point2d.transformMat2d(corner_point, corner_point, worldToScreenMatrix)
+    ctx.lineTo(corner_point[0], corner_point[1])
+
+    ctx.closePath()
+
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     ctx.stroke()
     ctx.restore()
@@ -328,7 +340,7 @@ export default class BaseShape extends aggregation(
    *                                     shape.
    */
   render(ctx, worldToScreenMatrix, styleState, doFill = null, doStroke = null) {
-    this.transformCtx(ctx, this._fullXform, worldToScreenMatrix)
+    Mat2d.multiply(this._fullXform, worldToScreenMatrix, this.globalXform)
 
     ctx.beginPath()
 
@@ -343,6 +355,10 @@ export default class BaseShape extends aggregation(
         styleState.setStrokeStyle(ctx, this)
         ctx.setTransform(1, 0, 0, 1, 0, 0)
         ctx.stroke()
+      }
+
+      if (this._doDebugDraw) {
+        this._drawDebug(ctx)
       }
     }
   }

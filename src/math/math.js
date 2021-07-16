@@ -1,4 +1,5 @@
-const EPS = 1e-5
+import { EPSILON } from "../core/configure"
+
 const quarter = 0.25
 const half = 0.5
 const two = 2
@@ -14,9 +15,6 @@ Math.NTWO_PI = two * Math.NPI
 Math.INV_PI = 1 / Math.PI
 Math.RAD_TO_DEG = 180 / Math.PI
 Math.DEG_TO_RAD = Math.PI / 180
-
-// this could be useful to tweak in your app, depends on your world resolution
-Math.EPS = EPS
 
 /**
  * Clamp f to be between a min and max.
@@ -52,5 +50,21 @@ function lerp(f1, f2, t) {
 Math.clamp = clamp
 Math.clamp01 = clamp01
 Math.lerp = lerp
+
+/**
+ * Tests whether or not the arguments have approximately the same value, within an absolute
+ * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
+ * than or equal to 1.0, and a relative tolerance is used for larger values)
+ *
+ * @param {Number} a The first number to test.
+ * @param {Number} b The second number to test.
+ * @param {Number} [epsilon=null] Optional epsilon value to use for the comparison. If null, uses
+ *                                the globally-configured epsilon.
+ * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
+ */
+Math.floatingPtEquals = function(a, b, epsilon = null) {
+  const eps = epsilon !== null ? epsilon : EPSILON
+  return Math.abs(a - b) <= eps * Math.max(1.0, Math.abs(a), Math.abs(b))
+}
 
 export default Math

@@ -6,10 +6,10 @@ import Mat2d from "../core/mat2d"
 import Vec2d from "../core/vec2d"
 
 function rotateOBBox(shape, parentShape, selectedInfo, screenPos, worldPos) {
-  const pt = [0, 0]
-  const scale = [0, 0]
+  const pt = Point2d.create()
+  const scale = Vec2d.create()
   Mat2d.svd(pt, scale, null, selectedInfo.objectToWorldMatrix)
-  const startDir = [0, 0]
+  const startDir = Vec2d.create()
   Point2d.sub(startDir, selectedInfo.startWorldPos, pt)
   Vec2d.normalize(startDir, startDir)
   const dir = pt
@@ -36,9 +36,9 @@ export function transformXformShape(
   camera
 ) {
   const parentShape = shape.parent
-  const objPos = [0, 0]
-  const deltaPos = [0, 0]
-  const deltaDims = [0, 0]
+  const objPos = Point2d.create()
+  const deltaPos = Point2d.create()
+  const deltaDims = Point2d.create()
 
   if (selectedInfo.rotate) {
     rotateOBBox(shape, parentShape, selectedInfo, screenPos, worldPos, camera)
@@ -50,7 +50,7 @@ export function transformXformShape(
   const centerScale = selectedInfo.keys.altKey || selectedInfo.centerScaleOnly
 
   // get the position of the shape at start of transform
-  const pt = [0, 0]
+  const pt = Point2d.create()
   Mat2d.svd(pt, null, null, selectedInfo.objectToWorldMatrix)
 
   // get the mouse delta in world space
@@ -65,7 +65,7 @@ export function transformXformShape(
       selectedInfo.objectToWorldMatrix[2],
       selectedInfo.objectToWorldMatrix[3]
     ]
-    const diagDir = [0, 0]
+    const diagDir = Vec2d.create()
 
     if (selectedInfo.controlIndex < 2) {
       Vec2d.negate(xAxisDir, xAxisDir)
@@ -136,7 +136,7 @@ export function transformXformShape(
     // out that direction based on the orientation of the
     // shape
     const idx = selectedInfo.controlIndex - 4
-    const axisDir = [0, 0]
+    const axisDir = Vec2d.create()
     if (idx % 2 === 0) {
       // scaling in the object's X direction
       Vec2d.set(
@@ -196,8 +196,8 @@ export function translateShape(
   worldPos,
   camera
 ) {
-  const diff = [0, 0]
-  const pt = [0, 0]
+  const diff = Vec2d.create()
+  const pt = Point2d.create()
   Mat2d.svd(pt, null, null, selectedInfo.objectToWorldMatrix)
   if (selectedInfo.keys.shiftKey) {
     Point2d.sub(diff, screenPos, selectedInfo.startPos)
@@ -218,7 +218,7 @@ export function translateVert(shape, selectedInfo, screenPos, worldPos) {
   const parentShape = shape.parent
 
   // get the position of the shape at start of transform
-  // const pt = [0, 0]
+  // const pt = Point2d.create()
   // Mat2d.svd(pt, null, null, selectedInfo.objectToWorldMatrix)
 
   // get the mouse delta in world space
@@ -236,10 +236,10 @@ export function translateVert(shape, selectedInfo, screenPos, worldPos) {
   if (selectedInfo.controlIndex >= numVerts) {
     const idx1 = Math.min(selectedInfo.controlIndex - numVerts, numVerts - 1)
     const idx2 = idx1 === numVerts - 1 ? 0 : idx1 + 1
-    const pt = [0, 0]
-    const pt1 = [0, 0]
-    const pt2 = [0, 0]
-    const vec = [0, 0]
+    const pt = Point2d.create()
+    const pt1 = Point2d.create()
+    const pt2 = Point2d.create()
+    const vec = Vec2d.create()
     const verts = parentShape.vertsRef
     const xform = parentShape.globalXform
     Point2d.transformMat2d(pt1, verts[idx1], xform)

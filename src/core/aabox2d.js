@@ -1,6 +1,8 @@
 "use strict"
 
-import { glMatrix, vec2 as Vec2d } from "gl-matrix"
+import { glMatrix } from "gl-matrix"
+import { EPSILON } from "./configure"
+import Vec2d from "./vec2d"
 
 export const MINX = 0
 export const MINY = 1
@@ -207,9 +209,11 @@ export function isInfinite(box) {
  * Returns true if one aabox approximately equals another
  * @param  {AABox2d} a
  * @param  {AABox2d} b
+ * @param {Number} [epsilon=null] Optional epsilon value to use for the comparison. If null, uses
+ *                                the globally-configured epsilon.
  * @return {Boolean}   true if a ~= b
  */
-export function equals(a, b) {
+export function equals(a, b, epsilon = null) {
   const a0 = a[0]
   const a1 = a[1]
   const a2 = a[2]
@@ -218,11 +222,12 @@ export function equals(a, b) {
   const b1 = b[1]
   const b2 = b[2]
   const b3 = b[3]
+  const eps = epsilon !== null ? epsilon : EPSILON
   return (
-    Math.abs(a0 - b0) <= glMatrix.EPSILON &&
-    Math.abs(a1 - b1) <= glMatrix.EPSILON &&
-    Math.abs(a2 - b2) <= glMatrix.EPSILON &&
-    Math.abs(a3 - b3) <= glMatrix.EPSILON
+    Math.abs(a0 - b0) <= eps &&
+    Math.abs(a1 - b1) <= eps &&
+    Math.abs(a2 - b2) <= eps &&
+    Math.abs(a3 - b3) <= eps
   )
 }
 

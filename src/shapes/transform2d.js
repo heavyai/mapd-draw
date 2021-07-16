@@ -1,7 +1,8 @@
 "use strict"
 
 import * as Point2d from "../core/point2d"
-import { glMatrix as GLMatrix, mat2d as Mat2d, vec2 as Vec2d } from "gl-matrix"
+import Mat2d from "../core/mat2d"
+import Vec2d from "../core/vec2d"
 import aggregation from "../util/aggregation"
 import Math from "../math/math"
 
@@ -394,26 +395,6 @@ export default class Transform2d {
   }
 
   /**
-   * Sets the transform state of a 2d rendering context
-   * @param  {CanvasRenderingContext2D} ctx
-   * @param  {Mat2d} currMatrix          The current matrix used to store the result of the
-   *                                     model-view-projection-screen matrix multiplication for this node
-   * @param  {Mat2d} worldToScreenMatrix The current world-to-screen tranform
-   */
-  transformCtx(ctx, currMatrix, worldToScreenMatrix) {
-    Mat2d.multiply(currMatrix, worldToScreenMatrix, this.globalXform)
-
-    ctx.setTransform(
-      currMatrix[0],
-      currMatrix[1],
-      currMatrix[2],
-      currMatrix[3],
-      currMatrix[4],
-      currMatrix[5]
-    )
-  }
-
-  /**
    * Converts a Transform2d instance to a JSON object
    * @param  {Transform2d} xformObj
    * @return {{position: Point2d, scale: Vec2d, rotation: number, pivot: Vec2d}}
@@ -634,8 +615,8 @@ export function createEventedTransform2dMixin(eventName) {
         if (
           typeof tx !== "undefined" &&
           typeof ty !== "undefined" &&
-          (!GLMatrix.equals(tx, this._pos[0]) ||
-            !GLMatrix.equals(ty, this._pos[1]))
+          (!Math.floatingPtEquals(tx, this._pos[0]) ||
+            !Math.floatingPtEquals(ty, this._pos[1]))
         ) {
           const prev = Point2d.clone(this._pos)
           this._pos[0] = tx
@@ -648,8 +629,8 @@ export function createEventedTransform2dMixin(eventName) {
         if (
           typeof sx !== "undefined" &&
           typeof sy !== "undefined" &&
-          (!GLMatrix.equals(sx, this._scale[0]) ||
-            !GLMatrix.equals(sy, this._scale[1]))
+          (!Math.floatingPtEquals(sx, this._scale[0]) ||
+            !Math.floatingPtEquals(sy, this._scale[1]))
         ) {
           const prev = Vec2d.clone(this._scale)
           Vec2d.set(this._scale, sx, sy)
@@ -660,7 +641,7 @@ export function createEventedTransform2dMixin(eventName) {
 
         if (typeof deg !== "undefined") {
           const degToUse = deg % 360
-          if (!GLMatrix.equals(degToUse, this._rotDeg)) {
+          if (!Math.floatingPtEquals(degToUse, this._rotDeg)) {
             const prev = this._rotDeg
             this._rotDeg = degToUse
             attrs.push("orientation")
