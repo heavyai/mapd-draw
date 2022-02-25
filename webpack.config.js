@@ -4,14 +4,14 @@ var path = require("path");
 module.exports = {
   context: __dirname + "/src",
   entry: {
-    "mapd-draw": "./mapd-draw.js"
+    "draw": "./draw.js"
   },
   output: {
     path: __dirname + "/dist",
     filename: "[name].js",
     sourceMapFilename: "[name].js.map",
     libraryTarget: "umd",
-    library: "MapdDraw"
+    library: "Draw"
   },
   externals: {
   },

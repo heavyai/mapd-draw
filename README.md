@@ -1,4 +1,4 @@
-# mapd-draw
+# @heavyai/draw
 
 ### Table of Contents
 - [Quick Start](#quick-start)
@@ -17,7 +17,7 @@ npm test
 ```
 
 # Synopsis
-2d shape drawing and interaction library using an HTML canvas 2d rendering context. Basis for lasso tool in MapD Immerse.
+2d shape drawing and interaction library using an HTML canvas 2d rendering context. Basis for lasso tool in HeavyImmerse.
 
 # Installation
 ```bash
@@ -27,7 +27,7 @@ npm run build
 
 # Testing and Linting
 
-Contributions to the MapD Draw library should be unit-tested and linted.
+Contributions to the HEAVY.AI Draw library should be unit-tested and linted.
 
 The linter can be invoked manually with
 

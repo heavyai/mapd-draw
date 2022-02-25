@@ -1,11 +1,11 @@
 {
-  "name": "@mapd/mapd-draw",
+  "name": "@heavyai/draw",
   "description": "A Utility Library for drawing and interacting with shapes using canvas",
   "version": "1.1.0",
   "homepage": "https://omnisci.com",
   "bugs": "https://github.com/omnisci/mapd-draw/issues",
-  "main": "dist/mapd-draw.js",
-  "author": "MapD Technologies",
+  "main": "dist/draw.js",
+  "author": "HEAVY.AI",
   "license": "MIT",
   "engines": {
     "node": ">=4.0.0"

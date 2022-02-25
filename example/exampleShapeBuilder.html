@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>MapD</title>
+    <title>HEAVY.AI</title>
     <meta charset="UTF-8">
     <style></style>
 </head>
@@ -12,7 +12,7 @@
     <div class="main-container" style="width: 100%; height: 100%">
         <div id="chart1-example" style="position: relative; width: 100%; height: 100%;"></div>
     </div>
-    <script src="js/mapd-draw-dev.js"></script>
+    <script src="js/draw-dev.js"></script>
     <script>
     function init() {
         const parent = document.getElementById("chart1-example")
@@ -20,12 +20,12 @@
         const width = parent.offsetWidth
         const height = parent.offsetHeight
 
-        const drawEngine = new MapdDraw.ShapeBuilder(parent, {
+        const drawEngine = new Draw.ShapeBuilder(parent, {
           enableInteractions: true,
           cameraPosition: [0, 0]
         })
 
-        const circle = new MapdDraw.Circle({
+        const circle = new Draw.Circle({
           position: [0, 0],
           radius: 50,
           fillColor: "rgba(0,0,255,1.0)",
@@ -36,7 +36,7 @@
         circle.scale([2, 1])
         drawEngine.addShape(circle)
 
-        const rect = new MapdDraw.Rect({
+        const rect = new Draw.Rect({
           position: [150, 150],
           width: 100,
           height: 100,
@@ -52,7 +52,7 @@
           [100, -100],
           [0, -300]
         ]
-        const poly = new MapdDraw.Poly({
+        const poly = new Draw.Poly({
           verts: verts,
           fillColor: "rgba(0,255,0,0.5)"
         })

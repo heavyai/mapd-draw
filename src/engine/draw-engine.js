@@ -112,7 +112,7 @@ function addClass(element, className) {
 
 function createCanvas(parent) {
   const canvasContainer = document.createElement("div")
-  addClass(canvasContainer, "mapd-draw-canvas-container")
+  addClass(canvasContainer, "draw-canvas-container")
 
   const canvas = document.createElement("canvas")
   const canvasContext = canvas.getContext("2d")
@@ -120,7 +120,7 @@ function createCanvas(parent) {
   // const ratio = 1
 
   // add class?
-  addClass(canvas, "mapd-draw-canvas")
+  addClass(canvas, "draw-canvas")
   canvas.style.position = "absolute"
   canvas.style.pointerEvents = "none"
 
