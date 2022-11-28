@@ -411,6 +411,10 @@ export default class ShapeBuilder extends DrawEngine {
         addEventKeysToSelectedInfo(event, this._dragInfo)
         event.stopImmediatePropagation()
         this.fire(EventConstants.DRAG_BEGIN, {
+          dragInfo: {
+            currentPos: Point2d.clone(this._tmp_pt1),
+            currentWorldPos: Point2d.clone(this._tmp_pt2)
+          },
           shapes: getSelectedObjsFromMap(this._selectedShapes)
         })
       }
@@ -420,6 +424,12 @@ export default class ShapeBuilder extends DrawEngine {
   /* eslint-enable complexity */
 
   _mouseupCB(event) {
+    Point2d.set(this._tmp_pt1, event.offsetX, event.offsetY)
+    Point2d.transformMat2d(
+      this._tmp_pt2,
+      this._tmp_pt1,
+      this._camera.screenToWorldMatrix
+    )
     if (this._dragInfo && this._dragInfo.shape) {
       event.stopImmediatePropagation()
       event.preventDefault()
@@ -433,16 +443,14 @@ export default class ShapeBuilder extends DrawEngine {
       }
       this._dragInfo = null
       this.fire(EventConstants.DRAG_END, {
+        dragInfo: {
+          currentPos: Point2d.clone(this._tmp_pt1),
+          currentWorldPos: Point2d.clone(this._tmp_pt2)
+        },
         shapes: getSelectedObjsFromMap(this._selectedShapes)
       })
     } else if (performance.now() - this.timer < Constants.QUICK_CLICK_TIME) {
       // this is a relatively quick click
-      Point2d.set(this._tmp_pt1, event.offsetX, event.offsetY)
-      Point2d.transformMat2d(
-        this._tmp_pt2,
-        this._tmp_pt1,
-        this._camera.screenToWorldMatrix
-      )
       const worldToScreenMatrix = this._camera.worldToScreenMatrix
       const shapes = this.sortedShapes
       let selectedShape = null
