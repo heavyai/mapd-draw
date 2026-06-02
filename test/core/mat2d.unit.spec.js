@@ -1,3 +1,6 @@
+// Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 import chai, {expect} from 'chai'
 import Mat2d from '../../src/core/mat2d.js'
 

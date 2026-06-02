@@ -1,3 +1,6 @@
+// Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 module.exports = {
   extends: ["eslint:recommended", "prettier"],
   plugins: ["prettier"],
